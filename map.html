@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palette Preview Map — World of Colours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<style>
+:root {
+  --ink: #18181A; --ink-mid: #52525A; --ink-light: #9090A0;
+  --paper: #F6F4EF; --rule: #D8D4CC; --rule-dark: #B0AAA0;
+  --font-d: 'DM Serif Display', Georgia, serif;
+  --font-m: 'DM Mono', monospace;
+  --font-s: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-s); font-weight: 300; height: 100vh; display: flex; flex-direction: column; overflow: hidden; -webkit-font-smoothing: antialiased; }
+
+/* Header */
+.mheader {
+  height: 52px; flex-shrink: 0;
+  border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px;
+  background: rgba(246,244,239,.97);
+  backdrop-filter: blur(6px);
+}
+.mheader-back {
+  font-family: var(--font-m); font-size: 10px;
+  letter-spacing: .06em; color: var(--ink-light);
+  text-decoration: none; transition: color .15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.mheader-back:hover { color: var(--ink); }
+.mheader-title {
+  font-family: var(--font-d); font-size: 17px;
+  font-style: italic; color: var(--ink);
+}
+.mheader-sub {
+  font-family: var(--font-m); font-size: 10px;
+  color: var(--ink-light); letter-spacing: .04em;
+}
+
+/* Layout */
+.map-layout {
+  flex: 1; display: flex; overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px; flex-shrink: 0;
+  border-right: 1px solid var(--rule);
+  background: var(--paper);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sb-section {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.sb-label {
+  font-family: var(--font-m); font-size: 9px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-light); margin-bottom: 8px;
+}
+.palette-list {
+  flex: 1; overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--rule) transparent;
+}
+.palette-list::-webkit-scrollbar { width: 4px; }
+.palette-list::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
+.pl-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 16px; cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+  transition: background .12s;
+}
+.pl-item:hover { background: rgba(0,0,0,.04); }
+.pl-item.active { background: var(--ink); }
+.pl-item.active .pl-name { color: var(--paper); }
+.pl-item.active .pl-theme { color: rgba(246,244,239,.5); }
+
+.pl-preview {
+  display: flex; height: 20px; width: 56px; border-radius: 2px; overflow: hidden; flex-shrink: 0;
+}
+.pl-preview span { flex: 1; }
+.pl-name {
+  font-family: var(--font-d); font-size: 13px;
+  color: var(--ink); letter-spacing: -.01em;
+  line-height: 1.2;
+}
+.pl-theme {
+  font-family: var(--font-m); font-size: 8px;
+  color: var(--ink-light); letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* Data selector */
+select, .ctrl-btn {
+  font-family: var(--font-m); font-size: 10px;
+  letter-spacing: .03em;
+  border: 1px solid var(--rule-dark); border-radius: 2px;
+  background: transparent; color: var(--ink);
+  padding: 5px 8px; cursor: pointer;
+  transition: all .12s; width: 100%;
+}
+select:hover, .ctrl-btn:hover {
+  border-color: var(--ink-mid); background: rgba(0,0,0,.03);
+}
+.ctrl-btn { width: auto; margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; }
+.ctrl-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* Map container */
+#map {
+  flex: 1; position: relative;
+}
+
+/* Leaflet overrides — clean paper look */
+.leaflet-container { background: #D4D0C8; font-family: var(--font-s); }
+.leaflet-control-zoom a {
+  font-family: var(--font-m) !important;
+  color: var(--ink) !important;
+  background: var(--paper) !important;
+  border-color: var(--rule-dark) !important;
+}
+.leaflet-control-zoom a:hover { background: var(--paper-warm, #EDEAE2) !important; }
+
+/* Legend */
+.map-legend {
+  position: absolute; bottom: 20px; right: 16px; z-index: 999;
+  background: rgba(246,244,239,.95);
+  border: 1px solid var(--rule);
+  padding: 12px 14px;
+  min-width: 140px;
+  backdrop-filter: blur(4px);
+}
+.legend-title {
+  font-family: var(--font-m); font-size: 9px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-light); margin-bottom: 8px;
+}
+.legend-items { display: flex; flex-direction: column; gap: 4px; }
+.legend-item { display: flex; align-items: center; gap: 8px; }
+.legend-chip {
+  width: 16px; height: 10px; border-radius: 1px; flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,.1);
+}
+.legend-lbl { font-family: var(--font-m); font-size: 9px; color: var(--ink-mid); }
+
+/* Tooltip */
+.leaflet-tooltip {
+  background: var(--paper) !important;
+  border: 1px solid var(--rule-dark) !important;
+  border-radius: 2px !important;
+  font-family: var(--font-m) !important;
+  font-size: 10px !important;
+  color: var(--ink) !important;
+  padding: 4px 8px !important;
+  box-shadow: none !important;
+}
+
+/* Filter chips */
+.use-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.use-chip {
+  font-family: var(--font-m); font-size: 9px;
+  letter-spacing: .04em; text-transform: uppercase;
+  padding: 3px 8px; border: 1px solid var(--rule-dark);
+  border-radius: 2px; background: transparent;
+  color: var(--ink-light); cursor: pointer; transition: all .12s;
+}
+.use-chip:hover { color: var(--ink); border-color: var(--ink-mid); }
+.use-chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .sidebar { width: 220px; }
+}
+</style>
+</head>
+<body>
+
+<div class="mheader">
+  <a class="mheader-back" href="index.html">← Atlas</a>
+  <div>
+    <div class="mheader-title">Palette Preview Map</div>
+    <div class="mheader-sub">Test any palette on real GIS data</div>
+  </div>
+</div>
+
+<div class="map-layout">
+  <div class="sidebar">
+
+    <!-- Data selector -->
+    <div class="sb-section">
+      <div class="sb-label">Dataset</div>
+      <select id="dataSelect">
+        <option value="gdp">GDP per capita (World Bank)</option>
+        <option value="pop">Population (millions)</option>
+        <option value="area">Land area (km²)</option>
+        <option value="random">Random classification</option>
+      </select>
+
+      <div style="margin-top:10px;">
+        <div class="sb-label">Filter by use</div>
+        <div class="use-chips" id="useChips"></div>
+      </div>
+    </div>
+
+    <!-- Palette list -->
+    <div class="sb-label" style="padding:12px 16px 4px;">Palette</div>
+    <div class="palette-list" id="paletteList"></div>
+
+  </div>
+
+  <div id="map">
+    <div class="map-legend" id="mapLegend">
+      <div class="legend-title" id="legendTitle">Legend</div>
+      <div class="legend-items" id="legendItems"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="data.js"></script>
+<script>
+// ─────────────────────────────────────────────────────────────
+// DATASET — country-level values (ISO A3 → value)
+// GDP per capita USD approximate (World Bank ~2023)
+// ─────────────────────────────────────────────────────────────
+const DATASETS = {
+  gdp: {
+    label: "GDP per capita (USD)",
+    values: {
+      USA:85000,NOR:82000,CHE:92000,LUX:128000,AUS:65000,DNK:68000,SWE:62000,NLD:60000,
+      DEU:54000,CAN:55000,GBR:50000,FRA:46000,JPN:42000,KOR:35000,ITA:38000,ESP:33000,
+      CHN:13000,BRA:9000,MEX:11000,RUS:14000,ZAF:6000,IND:2500,NGA:2000,IDN:4700,
+      TUR:14000,SAU:25000,ARG:13000,COL:6500,EGY:4300,PAK:1500,BGD:2700,ETH:1000,
+      TZA:1100,KEN:2200,UKR:4500,POL:19000,CZE:26000,HUN:20000,GRC:22000,PRT:26000,
+      FIN:55000,AUT:56000,BEL:50000,ISR:55000,SGP:82000,NZL:50000,ZWE:1200,MOZ:550,
+      SDN:750,MMR:1200,VNM:4200,PHL:3700,MYS:13000,THA:7300,IRQ:5800,IRN:6000,
+      AFG:340,YEM:600,SYR:600,LBY:7000,DZA:4000,MAR:3700,TUN:4200,GHA:2600,
+      CIV:2400,CMR:1700,ANG:3300,COD:600,MDG:550,ZMB:1200,SEN:1700,MLI:930,
+      NER:600,BFA:950,TCD:740,SOM:450,ERI:620,DJI:3500,RWA:940,UGA:870,
+      MWI:680,LSO:1100,BWA:8500,NAM:4600,GAB:8700,GNQ:8000,COG:2600,CAF:530,
+      SLE:540,GIN:1100,LBR:720,TGO:980,BEN:1400,MRT:2100,GMB:780,GNB:870,
+      CPV:3700,STP:2200,COM:1500,MUS:11000,SYC:18000,MDV:10000,BHR:26000,QAT:80000,
+      ARE:50000,KWT:36000,OMN:19000,JOR:4400,LBN:3000,PSE:3500,ARM:6800,GEO:7000,
+      AZE:7500,KAZ:12000,UZB:2400,TKM:7500,KGZ:1500,TJK:1100,MNG:4400,
+      PRK:600,KHM:1800,LAO:2400,NPL:1200,BTN:3500,SRI:3700,MDV:10000,
+      CUB:9000,HTI:1600,DOM:9000,JAM:5600,TTO:17000,BLZ:5600,GTM:5000,
+      HND:2900,SLV:4600,NIC:2300,CRI:12000,PAN:16000,VEN:3000,GUY:9000,
+      SUR:5000,BOL:3600,PRY:5000,PER:7500,ECU:6300,URY:18000,CHL:16000,
+      ALB:7000,MKD:7500,SRB:10000,BIH:7200,MNE:10000,HRV:21000,SVN:31000,
+      SVK:24000,ROU:18000,BGR:14000,MDA:5700,BLR:8500,LTU:28000,LVA:24000,
+      EST:30000,ISL:75000,MLT:30000,CYP:35000,
+    },
+    breaks: [1000,3000,8000,18000,35000,55000,80000]
+  },
+  pop: {
+    label: "Population (millions)",
+    values: {
+      CHN:1410,IND:1420,USA:335,IDN:277,PAK:230,BRA:215,NGA:220,BGD:170,RUS:145,
+      ETH:126,MEX:128,JPN:125,PHL:115,COD:100,EGY:105,IRN:86,TUR:85,DEU:83,
+      THA:72,GBR:68,FRA:68,TZA:65,ZAF:60,MMR:54,KOR:52,COL:51,KEN:54,
+      ARG:45,DZA:44,SDN:45,UGA:47,IRQ:42,UKR:44,CAN:38,MAR:37,SAU:36,
+      VNM:97,AFG:40,MOZ:32,GHA:33,YEM:33,PRK:26,CMR:27,ANO:34,CIV:27,
+      NER:25,MDG:28,AUS:26,SYR:21,SRB:7,MYS:33,HRV:4,LKA:22,NLD:17,
+      CHL:19,ROU:19,CZE:11,PRT:10,SWE:10,AUT:9,CHE:8,BGD:170,BEL:11,
+      POL:38,GRC:11,ESP:47,ITA:60,ISR:9,SGP:6,NZL:5,ZWE:16,ZMB:19,
+      SEN:17,MLI:22,BFA:22,TCD:17,SOM:17,SLE:8,GIN:13,LBR:5,TGO:8,
+      BEN:12,MRT:4,GMB:2,GNB:2,RWA:13,MWI:19,LSO:2,BWA:2,NAM:3,
+      GAB:2,GNQ:1,COG:5,CAF:5,ERI:3,DJI:1,QAT:3,ARE:10,KWT:4,
+      BHR:2,OMN:5,JOR:10,LBN:7,KAZ:19,UZB:35,AZE:10,GEO:4,ARM:3,
+      MNG:3,KGZ:7,TJK:10,TKM:6,NPL:29,BTN:1,MDV:1,HTI:11,DOM:11,
+      CUB:11,JAM:3,TTO:1,GTM:17,HND:10,SLV:7,NIC:7,CRI:5,PAN:4,
+      VEN:29,GUY:1,SUR:1,BOL:12,PRY:7,PER:33,ECU:18,URY:3,
+      ALB:3,MKD:2,BIH:3,MNE:1,SVN:2,SVK:5,HUN:10,BGR:7,MDA:3,BLR:9,
+      LTU:3,LVA:2,EST:1,ISL:1,MLT:1,CYP:1,FIN:6,DNK:6,NOR:5
+    },
+    breaks: [5,20,50,100,200,500,1000]
+  },
+  area: {
+    label: "Land area (km²)",
+    values: {
+      RUS:17098242,CAN:9984670,USA:9833517,CHN:9596960,BRA:8515767,AUS:7692024,
+      IND:3287263,ARG:2780400,KAZ:2724900,DZA:2381741,COD:2344858,SAU:2149690,
+      MEX:1964375,IDN:1904569,SDN:1861484,LBY:1759540,IRN:1648195,MNG:1564116,
+      PER:1285216,TCD:1284000,NGA:923768,ANG:1246700,ETH:1104300,ZAF:1219090,
+      COL:1141748,BOL:1098581,MOZ:801590,NAM:824292,ZMB:752612,MMR:676578,
+      AFG:652230,SOM:637657,CAF:622984,UKR:603550,MDG:587041,BOT:581730,
+      KEN:580367,YEM:527968,THA:513120,ESP:505990,TKM:488100,CMR:475442,
+      PNG:462840,SWE:450295,UZB:448978,IRQ:438317,PRY:406752,ZWE:390757,
+      JPN:377973,GER:357114,COG:342000,FIN:338145,VNM:331210,MYS:329847,
+      NOR:323802,POL:312679,CIV:322463,ITA:301340,PHL:300000,ECU:283561,
+      BFA:274222,NZL:270467,GBR:242900,GHA:238533,ROM:238397,UGA:241038,
+      GIN:245857,SEN:196722,TUN:163610,SYR:185180,BGR:110879,MWI:118484,
+      AZE:86600,GRC:131957,PRT:92212,BEN:112622,HND:112492,LBR:111369,
+      TGO:56785,SLE:71740,HRV:56594,CZE:78867,ARM:29743,SVK:49035,
+      DOM:48671,SWZ:17364,ALB:28748,BLR:207600,HUN:93028,FRA:551695,
+      ETH:1104300,TZA:945087,RWA:26338,BDI:27830,
+      DEU:357114,CHE:41285,AUT:83871,BEL:30528,NLD:41543,DNK:43094,
+      ISR:22072,SGP:728,NZL:270467,MLT:316,CYP:9251,
+    },
+    breaks: [50000,200000,500000,1000000,2000000,5000000,10000000]
+  },
+  random: {
+    label: "Random classification",
+    values: {},
+    breaks: [1,2,3,4,5,6,7]
+  }
+};
+
+// ─────────────────────────────────────────────────────────────
+// COLOUR UTILS
+// ─────────────────────────────────────────────────────────────
+function hexToRgb(hex) {
+  const h = hex.replace('#','');
+  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+}
+
+function getColorForValue(value, breaks, colors) {
+  if (value === undefined || value === null) return '#cccccc';
+  // Clamp and find bucket
+  for (let i = 0; i < breaks.length; i++) {
+    if (value <= breaks[i]) return colors[Math.min(i, colors.length-1)];
+  }
+  return colors[colors.length-1];
+}
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let currentPalette = WOC_DATA[0];
+let currentDataset = 'gdp';
+let geoLayer = null;
+let geojsonData = null;
+let activeUse = 'all';
+
+// ─────────────────────────────────────────────────────────────
+// MAP INIT
+// ─────────────────────────────────────────────────────────────
+const map = L.map('map', {
+  center: [20, 10], zoom: 2,
+  minZoom: 1, maxZoom: 8,
+  zoomControl: true,
+  attributionControl: true
+});
+
+// No tile layer — paper background from CSS. Just pure vector.
+// Subtle grey ocean tile for context:
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO',
+  subdomains: 'abcd', maxZoom: 19, opacity: 0.3
+}).addTo(map);
+
+// ─────────────────────────────────────────────────────────────
+// LOAD GEOJSON (Natural Earth countries via unpkg)
+// ─────────────────────────────────────────────────────────────
+async function loadGeoJSON() {
+  const url = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
+  const topoUrl = url;
+
+  // Use a simpler GeoJSON source
+  const resp = await fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson');
+  if (!resp.ok) throw new Error('GeoJSON fetch failed');
+  return resp.json();
+}
+
+function applyPalette() {
+  if (!geojsonData) return;
+  const ds = DATASETS[currentDataset];
+  const colors = currentPalette.colors;
+
+  // Random: assign random class to each country
+  if (currentDataset === 'random') {
+    const keys = geojsonData.features.map(f => f.properties.ISO_A3 || f.properties.iso_a3 || '');
+    keys.forEach(k => { if (k) ds.values[k] = Math.random() * 7; });
+  }
+
+  if (geoLayer) map.removeLayer(geoLayer);
+
+  geoLayer = L.geoJSON(geojsonData, {
+    style: feature => {
+      const iso = feature.properties.ISO_A3 || feature.properties.iso_a3 || '';
+      const val = ds.values[iso];
+      const color = getColorForValue(val, ds.breaks, colors);
+      return {
+        fillColor: color,
+        weight: 0.5,
+        opacity: 0.6,
+        color: '#888',
+        fillOpacity: 0.85
+      };
+    },
+    onEachFeature: (feature, layer) => {
+      const iso = feature.properties.ISO_A3 || feature.properties.iso_a3 || '';
+      const name = feature.properties.ADMIN || feature.properties.name || iso;
+      const val = DATASETS[currentDataset].values[iso];
+      const valStr = val !== undefined
+        ? currentDataset === 'random'
+          ? `Class ${Math.ceil(val)}`
+          : currentDataset === 'pop'
+            ? `${val.toLocaleString()}M`
+            : currentDataset === 'area'
+              ? `${val.toLocaleString()} km²`
+              : `$${val.toLocaleString()}`
+        : 'No data';
+
+      layer.bindTooltip(`<strong>${name}</strong><br>${ds.label}: ${valStr}`, {
+        sticky: true, opacity: 1
+      });
+
+      layer.on({ mouseover: e => e.target.setStyle({ weight: 1.5, color: '#333', fillOpacity: 0.95 }),
+                 mouseout: e => geoLayer.resetStyle(e.target) });
+    }
+  }).addTo(map);
+
+  updateLegend();
+}
+
+function updateLegend() {
+  const ds = DATASETS[currentDataset];
+  const colors = currentPalette.colors;
+  const items = document.getElementById('legendItems');
+  const title = document.getElementById('legendTitle');
+
+  title.textContent = currentPalette.name;
+  items.innerHTML = '';
+
+  ds.breaks.forEach((b, i) => {
+    const prev = ds.breaks[i-1];
+    const color = colors[Math.min(i, colors.length-1)];
+    let lbl;
+    if (currentDataset === 'random') { lbl = `Class ${i+1}`; }
+    else if (currentDataset === 'pop')  { lbl = `< ${b}M`; }
+    else if (currentDataset === 'area') { lbl = `< ${(b/1000).toFixed(0)}k km²`; }
+    else { lbl = `< $${b >= 1000 ? (b/1000)+'k' : b}`; }
+
+    items.innerHTML += `
+      <div class="legend-item">
+        <div class="legend-chip" style="background:${color}"></div>
+        <span class="legend-lbl">${lbl}</span>
+      </div>`;
+  });
+
+  // No data
+  items.innerHTML += `<div class="legend-item"><div class="legend-chip" style="background:#ccc;opacity:.5"></div><span class="legend-lbl">No data</span></div>`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// SIDEBAR
+// ─────────────────────────────────────────────────────────────
+function buildSidebar() {
+  // Use-type chips
+  const chipsEl = document.getElementById('useChips');
+  const uses = ['all','sequential','diverging','qualitative','categorical'];
+  uses.forEach(u => {
+    const btn = document.createElement('button');
+    btn.className = 'use-chip' + (u === 'all' ? ' active' : '');
+    btn.textContent = u === 'all' ? 'All' : u;
+    btn.addEventListener('click', () => {
+      activeUse = u;
+      document.querySelectorAll('.use-chip').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      buildPaletteList();
+    });
+    chipsEl.appendChild(btn);
+  });
+
+  buildPaletteList();
+}
+
+function buildPaletteList() {
+  const list = document.getElementById('paletteList');
+  list.innerHTML = '';
+  const filtered = activeUse === 'all' ? WOC_DATA : WOC_DATA.filter(p => p.use === activeUse);
+
+  filtered.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'pl-item' + (p.id === currentPalette.id ? ' active' : '');
+
+    const preview = document.createElement('div');
+    preview.className = 'pl-preview';
+    p.colors.slice(0,8).forEach(c => {
+      const s = document.createElement('span');
+      s.style.background = c;
+      preview.appendChild(s);
+    });
+
+    item.innerHTML += '';
+    item.appendChild(preview);
+    const text = document.createElement('div');
+    text.innerHTML = `<div class="pl-name">${p.name}</div><div class="pl-theme">${p.theme}</div>`;
+    item.appendChild(text);
+
+    item.addEventListener('click', () => {
+      currentPalette = p;
+      document.querySelectorAll('.pl-item').forEach(el => el.classList.remove('active'));
+      item.classList.add('active');
+      applyPalette();
+    });
+
+    list.appendChild(item);
+  });
+}
+
+// Dataset selector
+document.getElementById('dataSelect').addEventListener('change', e => {
+  currentDataset = e.target.value;
+  applyPalette();
+});
+
+// ─────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────
+buildSidebar();
+
+loadGeoJSON().then(data => {
+  geojsonData = data;
+  applyPalette();
+}).catch(err => {
+  console.error('GeoJSON load error:', err);
+  document.getElementById('map').innerHTML +=
+    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-family:var(--font-m);font-size:11px;color:#888;padding:40px;">' +
+    'Could not load world data.<br>Check your connection and reload.' +
+    '</div>';
+});
+</script>
+</body>
+</html>
