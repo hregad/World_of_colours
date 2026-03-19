@@ -324,4 +324,189 @@ const WOC_DATA = [
   //   colors: ["#..."]
   // },
 
+
+  // ════════════════════════════════════════════════════════════
+  // CARTOGRAPHY CLASSICS
+  // ════════════════════════════════════════════════════════════
+
+  // ── Terrain & Hypsometry ─────────────────────────────────
+  {
+    id: "carto-hypsometric",
+    theme: "Cartography Classics", faction: "Terrain",
+    name: "Hypsometric Tints",
+    desc: "Classic elevation colour scheme. Deep sea green through summit white. The cartographic standard.",
+    use: "sequential",
+    colors: ["#1A5276","#2980B9","#76B7D1","#A8D8A8","#78B060","#4E8A28","#C8A050","#A07838","#785830","#F0EDE8"]
+  },
+  {
+    id: "carto-terrain-warm",
+    theme: "Cartography Classics", faction: "Terrain",
+    name: "Warm Terrain",
+    desc: "Warm-toned hypsometry for arid and temperate landscapes. Lowland green to snow white.",
+    use: "sequential",
+    colors: ["#3D8C60","#6AAF60","#A8C870","#D4D890","#C8A86A","#A87840","#886030","#6A4820","#907878","#F0EDE8"]
+  },
+  {
+    id: "carto-bathymetry",
+    theme: "Cartography Classics", faction: "Terrain",
+    name: "Bathymetric Depth",
+    desc: "Ocean floor depth palette. From shoreline blue to abyssal trench.",
+    use: "sequential",
+    colors: ["#D0EAF8","#90C8EE","#50A0E0","#1878C8","#0050A0","#003880","#002060","#001040","#000820","#000410"]
+  },
+  {
+    id: "carto-relief",
+    theme: "Cartography Classics", faction: "Terrain",
+    name: "Relief Grey",
+    desc: "Hillshade and relief. Neutral grey ramp for analytical topography.",
+    use: "sequential",
+    colors: ["#FFFFFF","#EBEBEB","#D4D4D4","#BABABA","#9E9E9E","#828282","#686868","#4E4E4E","#363636","#1A1A1A"]
+  },
+  {
+    id: "carto-topo-contrast",
+    theme: "Cartography Classics", faction: "Terrain",
+    name: "Topo Contrast",
+    desc: "High-contrast topographic palette for slope and aspect analysis.",
+    use: "diverging",
+    colors: ["#F5F5F5","#D4D4B0","#B0B878","#88A040","#508828","#286010","#C8883A","#A05A18","#784010","#502808"]
+  },
+
+  // ── Sequential ────────────────────────────────────────────
+  {
+    id: "carto-blues",
+    theme: "Cartography Classics", faction: "Sequential",
+    name: "Blues",
+    desc: "Classic single-hue sequential blue. Population density, precipitation, water bodies.",
+    use: "sequential",
+    colors: ["#F7FBFF","#DEEBF7","#C6DBEF","#9ECAE1","#6BAED6","#4292C6","#2171B5","#08519C","#08306B","#041B3D"]
+  },
+  {
+    id: "carto-greens",
+    theme: "Cartography Classics", faction: "Sequential",
+    name: "Greens",
+    desc: "Single-hue sequential green. Vegetation density, land cover, NDVI.",
+    use: "sequential",
+    colors: ["#F7FCF5","#E5F5E0","#C7E9C0","#A1D99B","#74C476","#41AB5D","#238B45","#006D2C","#00441B","#002710"]
+  },
+  {
+    id: "carto-reds",
+    theme: "Cartography Classics", faction: "Sequential",
+    name: "Reds",
+    desc: "Sequential red. Temperature anomalies, risk, fire intensity, drought.",
+    use: "sequential",
+    colors: ["#FFF5F0","#FEE0D2","#FCBBA1","#FC9272","#FB6A4A","#EF3B2C","#CB181D","#A50F15","#67000D","#3D0007"]
+  },
+  {
+    id: "carto-ylgnbu",
+    theme: "Cartography Classics", faction: "Sequential",
+    name: "Yellow-Green-Blue",
+    desc: "Multi-hue YlGnBu. Versatile sequential palette for choropleth mapping.",
+    use: "sequential",
+    colors: ["#FFFFD9","#EDF8B1","#C7E9B4","#7FCDBB","#41B6C4","#1D91C0","#225EA8","#253494","#081D58","#030C2A"]
+  },
+  {
+    id: "carto-orangered",
+    theme: "Cartography Classics", faction: "Sequential",
+    name: "Orange-Red",
+    desc: "Orange to red sequential. Heat, aridity, erosion risk.",
+    use: "sequential",
+    colors: ["#FFF7EC","#FEE8C8","#FDD49E","#FDBB84","#FC8D59","#EF6548","#D7301F","#B30000","#7F0000","#4A0000"]
+  },
+  {
+    id: "carto-purples",
+    theme: "Cartography Classics", faction: "Sequential",
+    name: "Purples",
+    desc: "Single-hue purple ramp. Night-time lights, urban density, shadow depth.",
+    use: "sequential",
+    colors: ["#FCFBFD","#EFEDF5","#DADAEB","#BCBDDC","#9E9AC8","#807DBA","#6A51A3","#54278F","#3F007D","#250049"]
+  },
+
+  // ── Diverging ─────────────────────────────────────────────
+  {
+    id: "carto-rdbu",
+    theme: "Cartography Classics", faction: "Diverging",
+    name: "Red-Blue",
+    desc: "Classic diverging red-blue. Temperature anomaly, political maps, change detection.",
+    use: "diverging",
+    colors: ["#67001F","#B2182B","#D6604D","#F4A582","#FDDBC7","#F7F7F7","#D1E5F0","#92C5DE","#4393C3","#2166AC","#053061"]
+  },
+  {
+    id: "carto-browngreen",
+    theme: "Cartography Classics", faction: "Diverging",
+    name: "Brown-Green",
+    desc: "Arid to lush diverging palette. Drought index, vegetation change, land degradation.",
+    use: "diverging",
+    colors: ["#543005","#8C510A","#BF812D","#DFC27D","#F6E8C3","#F5F5F5","#C7EAE5","#80CDC1","#35978F","#01665E","#003C30"]
+  },
+  {
+    id: "carto-spectral",
+    theme: "Cartography Classics", faction: "Diverging",
+    name: "Spectral",
+    desc: "Full spectral range diverging. Multi-class classification, land cover, spectral indices.",
+    use: "diverging",
+    colors: ["#9E0142","#D53E4F","#F46D43","#FDAE61","#FEE08B","#FFFFBF","#E6F598","#ABDDA4","#66C2A5","#3288BD","#5E4FA2"]
+  },
+  {
+    id: "carto-piyg",
+    theme: "Cartography Classics", faction: "Diverging",
+    name: "Pink-Green",
+    desc: "Pink to green diverging. Rainfall anomaly, NDVI difference, before/after change.",
+    use: "diverging",
+    colors: ["#8E0152","#C51B7D","#DE77AE","#F1B6DA","#FDE0EF","#F7F7F7","#E6F5D0","#B8E186","#7FBC41","#4D9221","#276419"]
+  },
+
+  // ── Qualitative ───────────────────────────────────────────
+  {
+    id: "carto-set1",
+    theme: "Cartography Classics", faction: "Qualitative",
+    name: "Set I — Vivid",
+    desc: "High-contrast qualitative palette. Distinct land use classes, administrative boundaries.",
+    use: "qualitative",
+    colors: ["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#FFFF33","#A6CEE3"]
+  },
+  {
+    id: "carto-pastel",
+    theme: "Cartography Classics", faction: "Qualitative",
+    name: "Pastel Regions",
+    desc: "Soft qualitative palette for background polygons. Administrative regions, zoning.",
+    use: "qualitative",
+    colors: ["#FBB4AE","#B3CDE3","#CCEBC5","#DECBE4","#FED9A6","#FFFFCC","#E5D8BD","#FDDAEC","#F2F2F2","#B3E2CD"]
+  },
+  {
+    id: "carto-dark2",
+    theme: "Cartography Classics", faction: "Qualitative",
+    name: "Dark Classes",
+    desc: "Dark qualitative palette for dense maps. Ecological zones, soil types.",
+    use: "qualitative",
+    colors: ["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","#666666","#2C7BB6","#B2182B"]
+  },
+
+  // ── Cartographic Specialties ──────────────────────────────
+  {
+    id: "carto-population",
+    theme: "Cartography Classics", faction: "Thematic",
+    name: "Population Density",
+    desc: "From rural emptiness to dense urban cores. Perceptually linear orange-red.",
+    use: "sequential",
+    colors: ["#FFFFF0","#FEFEC0","#FEE090","#FDBB50","#FC8D30","#E85C10","#C02808","#901000","#600000","#300000"]
+  },
+  {
+    id: "carto-nightlights",
+    theme: "Cartography Classics", faction: "Thematic",
+    name: "Night Lights",
+    desc: "VIIRS/DMSP night-time lights. Black void to saturated city glow.",
+    use: "sequential",
+    colors: ["#000000","#0A0808","#180C04","#301806","#502808","#784010","#A86820","#D0A030","#F0C840","#FFEE80"]
+  },
+  {
+    id: "carto-landcover",
+    theme: "Cartography Classics", faction: "Thematic",
+    name: "Land Cover",
+    desc: "Global land cover classification. Forest, grassland, cropland, urban, water, bare.",
+    use: "qualitative",
+    colors: ["#1A6B1A","#8CC850","#F0E060","#D09030","#C03020","#808080","#4090D0","#B0D0F0","#F0F0F0","#604020"]
+  },
+];
+
+
 ];
