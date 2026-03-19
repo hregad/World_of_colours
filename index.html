@@ -3,933 +3,416 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World of Colours</title>
+<title>World of Colours — A Colour Atlas for GIS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-/* ─────────────────────────────────────────────────────────────
-   TOKENS
-───────────────────────────────────────────────────────────── */
 :root {
-  --ink:        #1A1A1A;
-  --ink-mid:    #555555;
-  --ink-light:  #999999;
-  --ink-faint:  #CCCCCC;
-  --paper:      #F7F5F0;
-  --paper-warm: #EDE9E0;
-  --paper-mid:  #D8D2C8;
-  --rule:       #D0CAC0;
-  --rule-dark:  #B0A898;
-  --accent:     #1A1A1A;
-  --tag-bg:     rgba(26,26,26,0.06);
-  --tag-bg-act: #1A1A1A;
-  --tag-fg-act: #F7F5F0;
-
-  --font-display: 'DM Serif Display', Georgia, serif;
-  --font-mono:    'DM Mono', 'Courier New', monospace;
-  --font-sans:    'DM Sans', system-ui, sans-serif;
+  --ink:        #18181A;
+  --ink-mid:    #52525A;
+  --ink-light:  #9090A0;
+  --ink-faint:  #C8C8D8;
+  --paper:      #F6F4EF;
+  --paper-warm: #EDEAE2;
+  --rule:       #D8D4CC;
+  --rule-dark:  #B0AAA0;
+  --font-d: 'DM Serif Display', Georgia, serif;
+  --font-m: 'DM Mono', 'Courier New', monospace;
+  --font-s: 'DM Sans', system-ui, sans-serif;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-s);font-weight:300;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
-/* ─────────────────────────────────────────────────────────────
-   RESET & BASE
-───────────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:50;background:rgba(246,244,239,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);height:54px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;gap:20px}
+.logo{font-family:var(--font-d);font-size:18px;color:var(--ink);text-decoration:none;flex-shrink:0;letter-spacing:-0.01em}
+.logo em{font-style:italic;color:var(--ink-mid)}
+.header-spectrum{flex:1;display:flex;height:6px;border-radius:3px;overflow:hidden;max-width:300px;gap:1px;opacity:.55}
+.hs{flex:1;border-radius:1px;transition:flex .4s ease}
+.header-link{font-family:var(--font-m);font-size:10px;color:var(--ink-light);text-decoration:none;letter-spacing:.04em;transition:color .15s;flex-shrink:0}
+.header-link:hover{color:var(--ink)}
 
-html { font-size: 16px; }
+/* ── MASTHEAD ── */
+.masthead{padding:56px 40px 48px;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:auto 1fr;gap:0 80px;align-items:end;position:relative;overflow:hidden}
+.masthead-bg{position:absolute;inset:0;opacity:.06;background:linear-gradient(135deg,#E74C3C 0%,#9B59B6 20%,#3498DB 40%,#27AE60 60%,#F39C12 80%,#E74C3C 100%);background-size:400% 400%;animation:bg-shift 20s ease infinite;pointer-events:none}
+@keyframes bg-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.masthead-title{font-family:var(--font-d);font-size:clamp(54px,8vw,100px);line-height:.88;letter-spacing:-.02em;color:var(--ink);position:relative}
+.masthead-title em{font-style:italic;color:var(--ink-mid)}
+.masthead-right{padding-bottom:6px;position:relative}
+.masthead-kicker{font-family:var(--font-m);font-size:10px;letter-spacing:.12em;color:var(--ink-light);text-transform:uppercase;margin-bottom:14px}
+.masthead-desc{font-size:14px;line-height:1.75;color:var(--ink-mid);max-width:400px;margin-bottom:24px}
+.masthead-desc a{color:var(--ink);text-underline-offset:2px}
+.vols{display:flex;flex-direction:column;gap:7px}
+.vol-row{display:flex;align-items:center;gap:10px;font-family:var(--font-m);font-size:10px;letter-spacing:.04em;color:var(--ink-light);opacity:0;transform:translateX(-6px);animation:vol-in .5s ease both}
+.vol-row:nth-child(1){animation-delay:.1s}.vol-row:nth-child(2){animation-delay:.2s}.vol-row:nth-child(3){animation-delay:.3s}.vol-row:nth-child(4){animation-delay:.4s}
+@keyframes vol-in{to{opacity:1;transform:translateX(0)}}
+.vol-chip{width:22px;height:5px;border-radius:2px;flex-shrink:0}
 
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-sans);
-  font-weight: 300;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+/* ── TICKER ── */
+.ticker{height:30px;overflow:hidden;border-bottom:1px solid var(--rule);display:flex;cursor:pointer}
+.ticker-track{display:flex;height:100%;animation:tick 50s linear infinite;white-space:nowrap}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick-s{height:100%;min-width:36px;position:relative;transition:min-width .2s ease;flex-shrink:0}
+.tick-s:hover{min-width:72px}
+.tick-h{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:var(--font-m);font-size:7px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6);opacity:0;white-space:nowrap;pointer-events:none;transition:opacity .15s}
+.tick-s:hover .tick-h{opacity:1}
 
-/* ─────────────────────────────────────────────────────────────
-   HEADER
-───────────────────────────────────────────────────────────── */
-header {
-  border-bottom: 1px solid var(--rule);
-  padding: 0 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 52px;
-  position: sticky;
-  top: 0;
-  background: rgba(247,245,240,0.95);
-  backdrop-filter: blur(6px);
-  z-index: 50;
-}
+/* ── STATS ── */
+.stats{display:flex;padding:0 40px;border-bottom:1px solid var(--rule)}
+.stat{flex:1;padding:14px 0 12px;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:2px}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--font-d);font-size:28px;color:var(--ink);line-height:1;font-style:italic}
+.stat-l{font-family:var(--font-m);font-size:9px;letter-spacing:.08em;color:var(--ink-light);text-transform:uppercase}
 
-.logo {
-  font-family: var(--font-display);
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  text-decoration: none;
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
+/* ── FILTER BAR ── */
+.fbar{position:sticky;top:54px;z-index:40;background:rgba(246,244,239,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);padding:11px 40px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.fsep{width:1px;height:20px;background:var(--rule);margin:0 4px;flex-shrink:0}
+.tag{font-family:var(--font-m);font-size:10px;letter-spacing:.03em;padding:4px 11px;border:1px solid transparent;background:rgba(24,24,26,.06);color:var(--ink-mid);cursor:pointer;border-radius:2px;transition:all .12s;white-space:nowrap;user-select:none}
+.tag:hover{background:rgba(24,24,26,.1);color:var(--ink)}
+.tag.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.fright{margin-left:auto;font-family:var(--font-m);font-size:10px;color:var(--ink-light);white-space:nowrap}
 
-.logo em {
-  font-style: italic;
-  color: var(--ink-mid);
-}
+/* ── USE LEGEND ── */
+.ulegend{padding:9px 40px;border-bottom:1px solid var(--rule);display:flex;gap:20px;flex-wrap:wrap}
+.ul-item{display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:9px;color:var(--ink-light);letter-spacing:.04em}
+.ul-swatches{display:flex;gap:1px}
+.ul-swatches span{width:10px;height:10px;border-radius:1px;display:block}
 
-.logo-vol {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-light);
-  letter-spacing: 0.05em;
-  font-style: normal;
-}
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr))}
 
-.header-meta {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-light);
-  letter-spacing: 0.04em;
-}
+/* ── THEME DIVIDER ── */
+.tdiv{grid-column:1/-1;display:flex;align-items:baseline;gap:16px;padding:22px 40px 12px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);position:relative}
+.tdiv-accent{position:absolute;bottom:0;left:40px;height:2px;width:44px;border-radius:1px}
+.tdiv-title{font-family:var(--font-d);font-size:24px;font-style:italic;color:var(--ink-mid)}
+.tdiv-count{font-family:var(--font-m);font-size:10px;color:var(--ink-light);letter-spacing:.05em}
 
-.header-meta a {
-  color: inherit;
-  text-decoration: none;
-  transition: color 0.15s;
-}
+/* ── CARD ── */
+.card{border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;background:var(--paper);transition:background .18s;opacity:0;animation:cin .35s ease both}
+@keyframes cin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{background:var(--paper-warm)}
+.card.hidden{display:none}
 
-.header-meta a:hover { color: var(--ink); }
-
-/* ─────────────────────────────────────────────────────────────
-   MASTHEAD
-───────────────────────────────────────────────────────────── */
-.masthead {
-  padding: 60px 40px 44px;
-  border-bottom: 1px solid var(--rule);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 80px;
-  align-items: end;
-}
-
-.masthead-title {
-  font-family: var(--font-display);
-  font-size: clamp(44px, 6vw, 80px);
-  line-height: 0.92;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-.masthead-title em {
-  font-style: italic;
-  color: var(--ink-mid);
-}
-
-.masthead-right {
-  padding-bottom: 4px;
-}
-
-.masthead-desc {
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--ink-mid);
-  max-width: 380px;
-  margin-bottom: 28px;
-}
-
-.masthead-caps {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.cap-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-light);
-  letter-spacing: 0.04em;
-}
-
-.cap-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--ink-faint);
-  flex-shrink: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   FILTER BAR
-───────────────────────────────────────────────────────────── */
-.filter-bar {
-  padding: 14px 40px;
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  background: var(--paper);
-  position: sticky;
-  top: 52px;
-  z-index: 40;
-}
-
-.filter-group {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.filter-sep {
-  width: 1px;
-  height: 18px;
-  background: var(--rule);
-  margin: 0 4px;
-}
-
-.filter-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-light);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.04em;
-  padding: 4px 10px;
-  border: 1px solid transparent;
-  background: var(--tag-bg);
-  color: var(--ink-mid);
-  cursor: pointer;
-  border-radius: 2px;
-  transition: all 0.12s;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.tag:hover {
-  background: rgba(26,26,26,0.1);
-  color: var(--ink);
-}
-
-.tag.active {
-  background: var(--tag-bg-act);
-  color: var(--tag-fg-act);
-  border-color: var(--tag-bg-act);
-}
-
-.filter-right {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-light);
-  white-space: nowrap;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   GRID
-───────────────────────────────────────────────────────────── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  border-top: none;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   PALETTE CARD
-───────────────────────────────────────────────────────────── */
-.card {
-  border-right: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  flex-direction: column;
-  transition: background 0.15s;
-}
-
-.card:hover { background: var(--paper-warm); }
-.card.hidden { display: none; }
-
-/* Swatch strip */
-.swatches {
-  display: flex;
-  height: 64px;
-  flex-shrink: 0;
-}
-
-.swatch {
-  flex: 1;
-  position: relative;
-  cursor: pointer;
-  transition: flex 0.18s cubic-bezier(.4,0,.2,1);
-}
-
-.swatch:hover { flex: 3; }
-
-.swatch::after {
-  content: attr(data-hex);
-  position: absolute;
-  bottom: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.15s;
-  pointer-events: none;
-  /* text shadow for readability on any color */
-  text-shadow: 0 0 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.4);
-  color: #fff;
-}
-
-.swatch:hover::after { opacity: 1; }
-
-/* Copied flash */
-.swatch.copied {
-  outline: 2px solid var(--ink);
-  outline-offset: -2px;
-}
+/* Swatches */
+.swatches{display:flex;height:72px;flex-shrink:0}
+.sw{flex:1;cursor:pointer;position:relative;transition:flex .2s cubic-bezier(.4,0,.2,1)}
+.sw:hover{flex:3.5}
+.sw::after{content:attr(data-h);position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-family:var(--font-m);font-size:8px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.sw:hover::after{opacity:1}
+@keyframes flash{0%{outline:2px solid rgba(255,255,255,.9);outline-offset:-2px}100%{outline:2px solid transparent;outline-offset:-2px}}
+.sw.copied{animation:flash .5s ease}
 
 /* Card body */
-.card-body {
-  padding: 16px 20px 14px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.card-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-light);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-}
-
-.card-eyebrow-sep { color: var(--rule-dark); }
-
-.card-name {
-  font-family: var(--font-display);
-  font-size: 18px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  line-height: 1.1;
-}
-
-.card-desc {
-  font-size: 11px;
-  color: var(--ink-light);
-  line-height: 1.5;
-  margin-top: 2px;
-}
-
-.use-badge {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 2px 6px;
-  border: 1px solid var(--rule-dark);
-  color: var(--ink-light);
-  border-radius: 1px;
-  margin-top: 4px;
-  align-self: flex-start;
-}
+.cbody{padding:13px 18px 9px;flex:1}
+.cmeta{font-family:var(--font-m);font-size:9px;letter-spacing:.06em;color:var(--ink-light);text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cmeta-dot{color:var(--rule-dark)}
+.cname{font-family:var(--font-d);font-size:17px;letter-spacing:-.01em;color:var(--ink);line-height:1.1;margin-bottom:3px}
+.cdesc{font-size:11px;color:var(--ink-light);line-height:1.5}
+.ubadge{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-m);font-size:8px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--rule);color:var(--ink-light);border-radius:1px;margin-top:7px}
+.upip{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ubadge[data-u=sequential]  .upip{background:#3498DB}
+.ubadge[data-u=diverging]   .upip{background:#E67E22}
+.ubadge[data-u=qualitative] .upip{background:#27AE60}
+.ubadge[data-u=categorical] .upip{background:#9B59B6}
 
 /* Card footer */
-.card-foot {
-  padding: 10px 20px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid var(--rule);
-  margin-top: auto;
-}
+.cfoot{padding:9px 18px 13px;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.nc{font-family:var(--font-m);font-size:9px;color:var(--ink-faint)}
+.dlg{display:flex;gap:3px}
+.dlb{font-family:var(--font-m);font-size:9px;padding:4px 8px;border:1px solid var(--rule);background:transparent;color:var(--ink-light);cursor:pointer;border-radius:1px;transition:all .12s;letter-spacing:.03em}
+.dlb:hover{border-color:var(--ink-mid);color:var(--ink);background:rgba(24,24,26,.04)}
 
-.n-colors {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-faint);
-  letter-spacing: 0.04em;
-}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--paper);font-family:var(--font-m);font-size:11px;letter-spacing:.04em;padding:8px 18px;border-radius:2px;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;white-space:nowrap;z-index:9999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.dl-group {
-  display: flex;
-  gap: 4px;
-}
+/* ── FOOTER ── */
+footer{border-top:2px solid var(--ink);padding:40px 40px 48px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;margin-top:1px}
+.flogo{font-family:var(--font-d);font-size:30px;font-style:italic;color:var(--ink);margin-bottom:10px}
+.fbody{font-size:13px;color:var(--ink-mid);line-height:1.75;max-width:480px}
+.fbody a{color:var(--ink);text-underline-offset:2px}
+.fformats{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.fft{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-light);margin-bottom:2px}
+.ff{font-family:var(--font-m);font-size:11px;color:var(--ink-mid);display:flex;align-items:center;gap:8px}
+.ffd{width:4px;height:4px;border-radius:50%;background:var(--rule-dark)}
 
-.dl-btn {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.04em;
-  padding: 4px 8px;
-  border: 1px solid var(--rule-dark);
-  background: transparent;
-  color: var(--ink-light);
-  cursor: pointer;
-  border-radius: 1px;
-  transition: all 0.12s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  header{padding:0 20px}
+  .header-spectrum{display:none}
+  .masthead{grid-template-columns:1fr;padding:36px 20px 28px;gap:22px}
+  .stats,.fbar,.ulegend{padding-left:20px;padding-right:20px}
+  .grid{grid-template-columns:1fr}
+  footer{grid-template-columns:1fr;padding:28px 20px}
+  .fformats{align-items:flex-start}
+  .tdiv{padding:16px 20px 10px}
+  .ticker{display:none}
 }
-
-.dl-btn:hover {
-  border-color: var(--ink-mid);
-  color: var(--ink);
-  background: rgba(26,26,26,0.04);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   SECTION DIVIDER
-───────────────────────────────────────────────────────────── */
-.theme-divider {
-  grid-column: 1 / -1;
-  padding: 28px 40px 16px;
-  border-bottom: 1px solid var(--rule);
-  border-right: 1px solid var(--rule);
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-}
-
-.theme-divider-title {
-  font-family: var(--font-display);
-  font-size: 28px;
-  letter-spacing: -0.02em;
-  font-style: italic;
-  color: var(--ink-mid);
-}
-
-.theme-divider-meta {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--ink-light);
-  letter-spacing: 0.04em;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   TOAST
-───────────────────────────────────────────────────────────── */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  padding: 9px 20px;
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity 0.18s, transform 0.18s;
-  pointer-events: none;
-  white-space: nowrap;
-  z-index: 9999;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   FOOTER
-───────────────────────────────────────────────────────────── */
-footer {
-  border-top: 2px solid var(--ink);
-  padding: 32px 40px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 24px;
-  align-items: start;
-  margin-top: 1px;
-}
-
-.footer-col {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.footer-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-
-.footer-body {
-  font-size: 12px;
-  color: var(--ink-light);
-  line-height: 1.7;
-  max-width: 440px;
-}
-
-.footer-body a {
-  color: var(--ink-mid);
-  text-decoration: underline;
-  text-decoration-color: var(--rule-dark);
-}
-
-.footer-formats {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-}
-
-.footer-format-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink-light);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
-
-.footer-format {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--ink-mid);
-  letter-spacing: 0.04em;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   RESPONSIVE
-───────────────────────────────────────────────────────────── */
-@media (max-width: 700px) {
-  header { padding: 0 20px; }
-  .masthead { grid-template-columns: 1fr; padding: 40px 20px 32px; gap: 24px; }
-  .filter-bar { padding: 12px 20px; }
-  .grid { grid-template-columns: 1fr; }
-  footer { grid-template-columns: 1fr; padding: 28px 20px; }
-  .footer-formats { align-items: flex-start; }
-  .theme-divider { padding: 20px 20px 12px; }
-}
-
-@media (max-width: 900px) {
-  .header-meta { display: none; }
-}
-
-/* ─────────────────────────────────────────────────────────────
-   ANIMATIONS
-───────────────────────────────────────────────────────────── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.card { animation: fadeUp 0.35s ease both; }
 </style>
 </head>
 <body>
 
-<!-- ═══ HEADER ══════════════════════════════════════════════════ -->
 <header>
-  <a class="logo" href="#">
-    World <em>of</em> Colours
-    <span class="logo-vol">— A Colour Atlas for GIS</span>
-  </a>
-  <div class="header-meta">
-    <a href="https://github.com/world-of-colours" target="_blank">github.com/world-of-colours</a>
-    <span>QGIS · ArcGIS · HEX</span>
-  </div>
+  <a class="logo" href="#">World <em>of</em> Colours</a>
+  <div class="header-spectrum" id="hs"></div>
+  <a class="header-link" href="https://github.com/hregad" target="_blank">github.com/hregad</a>
 </header>
 
-<!-- ═══ MASTHEAD ════════════════════════════════════════════════ -->
 <div class="masthead">
-  <div class="masthead-title">
-    World<br><em>of</em><br>Colours
-  </div>
+  <div class="masthead-bg"></div>
+  <div class="masthead-title">World<br><em>of</em><br>Colours</div>
   <div class="masthead-right">
+    <div class="masthead-kicker">A colour atlas for GIS professionals</div>
     <p class="masthead-desc">
-      A curated atlas of colour palettes for cartographers and geospatial professionals.
-      Every palette is export-ready for QGIS and ArcGIS.
+      Curated palettes for cartographers and spatial analysts — crafted for real map work.
+      Sequential, diverging, qualitative, categorical.
+      Every palette exports to QGIS and ArcGIS.
       Click any swatch to copy its hex value.
     </p>
-    <div class="masthead-caps">
-      <div class="cap-row"><div class="cap-dot"></div> QGIS .gpl — import via Style Manager</div>
-      <div class="cap-row"><div class="cap-dot"></div> ArcGIS .clr — color ramp & raster symbology</div>
-      <div class="cap-row"><div class="cap-dot"></div> ArcGIS Pro .json — CIMColorPalette</div>
-      <div class="cap-row"><div class="cap-dot"></div> .txt — plain hex sheet</div>
-    </div>
+    <div class="vols" id="vols"></div>
   </div>
 </div>
 
-<!-- ═══ FILTER BAR ══════════════════════════════════════════════ -->
-<div class="filter-bar" id="filter-bar">
-  <!-- Generated by JS -->
+<div class="ticker"><div class="ticker-track" id="tick"></div></div>
+
+<div class="stats" id="stats"></div>
+
+<div class="fbar" id="fbar"></div>
+
+<div class="ulegend">
+  <div class="ul-item">
+    <div class="ul-swatches"><span style="background:#3498DB"></span><span style="background:#5DADE2"></span><span style="background:#93C6E0"></span></div>
+    Sequential
+  </div>
+  <div class="ul-item">
+    <div class="ul-swatches"><span style="background:#C0392B"></span><span style="background:#F5F5F5"></span><span style="background:#2980B9"></span></div>
+    Diverging
+  </div>
+  <div class="ul-item">
+    <div class="ul-swatches"><span style="background:#27AE60"></span><span style="background:#E74C3C"></span><span style="background:#F39C12"></span></div>
+    Qualitative
+  </div>
+  <div class="ul-item">
+    <div class="ul-swatches"><span style="background:#9B59B6"></span><span style="background:#8B1A1A"></span><span style="background:#2C3A4A"></span></div>
+    Categorical
+  </div>
 </div>
 
-<!-- ═══ GRID ════════════════════════════════════════════════════ -->
 <div class="grid" id="grid"></div>
 
-<!-- ═══ FOOTER ══════════════════════════════════════════════════ -->
 <footer>
-  <div class="footer-col">
-    <div class="footer-title">World of Colours</div>
-    <p class="footer-body">
-      A living atlas of GIS colour palettes, organised by theme and updated regularly.
-      Each palette is crafted to work in real cartographic contexts — sequential, diverging, qualitative, and categorical use cases.
-      Hosted on <a href="https://github.com/world-of-colours" target="_blank">GitHub</a>.
-      Open source, free to use.
+  <div>
+    <div class="flogo">World of Colours</div>
+    <p class="fbody">
+      A living atlas of GIS-ready colour palettes, maintained and expanded over time.
+      Each palette is built for a specific cartographic context.
+      Open source and free to use. Maintained by
+      <a href="https://github.com/hregad" target="_blank">hregad</a> on GitHub.
     </p>
   </div>
-  <div class="footer-formats">
-    <div class="footer-format-label">Export formats</div>
-    <div class="footer-format">.gpl — QGIS / GIMP</div>
-    <div class="footer-format">.clr — ArcGIS color ramp</div>
-    <div class="footer-format">.json — ArcGIS Pro CIM</div>
-    <div class="footer-format">.txt — hex + RGB sheet</div>
+  <div class="fformats">
+    <div class="fft">Export formats</div>
+    <div class="ff"><div class="ffd"></div>.gpl — QGIS / GIMP</div>
+    <div class="ff"><div class="ffd"></div>.clr — ArcGIS Color Ramp</div>
+    <div class="ff"><div class="ffd"></div>.json — ArcGIS Pro CIM</div>
+    <div class="ff"><div class="ffd"></div>.txt — Hex + RGB</div>
   </div>
 </footer>
 
-<!-- ═══ TOAST ════════════════════════════════════════════════════ -->
 <div class="toast" id="toast"></div>
 
-<!-- ═══ DATA ═════════════════════════════════════════════════════ -->
 <script src="data.js"></script>
-
+<script src="news.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════════
-// UTILITIES
-// ═══════════════════════════════════════════════════════════════
-function hexToRgb(hex) {
-  const h = hex.replace('#','');
-  return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+const THEME_ACCENT = {
+  "Star Wars":            "#C0392B",
+  "Cartography Classics": "#2980B9",
+};
+function accent(t){ return THEME_ACCENT[t]||"#18181A"; }
+
+function h2r(hex){const h=hex.replace('#','');return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)};}
+
+let _tt;
+function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>e.classList.remove('show'),1800);}
+
+function dl(content,name,mime){const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([content],{type:mime})),download:name});a.click();URL.revokeObjectURL(a.href);}
+
+function toGPL(p){return['GIMP Palette',`Name: ${p.name}`,'Columns: 5','#',`# World of Colours — ${p.theme} / ${p.faction}`,`# ${p.desc}`,`# github.com/hregad`,'#',...p.colors.map((h,i)=>{const{r,g,b}=h2r(h);return`${String(r).padStart(3)} ${String(g).padStart(3)} ${String(b).padStart(3)}\t${p.name} ${String(i+1).padStart(2,'0')}`;})].join('\n');}
+function toCLR(p){return[`# World of Colours — ${p.name}`,`# ${p.theme} / ${p.faction} — ${p.use}`,`# github.com/hregad`,`nColors ${p.colors.length}`,...p.colors.map((h,i)=>{const{r,g,b}=h2r(h);return`${i} ${r} ${g} ${b} 255`;})].join('\n');}
+function toJSON(p){return JSON.stringify({type:'CIMColorPalette',name:p.name,tags:['World of Colours',p.theme,p.faction,p.use],colors:p.colors.map((h,i)=>{const{r,g,b}=h2r(h);return{type:'CIMRGBColor',values:[r,g,b,100],name:`${p.name} ${i+1}`};})},null,2);}
+function toTXT(p){return[`World of Colours — ${p.name}`,`${p.theme} · ${p.faction} · ${p.use}`,p.desc,'','HEX           R    G    B','─'.repeat(30),...p.colors.map(h=>{const{r,g,b}=h2r(h);return`${h.toUpperCase()}  ${String(r).padStart(3)}  ${String(g).padStart(3)}  ${String(b).padStart(3)}`;}),''  ,'— World of Colours · github.com/hregad'].join('\n');}
+
+function copyHex(hex,el){
+  const t=hex.toUpperCase();
+  (navigator.clipboard?.writeText(t)??Promise.reject()).catch(()=>{const ta=Object.assign(document.createElement('textarea'),{value:t});document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}).finally(()=>{el.classList.add('copied');setTimeout(()=>el.classList.remove('copied'),600);toast(`Copied ${t}`);});
 }
 
-function luma(hex) {
-  const {r,g,b} = hexToRgb(hex);
-  return 0.299*r + 0.587*g + 0.114*b;
+function taxonomy(){
+  const t={};WOC_DATA.forEach(p=>{if(!t[p.theme])t[p.theme]=new Set();t[p.theme].add(p.faction);});return t;
 }
 
-function download(content, filename, mime) {
-  const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(new Blob([content], {type: mime})),
-    download: filename
-  });
-  a.click(); URL.revokeObjectURL(a.href);
-}
-
-let toastTimer;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
-}
-
-// ═══════════════════════════════════════════════════════════════
-// EXPORTS
-// ═══════════════════════════════════════════════════════════════
-function toGPL(p) {
-  const lines = [
-    'GIMP Palette',
-    `Name: ${p.name}`,
-    'Columns: 5',
-    '#',
-    `# World of Colours — ${p.theme} / ${p.faction}`,
-    `# ${p.desc}`,
-    '# github.com/world-of-colours',
-    '#'
-  ];
-  p.colors.forEach((hex, i) => {
-    const {r,g,b} = hexToRgb(hex);
-    lines.push(`${String(r).padStart(3)} ${String(g).padStart(3)} ${String(b).padStart(3)}\t${p.name} ${String(i+1).padStart(2,'0')}`);
-  });
-  return lines.join('\n');
-}
-
-function toCLR(p) {
-  const lines = [
-    `# World of Colours — ${p.name}`,
-    `# Theme: ${p.theme}  Faction: ${p.faction}`,
-    `# ${p.desc}`,
-    `# github.com/world-of-colours`,
-    `nColors ${p.colors.length}`
-  ];
-  p.colors.forEach((hex, i) => {
-    const {r,g,b} = hexToRgb(hex);
-    lines.push(`${i} ${r} ${g} ${b} 255`);
-  });
-  return lines.join('\n');
-}
-
-function toJSON(p) {
-  return JSON.stringify({
-    type: 'CIMColorPalette',
-    name: p.name,
-    tags: ['World of Colours', p.theme, p.faction, p.use],
-    colors: p.colors.map((hex, i) => {
-      const {r,g,b} = hexToRgb(hex);
-      return { type: 'CIMRGBColor', values: [r,g,b,100], name: `${p.name} ${i+1}` };
-    })
-  }, null, 2);
-}
-
-function toTXT(p) {
-  return [
-    `World of Colours — ${p.name}`,
-    `Theme: ${p.theme}  ·  Faction: ${p.faction}  ·  Use: ${p.use}`,
-    p.desc, '',
-    'HEX             R    G    B',
-    '─'.repeat(34),
-    ...p.colors.map(hex => {
-      const {r,g,b} = hexToRgb(hex);
-      return `${hex.toUpperCase()}  ${String(r).padStart(3)}  ${String(g).padStart(3)}  ${String(b).padStart(3)}`;
-    }),
-    '',
-    '— World of Colours Project · github.com/world-of-colours'
-  ].join('\n');
-}
-
-// ═══════════════════════════════════════════════════════════════
-// COPY HEX
-// ═══════════════════════════════════════════════════════════════
-function copyHex(hex, swatchEl) {
-  const text = hex.toUpperCase();
-  (navigator.clipboard?.writeText(text) ?? Promise.reject())
-    .catch(() => {
-      const t = document.createElement('textarea');
-      t.value = text; document.body.appendChild(t); t.select();
-      document.execCommand('copy'); document.body.removeChild(t);
-    })
-    .finally(() => {
-      swatchEl.classList.add('copied');
-      setTimeout(() => swatchEl.classList.remove('copied'), 600);
-      toast(`Copied ${text}`);
+/* Header spectrum */
+function buildHS(){
+  const el=document.getElementById('hs');
+  const tax=taxonomy();
+  Object.keys(tax).forEach(th=>{
+    const p=WOC_DATA.find(x=>x.theme===th);
+    if(p)p.colors.slice(0,5).forEach(h=>{
+      const s=document.createElement('div');
+      s.className='hs';s.style.background=h;el.appendChild(s);
     });
+  });
 }
 
-// ═══════════════════════════════════════════════════════════════
-// DERIVE TAXONOMY FROM DATA (auto-updates when data.js changes)
-// ═══════════════════════════════════════════════════════════════
-function buildTaxonomy() {
-  const themes = {}; // { theme: Set<faction> }
-  WOC_DATA.forEach(p => {
-    if (!themes[p.theme]) themes[p.theme] = new Set();
-    themes[p.theme].add(p.faction);
+/* Masthead vols */
+function buildVols(){
+  const el=document.getElementById('vols');
+  const tax=taxonomy();
+  Object.keys(tax).forEach(th=>{
+    const n=WOC_DATA.filter(p=>p.theme===th).length;
+    el.innerHTML+=`<div class="vol-row"><div class="vol-chip" style="background:${accent(th)}"></div>${th} — ${n} palettes</div>`;
   });
-  return themes;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// RENDER FILTERS
-// ═══════════════════════════════════════════════════════════════
-let activeTheme = 'all';
-let activeFaction = 'all';
-
-function renderFilters() {
-  const taxonomy = buildTaxonomy();
-  const bar = document.getElementById('filter-bar');
-
-  const allTag = makeTag('All themes', 'all', 'theme', activeTheme === 'all' && activeFaction === 'all');
-  const themeGroup = document.createElement('div');
-  themeGroup.className = 'filter-group';
-  themeGroup.appendChild(allTag);
-
-  Object.keys(taxonomy).forEach(theme => {
-    themeGroup.appendChild(makeTag(theme, theme, 'theme', activeTheme === theme));
+/* Ticker */
+function buildTicker(){
+  const track=document.getElementById('tick');
+  const all=[...new Set(WOC_DATA.flatMap(p=>p.colors))].sort((a,b)=>parseInt(a.slice(1),16)-parseInt(b.slice(1),16));
+  const doubled=[...all,...all];
+  doubled.forEach(h=>{
+    const s=document.createElement('div');
+    s.className='tick-s';s.style.background=h;
+    s.innerHTML=`<span class="tick-h">${h.toUpperCase()}</span>`;
+    s.addEventListener('click',()=>copyHex(h,s));
+    track.appendChild(s);
   });
+}
 
-  bar.innerHTML = '';
-  bar.appendChild(themeGroup);
+/* Stats */
+function buildStats(){
+  const el=document.getElementById('stats');
+  const tax=taxonomy();
+  const uc=new Set(WOC_DATA.flatMap(p=>p.colors)).size;
+  [[WOC_DATA.length,'Palettes'],[Object.keys(tax).length,'Themes'],[uc,'Unique colours'],[4,'Export formats']].forEach(([n,l])=>{
+    el.innerHTML+=`<div class="stat"><div class="stat-n">${n}</div><div class="stat-l">${l}</div></div>`;
+  });
+}
 
-  // Faction sub-filter (only when a theme is active)
-  if (activeTheme !== 'all') {
-    const sep = document.createElement('div');
-    sep.className = 'filter-sep';
-    bar.appendChild(sep);
+/* Filters */
+let aTheme='all',aFac='all';
 
-    const factionGroup = document.createElement('div');
-    factionGroup.className = 'filter-group';
+function renderFilters(){
+  const tax=taxonomy();
+  const bar=document.getElementById('fbar');
+  bar.innerHTML='';
 
-    const allFac = makeTag('All', 'all', 'faction', activeFaction === 'all');
-    factionGroup.appendChild(allFac);
+  const tg=document.createElement('div');
+  tg.style.cssText='display:flex;align-items:center;gap:6px;flex-wrap:wrap;';
+  tg.appendChild(mkTag('All','all','theme',aTheme==='all'&&aFac==='all'));
+  Object.keys(tax).forEach(th=>{
+    const b=mkTag(th,th,'theme',aTheme===th);
+    b.style.borderBottom=`2px solid ${accent(th)}`;
+    tg.appendChild(b);
+  });
+  bar.appendChild(tg);
 
-    const factions = [...taxonomy[activeTheme]].sort();
-    factions.forEach(f => {
-      factionGroup.appendChild(makeTag(f, f, 'faction', activeFaction === f));
-    });
-    bar.appendChild(factionGroup);
+  if(aTheme!=='all'){
+    const sep=document.createElement('div');sep.className='fsep';bar.appendChild(sep);
+    const fg=document.createElement('div');fg.style.cssText='display:flex;align-items:center;gap:6px;flex-wrap:wrap;';
+    fg.appendChild(mkTag('All','all','faction',aFac==='all'));
+    [...tax[aTheme]].sort().forEach(f=>fg.appendChild(mkTag(f,f,'faction',aFac===f)));
+    bar.appendChild(fg);
   }
 
-  // Count
-  const countEl = document.createElement('span');
-  countEl.className = 'filter-right';
-  countEl.id = 'visible-count';
-  bar.appendChild(countEl);
+  const ce=document.createElement('span');ce.className='fright';ce.id='vc';bar.appendChild(ce);
   updateCount();
 }
 
-function makeTag(label, value, type, isActive) {
-  const btn = document.createElement('button');
-  btn.className = 'tag' + (isActive ? ' active' : '');
-  btn.textContent = label;
-  btn.addEventListener('click', () => {
-    if (type === 'theme') {
-      activeTheme = value === 'all' ? 'all' : value;
-      activeFaction = 'all';
-    } else {
-      activeFaction = value;
-    }
-    renderFilters();
-    renderGrid();
+function mkTag(label,value,type,isActive){
+  const b=document.createElement('button');
+  b.className='tag'+(isActive?' active':'');
+  b.textContent=label;
+  b.addEventListener('click',()=>{
+    if(type==='theme'){aTheme=value;aFac='all';}else{aFac=value;}
+    renderFilters();renderGrid();
   });
-  return btn;
+  return b;
 }
 
-function updateCount() {
-  const el = document.getElementById('visible-count');
-  if (el) {
-    const n = getFiltered().length;
-    el.textContent = `${n} palette${n !== 1 ? 's' : ''}`;
-  }
+function updateCount(){
+  const e=document.getElementById('vc');
+  if(e){const n=getFiltered().length;e.textContent=`${n} palette${n!==1?'s':''}`;}
 }
 
-function getFiltered() {
-  return WOC_DATA.filter(p => {
-    if (activeTheme !== 'all' && p.theme !== activeTheme) return false;
-    if (activeFaction !== 'all' && p.faction !== activeFaction) return false;
+function getFiltered(){
+  return WOC_DATA.filter(p=>{
+    if(aTheme!=='all'&&p.theme!==aTheme)return false;
+    if(aFac!=='all'&&p.faction!==aFac)return false;
     return true;
   });
 }
 
-// ═══════════════════════════════════════════════════════════════
-// RENDER GRID
-// ═══════════════════════════════════════════════════════════════
-function renderGrid() {
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
+/* Grid */
+function renderGrid(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  const filtered=getFiltered();
+  if(!filtered.length){grid.innerHTML='<p style="padding:48px 40px;font-family:var(--font-m);font-size:12px;color:var(--ink-light);">No palettes match.</p>';return;}
 
-  const filtered = getFiltered();
-  if (!filtered.length) {
-    grid.innerHTML = '<p style="padding:60px 40px;font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">No palettes match the current filter.</p>';
-    return;
-  }
+  const byTheme={};
+  filtered.forEach(p=>{if(!byTheme[p.theme])byTheme[p.theme]=[];byTheme[p.theme].push(p);});
+  const themes=Object.keys(byTheme);
+  const multi=themes.length>1;
+  let idx=0;
 
-  // Group by theme for dividers
-  const byTheme = {};
-  filtered.forEach(p => {
-    if (!byTheme[p.theme]) byTheme[p.theme] = [];
-    byTheme[p.theme].push(p);
-  });
-
-  let cardIdx = 0;
-  const themes = Object.keys(byTheme);
-  const multiTheme = themes.length > 1;
-
-  themes.forEach(theme => {
-    if (multiTheme) {
-      const div = document.createElement('div');
-      div.className = 'theme-divider';
-      div.innerHTML = `
-        <span class="theme-divider-title">${theme}</span>
-        <span class="theme-divider-meta">${byTheme[theme].length} palettes</span>
-      `;
-      grid.appendChild(div);
+  themes.forEach(th=>{
+    if(multi){
+      const d=document.createElement('div');d.className='tdiv';
+      d.innerHTML=`<span class="tdiv-title">${th}</span><span class="tdiv-count">${byTheme[th].length} palettes</span><div class="tdiv-accent" style="background:${accent(th)}"></div>`;
+      grid.appendChild(d);
     }
-
-    byTheme[theme].forEach(p => {
-      grid.appendChild(makeCard(p, cardIdx++));
-    });
+    byTheme[th].forEach(p=>grid.appendChild(mkCard(p,idx++)));
   });
 }
 
-function makeCard(p, idx) {
-  const card = document.createElement('div');
-  card.className = 'card';
-  card.style.animationDelay = `${Math.min(idx, 20) * 0.025}s`;
+function mkCard(p,idx){
+  const card=document.createElement('div');
+  card.className='card';
+  card.style.animationDelay=`${Math.min(idx,24)*.022}s`;
 
-  // Swatches
-  const swatches = document.createElement('div');
-  swatches.className = 'swatches';
-  p.colors.forEach(hex => {
-    const s = document.createElement('div');
-    s.className = 'swatch';
-    s.style.background = hex;
-    s.dataset.hex = hex.toUpperCase();
-    s.title = hex.toUpperCase();
-    s.addEventListener('click', () => copyHex(hex, s));
-    swatches.appendChild(s);
+  const srow=document.createElement('div');srow.className='swatches';
+  p.colors.forEach(h=>{
+    const s=document.createElement('div');s.className='sw';s.style.background=h;s.dataset.h=h.toUpperCase();
+    s.addEventListener('click',()=>copyHex(h,s));srow.appendChild(s);
   });
 
-  // Body
-  const body = document.createElement('div');
-  body.className = 'card-body';
-  body.innerHTML = `
-    <div class="card-eyebrow">
-      <span>${p.theme}</span>
-      <span class="card-eyebrow-sep">·</span>
-      <span>${p.faction}</span>
-    </div>
-    <div class="card-name">${p.name}</div>
-    <div class="card-desc">${p.desc}</div>
-    <div class="use-badge">${p.use}</div>
-  `;
+  const body=document.createElement('div');body.className='cbody';
+  body.innerHTML=`<div class="cmeta"><span>${p.theme}</span><span class="cmeta-dot">·</span><span>${p.faction}</span></div><div class="cname">${p.name}</div><div class="cdesc">${p.desc}</div><div class="ubadge" data-u="${p.use}"><div class="upip"></div>${p.use}</div>`;
 
-  // Footer
-  const foot = document.createElement('div');
-  foot.className = 'card-foot';
-  foot.innerHTML = `<span class="n-colors">${p.colors.length} colours</span>`;
+  const foot=document.createElement('div');foot.className='cfoot';
+  const nc=document.createElement('span');nc.className='nc';nc.textContent=`${p.colors.length} colours`;
+  const dlg=document.createElement('div');dlg.className='dlg';
 
-  const dlGroup = document.createElement('div');
-  dlGroup.className = 'dl-group';
-
-  const formats = [
-    { label: '.gpl', fn: () => download(toGPL(p), `${p.id}.gpl`, 'text/plain'), title: 'QGIS / GIMP Palette' },
-    { label: '.clr', fn: () => download(toCLR(p), `${p.id}.clr`, 'text/plain'), title: 'ArcGIS Color Ramp' },
-    { label: '.json', fn: () => download(toJSON(p), `${p.id}.json`, 'application/json'), title: 'ArcGIS Pro CIMColorPalette' },
-    { label: '.txt', fn: () => download(toTXT(p), `${p.id}.txt`, 'text/plain'), title: 'Hex + RGB sheet' },
-  ];
-
-  formats.forEach(({label, fn, title}) => {
-    const btn = document.createElement('button');
-    btn.className = 'dl-btn';
-    btn.textContent = label;
-    btn.title = title;
-    btn.addEventListener('click', (e) => { e.stopPropagation(); fn(); toast(`Downloaded ${p.name}${label}`); });
-    dlGroup.appendChild(btn);
+  [['.gpl',()=>dl(toGPL(p),`${p.id}.gpl`,'text/plain'),'QGIS / GIMP'],
+   ['.clr',()=>dl(toCLR(p),`${p.id}.clr`,'text/plain'),'ArcGIS Color Ramp'],
+   ['.json',()=>dl(toJSON(p),`${p.id}.json`,'application/json'),'ArcGIS Pro CIM'],
+   ['.txt',()=>dl(toTXT(p),`${p.id}.txt`,'text/plain'),'Hex + RGB']
+  ].forEach(([label,fn,title])=>{
+    const b=document.createElement('button');b.className='dlb';b.textContent=label;b.title=title;
+    b.addEventListener('click',e=>{e.stopPropagation();fn();toast(`Downloaded ${p.name}${label}`);});
+    dlg.appendChild(b);
   });
 
-  foot.appendChild(dlGroup);
-  card.appendChild(swatches);
-  card.appendChild(body);
-  card.appendChild(foot);
+  foot.appendChild(nc);foot.appendChild(dlg);
+  card.appendChild(srow);card.appendChild(body);card.appendChild(foot);
   return card;
 }
 
-// ═══════════════════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════════════════
-renderFilters();
-renderGrid();
+/* Init */
+buildHS();buildVols();buildTicker();buildStats();renderFilters();renderGrid();
 </script>
 </body>
 </html>
