@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World of Colours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────────────────────────── */
+:root {
+  --ink:        #1A1A1A;
+  --ink-mid:    #555555;
+  --ink-light:  #999999;
+  --ink-faint:  #CCCCCC;
+  --paper:      #F7F5F0;
+  --paper-warm: #EDE9E0;
+  --paper-mid:  #D8D2C8;
+  --rule:       #D0CAC0;
+  --rule-dark:  #B0A898;
+  --accent:     #1A1A1A;
+  --tag-bg:     rgba(26,26,26,0.06);
+  --tag-bg-act: #1A1A1A;
+  --tag-fg-act: #F7F5F0;
+
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-mono:    'DM Mono', 'Courier New', monospace;
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESET & BASE
+───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   HEADER
+───────────────────────────────────────────────────────────── */
+header {
+  border-bottom: 1px solid var(--rule);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  background: rgba(247,245,240,0.95);
+  backdrop-filter: blur(6px);
+  z-index: 50;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.logo em {
+  font-style: italic;
+  color: var(--ink-mid);
+}
+
+.logo-vol {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  letter-spacing: 0.05em;
+  font-style: normal;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  letter-spacing: 0.04em;
+}
+
+.header-meta a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.header-meta a:hover { color: var(--ink); }
+
+/* ─────────────────────────────────────────────────────────────
+   MASTHEAD
+───────────────────────────────────────────────────────────── */
+.masthead {
+  padding: 60px 40px 44px;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 80px;
+  align-items: end;
+}
+
+.masthead-title {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 80px);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.masthead-title em {
+  font-style: italic;
+  color: var(--ink-mid);
+}
+
+.masthead-right {
+  padding-bottom: 4px;
+}
+
+.masthead-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  max-width: 380px;
+  margin-bottom: 28px;
+}
+
+.masthead-caps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cap-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  letter-spacing: 0.04em;
+}
+
+.cap-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FILTER BAR
+───────────────────────────────────────────────────────────── */
+.filter-bar {
+  padding: 14px 40px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: var(--paper);
+  position: sticky;
+  top: 52px;
+  z-index: 40;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.filter-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--rule);
+  margin: 0 4px;
+}
+
+.filter-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  background: var(--tag-bg);
+  color: var(--ink-mid);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.tag:hover {
+  background: rgba(26,26,26,0.1);
+  color: var(--ink);
+}
+
+.tag.active {
+  background: var(--tag-bg-act);
+  color: var(--tag-fg-act);
+  border-color: var(--tag-bg-act);
+}
+
+.filter-right {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GRID
+───────────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  border-top: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PALETTE CARD
+───────────────────────────────────────────────────────────── */
+.card {
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  transition: background 0.15s;
+}
+
+.card:hover { background: var(--paper-warm); }
+.card.hidden { display: none; }
+
+/* Swatch strip */
+.swatches {
+  display: flex;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.swatch {
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+  transition: flex 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+.swatch:hover { flex: 3; }
+
+.swatch::after {
+  content: attr(data-hex);
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  /* text shadow for readability on any color */
+  text-shadow: 0 0 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.4);
+  color: #fff;
+}
+
+.swatch:hover::after { opacity: 1; }
+
+/* Copied flash */
+.swatch.copied {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+
+/* Card body */
+.card-body {
+  padding: 16px 20px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.card-eyebrow-sep { color: var(--rule-dark); }
+
+.card-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.card-desc {
+  font-size: 11px;
+  color: var(--ink-light);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+.use-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border: 1px solid var(--rule-dark);
+  color: var(--ink-light);
+  border-radius: 1px;
+  margin-top: 4px;
+  align-self: flex-start;
+}
+
+/* Card footer */
+.card-foot {
+  padding: 10px 20px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--rule);
+  margin-top: auto;
+}
+
+.n-colors {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+
+.dl-group {
+  display: flex;
+  gap: 4px;
+}
+
+.dl-btn {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 4px 8px;
+  border: 1px solid var(--rule-dark);
+  background: transparent;
+  color: var(--ink-light);
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.12s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dl-btn:hover {
+  border-color: var(--ink-mid);
+  color: var(--ink);
+  background: rgba(26,26,26,0.04);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION DIVIDER
+───────────────────────────────────────────────────────────── */
+.theme-divider {
+  grid-column: 1 / -1;
+  padding: 28px 40px 16px;
+  border-bottom: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.theme-divider-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  font-style: italic;
+  color: var(--ink-mid);
+}
+
+.theme-divider-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-light);
+  letter-spacing: 0.04em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TOAST
+───────────────────────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 9px 20px;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.18s, transform 0.18s;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────────── */
+footer {
+  border-top: 2px solid var(--ink);
+  padding: 32px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  align-items: start;
+  margin-top: 1px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.footer-body {
+  font-size: 12px;
+  color: var(--ink-light);
+  line-height: 1.7;
+  max-width: 440px;
+}
+
+.footer-body a {
+  color: var(--ink-mid);
+  text-decoration: underline;
+  text-decoration-color: var(--rule-dark);
+}
+
+.footer-formats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.footer-format-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink-light);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.footer-format {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-mid);
+  letter-spacing: 0.04em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+  header { padding: 0 20px; }
+  .masthead { grid-template-columns: 1fr; padding: 40px 20px 32px; gap: 24px; }
+  .filter-bar { padding: 12px 20px; }
+  .grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; padding: 28px 20px; }
+  .footer-formats { align-items: flex-start; }
+  .theme-divider { padding: 20px 20px 12px; }
+}
+
+@media (max-width: 900px) {
+  .header-meta { display: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ANIMATIONS
+───────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card { animation: fadeUp 0.35s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ══════════════════════════════════════════════════ -->
+<header>
+  <a class="logo" href="#">
+    World <em>of</em> Colours
+    <span class="logo-vol">— A Colour Atlas for GIS</span>
+  </a>
+  <div class="header-meta">
+    <a href="https://github.com/world-of-colours" target="_blank">github.com/world-of-colours</a>
+    <span>QGIS · ArcGIS · HEX</span>
+  </div>
+</header>
+
+<!-- ═══ MASTHEAD ════════════════════════════════════════════════ -->
+<div class="masthead">
+  <div class="masthead-title">
+    World<br><em>of</em><br>Colours
+  </div>
+  <div class="masthead-right">
+    <p class="masthead-desc">
+      A curated atlas of colour palettes for cartographers and geospatial professionals.
+      Every palette is export-ready for QGIS and ArcGIS.
+      Click any swatch to copy its hex value.
+    </p>
+    <div class="masthead-caps">
+      <div class="cap-row"><div class="cap-dot"></div> QGIS .gpl — import via Style Manager</div>
+      <div class="cap-row"><div class="cap-dot"></div> ArcGIS .clr — color ramp & raster symbology</div>
+      <div class="cap-row"><div class="cap-dot"></div> ArcGIS Pro .json — CIMColorPalette</div>
+      <div class="cap-row"><div class="cap-dot"></div> .txt — plain hex sheet</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FILTER BAR ══════════════════════════════════════════════ -->
+<div class="filter-bar" id="filter-bar">
+  <!-- Generated by JS -->
+</div>
+
+<!-- ═══ GRID ════════════════════════════════════════════════════ -->
+<div class="grid" id="grid"></div>
+
+<!-- ═══ FOOTER ══════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-col">
+    <div class="footer-title">World of Colours</div>
+    <p class="footer-body">
+      A living atlas of GIS colour palettes, organised by theme and updated regularly.
+      Each palette is crafted to work in real cartographic contexts — sequential, diverging, qualitative, and categorical use cases.
+      Hosted on <a href="https://github.com/world-of-colours" target="_blank">GitHub</a>.
+      Open source, free to use.
+    </p>
+  </div>
+  <div class="footer-formats">
+    <div class="footer-format-label">Export formats</div>
+    <div class="footer-format">.gpl — QGIS / GIMP</div>
+    <div class="footer-format">.clr — ArcGIS color ramp</div>
+    <div class="footer-format">.json — ArcGIS Pro CIM</div>
+    <div class="footer-format">.txt — hex + RGB sheet</div>
+  </div>
+</footer>
+
+<!-- ═══ TOAST ════════════════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ DATA ═════════════════════════════════════════════════════ -->
+<script src="data.js"></script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+function hexToRgb(hex) {
+  const h = hex.replace('#','');
+  return { r: parseInt(h.slice(0,2),16), g: parseInt(h.slice(2,4),16), b: parseInt(h.slice(4,6),16) };
+}
+
+function luma(hex) {
+  const {r,g,b} = hexToRgb(hex);
+  return 0.299*r + 0.587*g + 0.114*b;
+}
+
+function download(content, filename, mime) {
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([content], {type: mime})),
+    download: filename
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EXPORTS
+// ═══════════════════════════════════════════════════════════════
+function toGPL(p) {
+  const lines = [
+    'GIMP Palette',
+    `Name: ${p.name}`,
+    'Columns: 5',
+    '#',
+    `# World of Colours — ${p.theme} / ${p.faction}`,
+    `# ${p.desc}`,
+    '# github.com/world-of-colours',
+    '#'
+  ];
+  p.colors.forEach((hex, i) => {
+    const {r,g,b} = hexToRgb(hex);
+    lines.push(`${String(r).padStart(3)} ${String(g).padStart(3)} ${String(b).padStart(3)}\t${p.name} ${String(i+1).padStart(2,'0')}`);
+  });
+  return lines.join('\n');
+}
+
+function toCLR(p) {
+  const lines = [
+    `# World of Colours — ${p.name}`,
+    `# Theme: ${p.theme}  Faction: ${p.faction}`,
+    `# ${p.desc}`,
+    `# github.com/world-of-colours`,
+    `nColors ${p.colors.length}`
+  ];
+  p.colors.forEach((hex, i) => {
+    const {r,g,b} = hexToRgb(hex);
+    lines.push(`${i} ${r} ${g} ${b} 255`);
+  });
+  return lines.join('\n');
+}
+
+function toJSON(p) {
+  return JSON.stringify({
+    type: 'CIMColorPalette',
+    name: p.name,
+    tags: ['World of Colours', p.theme, p.faction, p.use],
+    colors: p.colors.map((hex, i) => {
+      const {r,g,b} = hexToRgb(hex);
+      return { type: 'CIMRGBColor', values: [r,g,b,100], name: `${p.name} ${i+1}` };
+    })
+  }, null, 2);
+}
+
+function toTXT(p) {
+  return [
+    `World of Colours — ${p.name}`,
+    `Theme: ${p.theme}  ·  Faction: ${p.faction}  ·  Use: ${p.use}`,
+    p.desc, '',
+    'HEX             R    G    B',
+    '─'.repeat(34),
+    ...p.colors.map(hex => {
+      const {r,g,b} = hexToRgb(hex);
+      return `${hex.toUpperCase()}  ${String(r).padStart(3)}  ${String(g).padStart(3)}  ${String(b).padStart(3)}`;
+    }),
+    '',
+    '— World of Colours Project · github.com/world-of-colours'
+  ].join('\n');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COPY HEX
+// ═══════════════════════════════════════════════════════════════
+function copyHex(hex, swatchEl) {
+  const text = hex.toUpperCase();
+  (navigator.clipboard?.writeText(text) ?? Promise.reject())
+    .catch(() => {
+      const t = document.createElement('textarea');
+      t.value = text; document.body.appendChild(t); t.select();
+      document.execCommand('copy'); document.body.removeChild(t);
+    })
+    .finally(() => {
+      swatchEl.classList.add('copied');
+      setTimeout(() => swatchEl.classList.remove('copied'), 600);
+      toast(`Copied ${text}`);
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DERIVE TAXONOMY FROM DATA (auto-updates when data.js changes)
+// ═══════════════════════════════════════════════════════════════
+function buildTaxonomy() {
+  const themes = {}; // { theme: Set<faction> }
+  WOC_DATA.forEach(p => {
+    if (!themes[p.theme]) themes[p.theme] = new Set();
+    themes[p.theme].add(p.faction);
+  });
+  return themes;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER FILTERS
+// ═══════════════════════════════════════════════════════════════
+let activeTheme = 'all';
+let activeFaction = 'all';
+
+function renderFilters() {
+  const taxonomy = buildTaxonomy();
+  const bar = document.getElementById('filter-bar');
+
+  const allTag = makeTag('All themes', 'all', 'theme', activeTheme === 'all' && activeFaction === 'all');
+  const themeGroup = document.createElement('div');
+  themeGroup.className = 'filter-group';
+  themeGroup.appendChild(allTag);
+
+  Object.keys(taxonomy).forEach(theme => {
+    themeGroup.appendChild(makeTag(theme, theme, 'theme', activeTheme === theme));
+  });
+
+  bar.innerHTML = '';
+  bar.appendChild(themeGroup);
+
+  // Faction sub-filter (only when a theme is active)
+  if (activeTheme !== 'all') {
+    const sep = document.createElement('div');
+    sep.className = 'filter-sep';
+    bar.appendChild(sep);
+
+    const factionGroup = document.createElement('div');
+    factionGroup.className = 'filter-group';
+
+    const allFac = makeTag('All', 'all', 'faction', activeFaction === 'all');
+    factionGroup.appendChild(allFac);
+
+    const factions = [...taxonomy[activeTheme]].sort();
+    factions.forEach(f => {
+      factionGroup.appendChild(makeTag(f, f, 'faction', activeFaction === f));
+    });
+    bar.appendChild(factionGroup);
+  }
+
+  // Count
+  const countEl = document.createElement('span');
+  countEl.className = 'filter-right';
+  countEl.id = 'visible-count';
+  bar.appendChild(countEl);
+  updateCount();
+}
+
+function makeTag(label, value, type, isActive) {
+  const btn = document.createElement('button');
+  btn.className = 'tag' + (isActive ? ' active' : '');
+  btn.textContent = label;
+  btn.addEventListener('click', () => {
+    if (type === 'theme') {
+      activeTheme = value === 'all' ? 'all' : value;
+      activeFaction = 'all';
+    } else {
+      activeFaction = value;
+    }
+    renderFilters();
+    renderGrid();
+  });
+  return btn;
+}
+
+function updateCount() {
+  const el = document.getElementById('visible-count');
+  if (el) {
+    const n = getFiltered().length;
+    el.textContent = `${n} palette${n !== 1 ? 's' : ''}`;
+  }
+}
+
+function getFiltered() {
+  return WOC_DATA.filter(p => {
+    if (activeTheme !== 'all' && p.theme !== activeTheme) return false;
+    if (activeFaction !== 'all' && p.faction !== activeFaction) return false;
+    return true;
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER GRID
+// ═══════════════════════════════════════════════════════════════
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  const filtered = getFiltered();
+  if (!filtered.length) {
+    grid.innerHTML = '<p style="padding:60px 40px;font-family:var(--font-mono);font-size:12px;color:var(--ink-light);">No palettes match the current filter.</p>';
+    return;
+  }
+
+  // Group by theme for dividers
+  const byTheme = {};
+  filtered.forEach(p => {
+    if (!byTheme[p.theme]) byTheme[p.theme] = [];
+    byTheme[p.theme].push(p);
+  });
+
+  let cardIdx = 0;
+  const themes = Object.keys(byTheme);
+  const multiTheme = themes.length > 1;
+
+  themes.forEach(theme => {
+    if (multiTheme) {
+      const div = document.createElement('div');
+      div.className = 'theme-divider';
+      div.innerHTML = `
+        <span class="theme-divider-title">${theme}</span>
+        <span class="theme-divider-meta">${byTheme[theme].length} palettes</span>
+      `;
+      grid.appendChild(div);
+    }
+
+    byTheme[theme].forEach(p => {
+      grid.appendChild(makeCard(p, cardIdx++));
+    });
+  });
+}
+
+function makeCard(p, idx) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.animationDelay = `${Math.min(idx, 20) * 0.025}s`;
+
+  // Swatches
+  const swatches = document.createElement('div');
+  swatches.className = 'swatches';
+  p.colors.forEach(hex => {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.style.background = hex;
+    s.dataset.hex = hex.toUpperCase();
+    s.title = hex.toUpperCase();
+    s.addEventListener('click', () => copyHex(hex, s));
+    swatches.appendChild(s);
+  });
+
+  // Body
+  const body = document.createElement('div');
+  body.className = 'card-body';
+  body.innerHTML = `
+    <div class="card-eyebrow">
+      <span>${p.theme}</span>
+      <span class="card-eyebrow-sep">·</span>
+      <span>${p.faction}</span>
+    </div>
+    <div class="card-name">${p.name}</div>
+    <div class="card-desc">${p.desc}</div>
+    <div class="use-badge">${p.use}</div>
+  `;
+
+  // Footer
+  const foot = document.createElement('div');
+  foot.className = 'card-foot';
+  foot.innerHTML = `<span class="n-colors">${p.colors.length} colours</span>`;
+
+  const dlGroup = document.createElement('div');
+  dlGroup.className = 'dl-group';
+
+  const formats = [
+    { label: '.gpl', fn: () => download(toGPL(p), `${p.id}.gpl`, 'text/plain'), title: 'QGIS / GIMP Palette' },
+    { label: '.clr', fn: () => download(toCLR(p), `${p.id}.clr`, 'text/plain'), title: 'ArcGIS Color Ramp' },
+    { label: '.json', fn: () => download(toJSON(p), `${p.id}.json`, 'application/json'), title: 'ArcGIS Pro CIMColorPalette' },
+    { label: '.txt', fn: () => download(toTXT(p), `${p.id}.txt`, 'text/plain'), title: 'Hex + RGB sheet' },
+  ];
+
+  formats.forEach(({label, fn, title}) => {
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = label;
+    btn.title = title;
+    btn.addEventListener('click', (e) => { e.stopPropagation(); fn(); toast(`Downloaded ${p.name}${label}`); });
+    dlGroup.appendChild(btn);
+  });
+
+  foot.appendChild(dlGroup);
+  card.appendChild(swatches);
+  card.appendChild(body);
+  card.appendChild(foot);
+  return card;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+renderFilters();
+renderGrid();
+</script>
+</body>
+</html>
