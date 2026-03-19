@@ -6,146 +6,135 @@
 <title>World of Colours — A Colour Atlas for GIS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet">
 <style>
-/* ── Tokens ─────────────────────────────────────────────── */
-:root {
-  --ink:   #18181A; --ink-m: #52525A; --ink-d: #9090A0; --ink-f: #C8C8D8;
-  --paper: #F6F4EF; --warm:  #EDEAE2; --rule:  #D8D4CC; --ruled: #B0AAA0;
-  --fd: 'DM Serif Display', Georgia, serif;
-  --fm: 'DM Mono', monospace;
-  --fs: 'DM Sans', sans-serif;
+/* ── Tokens ── */
+:root{
+  --ink:#18181A; --ink-m:#52525A; --ink-d:#9090A0; --ink-f:#C8C8D8;
+  --paper:#F6F4EF; --warm:#EDEAE2; --rule:#D8D4CC; --ruled:#B0AAA0;
+  --fd:'DM Serif Display',Georgia,serif;
+  --fm:'DM Mono',monospace;
+  --fs:'DM Sans',sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:var(--fs);font-weight:300;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{background:var(--paper);color:var(--ink);font-family:var(--fs);font-weight:300;
+  min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
-/* ── HEADER ─────────────────────────────────────────────── */
+/* ── HEADER ── */
 header{
   position:sticky;top:0;z-index:50;
   background:rgba(246,244,239,.96);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--rule);
   height:54px;display:flex;align-items:center;
-  padding:0 40px;justify-content:space-between;gap:20px;
+  padding:0 40px;justify-content:space-between;
 }
-.logo{
-  font-family:var(--fd);font-size:19px;letter-spacing:-.01em;
-  text-decoration:none;display:flex;align-items:baseline;gap:2px;flex-shrink:0;
-}
-.logo-w{display:inline-flex}
-.logo-l{
-  display:inline-block;
-  animation:lc 9s ease-in-out infinite;animation-fill-mode:both;
-}
-.logo-l:nth-child(1){animation-delay:.00s} .logo-l:nth-child(2){animation-delay:.12s}
-.logo-l:nth-child(3){animation-delay:.24s} .logo-l:nth-child(4){animation-delay:.36s}
-.logo-l:nth-child(5){animation-delay:.48s} .logo-l:nth-child(6){animation-delay:.72s}
-.logo-l:nth-child(7){animation-delay:.84s} .logo-l:nth-child(8){animation-delay:.96s}
-.logo-l:nth-child(9){animation-delay:1.08s} .logo-l:nth-child(10){animation-delay:1.20s}
-.logo-l:nth-child(11){animation-delay:1.32s} .logo-l:nth-child(12){animation-delay:1.44s}
-.logo-l:nth-child(13){animation-delay:1.56s}
-@keyframes lc{0%,55%,100%{color:var(--ink)}14%{color:#E74C3C}21%{color:#E67E22}28%{color:#27AE60}35%{color:#2980B9}42%{color:#9B59B6}}
-.logo-of{font-family:var(--fd);font-style:italic;font-size:19px;color:var(--ink-m);margin:0 3px}
-.hnav{display:flex;align-items:center;gap:18px}
-.hlink{font-family:var(--fm);font-size:10px;letter-spacing:.05em;color:var(--ink-d);text-decoration:none;transition:color .15s}
+.logo{font-family:var(--fd);font-size:19px;letter-spacing:-.01em;
+  text-decoration:none;display:flex;align-items:baseline;gap:2px}
+.lw{display:inline-flex}
+.ll{display:inline-block;animation:lc 9s ease-in-out infinite;animation-fill-mode:both}
+.ll:nth-child(1){animation-delay:0s}.ll:nth-child(2){animation-delay:.12s}
+.ll:nth-child(3){animation-delay:.24s}.ll:nth-child(4){animation-delay:.36s}
+.ll:nth-child(5){animation-delay:.48s}.ll:nth-child(6){animation-delay:.72s}
+.ll:nth-child(7){animation-delay:.84s}.ll:nth-child(8){animation-delay:.96s}
+.ll:nth-child(9){animation-delay:1.08s}.ll:nth-child(10){animation-delay:1.20s}
+.ll:nth-child(11){animation-delay:1.32s}.ll:nth-child(12){animation-delay:1.44s}
+.ll:nth-child(13){animation-delay:1.56s}
+@keyframes lc{0%,55%,100%{color:var(--ink)}14%{color:#E74C3C}21%{color:#E67E22}
+  28%{color:#27AE60}35%{color:#2980B9}42%{color:#9B59B6}}
+.lof{font-family:var(--fd);font-style:italic;font-size:19px;color:var(--ink-m);margin:0 3px}
+.hlink{font-family:var(--fm);font-size:10px;letter-spacing:.05em;color:var(--ink-d);
+  text-decoration:none;transition:color .15s}
 .hlink:hover{color:var(--ink)}
-.hsep{width:1px;height:16px;background:var(--rule)}
 
-/* ── MASTHEAD ───────────────────────────────────────────── */
+/* ── MASTHEAD ── */
 .masthead{
   border-bottom:1px solid var(--rule);
   display:grid;grid-template-columns:1fr 1fr;
-  min-height:320px;position:relative;overflow:hidden;
+  min-height:300px;position:relative;overflow:hidden;
 }
 
-/* Spinning arcs — vivid, fast, easing accented */
-.masthead-arcs{
-  position:absolute;inset:0;pointer-events:none;overflow:hidden;
-}
+/* Arcs: subtle at rest, vivid+fast on hover */
+.arcs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .arc{
   position:absolute;border-radius:50%;border-style:solid;
-  animation:aspin linear infinite;
+  animation:aspin var(--dur,16s) linear infinite;
+  opacity:var(--op,.18);transition:opacity .6s,animation-duration .6s;
 }
-.arc-1{
-  width:460px;height:460px;top:-90px;left:-60px;
-  border-width:3px;border-color:#E74C3C transparent transparent transparent;
-  animation-duration:6s;
-}
-.arc-2{
-  width:360px;height:360px;top:-50px;left:-20px;
-  border-width:2.5px;border-color:transparent #3498DB transparent transparent;
-  animation-duration:4.5s;animation-direction:reverse;
-}
-.arc-3{
-  width:270px;height:270px;top:-10px;left:20px;
-  border-width:2px;border-color:transparent transparent #27AE60 transparent;
-  animation-duration:3.5s;
-}
-.arc-4{
-  width:190px;height:190px;top:28px;left:55px;
-  border-width:1.5px;border-color:transparent transparent transparent #F39C12;
-  animation-duration:2.8s;animation-direction:reverse;
-}
-.arc-5{
-  width:120px;height:120px;top:60px;left:88px;
-  border-width:1.5px;border-color:#9B59B6 transparent transparent transparent;
-  animation-duration:2.2s;
-}
+.masthead:hover .arc{opacity:var(--hop,.55)}
+/* Slow → fast on hover via CSS custom property on animation-duration isn't supported,
+   so we swap the animation with a class injected by JS */
+.arc.fast{animation-duration:var(--fdur)!important}
 
-/* Smooth ease — brief fast burst then settle, repeat */
-@keyframes aspin{
-  0%   {transform:rotate(0deg)}
-  20%  {transform:rotate(180deg);animation-timing-function:cubic-bezier(.4,0,.2,1)}
-  60%  {transform:rotate(340deg);animation-timing-function:ease-out}
-  100% {transform:rotate(360deg)}
-}
+.arc-1{width:460px;height:460px;top:-90px;left:-60px;
+  --dur:22s;--hop:.5;--fdur:3.5s;
+  border-width:1.5px;border-color:#888 transparent transparent transparent}
+.arc-2{width:360px;height:360px;top:-50px;left:-20px;
+  --dur:17s;animation-direction:reverse;--hop:.5;--fdur:2.8s;
+  border-width:1.5px;border-color:transparent #aaa transparent transparent}
+.arc-3{width:270px;height:270px;top:-10px;left:20px;
+  --dur:13s;--hop:.45;--fdur:2.2s;
+  border-width:1px;border-color:transparent transparent #999 transparent}
+.arc-4{width:190px;height:190px;top:28px;left:55px;
+  --dur:10s;animation-direction:reverse;--hop:.4;--fdur:1.8s;
+  border-width:1px;border-color:transparent transparent transparent #bbb}
+.arc-5{width:120px;height:120px;top:60px;left:88px;
+  --dur:8s;--hop:.35;--fdur:1.4s;
+  border-width:1px;border-color:#ccc transparent transparent transparent}
+@keyframes aspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 
-/* Left col — arcs + big text */
+/* Colour ramp on the title text via background-clip */
 .masthead-left{
-  position:relative;z-index:1;
-  display:flex;align-items:flex-end;
-  padding:48px 32px 44px 40px;
+  position:relative;z-index:1;display:flex;align-items:flex-end;
+  padding:44px 32px 40px 40px;
 }
-.masthead-title{
+.mtitle{
   font-family:var(--fd);
-  font-size:clamp(54px,7vw,92px);
-  line-height:.88;letter-spacing:-.025em;color:var(--ink);
+  font-size:clamp(52px,6.5vw,88px);
+  line-height:.88;letter-spacing:-.025em;
+  background:linear-gradient(135deg,
+    #18181A 0%,#18181A 18%,
+    #C0392B 25%,#E67E22 38%,
+    #27AE60 50%,#2980B9 62%,
+    #9B59B6 72%,#18181A 82%,#18181A 100%);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:titleshift 14s ease-in-out infinite;
 }
-.masthead-title em{font-style:italic;color:var(--ink-m)}
+@keyframes titleshift{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.mtitle em{font-style:italic}
 
-/* Right col — description */
 .masthead-right{
-  padding:48px 40px 44px 36px;
+  padding:44px 40px 40px 36px;
   display:flex;flex-direction:column;justify-content:flex-end;
   border-left:1px solid var(--rule);position:relative;z-index:1;
 }
-.masthead-kicker{
-  font-family:var(--fm);font-size:10px;letter-spacing:.12em;
-  color:var(--ink-d);text-transform:uppercase;margin-bottom:14px;
-}
-.masthead-desc{
-  font-size:13.5px;line-height:1.75;color:var(--ink-m);
-  max-width:380px;margin-bottom:24px;
-}
-.masthead-desc a{color:var(--ink);text-underline-offset:2px}
-.vols{display:flex;flex-direction:column;gap:8px}
-.vr{
-  display:flex;align-items:center;gap:9px;
-  font-family:var(--fm);font-size:10px;letter-spacing:.04em;color:var(--ink-d);
-  opacity:0;transform:translateX(-7px);animation:vin .5s ease both;
-}
-.vr:nth-child(1){animation-delay:.1s}.vr:nth-child(2){animation-delay:.2s}.vr:nth-child(3){animation-delay:.3s}
+.mkicker{font-family:var(--fm);font-size:10px;letter-spacing:.12em;color:var(--ink-d);
+  text-transform:uppercase;margin-bottom:13px}
+.mdesc{font-size:13.5px;line-height:1.75;color:var(--ink-m);max-width:380px;margin-bottom:22px}
+.mdesc a{color:var(--ink);text-underline-offset:2px}
+.vols{display:flex;flex-direction:column;gap:7px}
+.vr{display:flex;align-items:center;gap:9px;font-family:var(--fm);font-size:10px;
+  letter-spacing:.04em;color:var(--ink-d);
+  opacity:0;transform:translateX(-7px);animation:vin .5s ease both}
+.vr:nth-child(1){animation-delay:.1s}.vr:nth-child(2){animation-delay:.2s}
+.vr:nth-child(3){animation-delay:.3s}
 @keyframes vin{to{opacity:1;transform:translateX(0)}}
 .vc{width:18px;height:4px;border-radius:2px;flex-shrink:0}
 
-/* ── STATS ──────────────────────────────────────────────── */
+/* ── STATS ── */
 .stats{display:flex;padding:0 40px;border-bottom:1px solid var(--rule)}
-.stat{flex:1;padding:12px 0;border-right:1px solid var(--rule);display:flex;flex-direction:column;gap:1px}
+.stat{flex:1;padding:12px 0;border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;gap:1px}
 .stat:last-child{border-right:none}
 .sn{font-family:var(--fd);font-size:26px;color:var(--ink);line-height:1;font-style:italic}
 .sl{font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--ink-d);text-transform:uppercase}
 
-/* ── FILTER BAR ─────────────────────────────────────────── */
+/* ── FILTER BAR ── */
 .fbar{
   position:sticky;top:54px;z-index:40;
   background:rgba(246,244,239,.97);backdrop-filter:blur(6px);
@@ -153,13 +142,9 @@ header{
   padding:10px 40px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
 }
 .fsep{width:1px;height:18px;background:var(--rule);margin:0 4px;flex-shrink:0}
-.tag{
-  font-family:var(--fm);font-size:10px;letter-spacing:.03em;
-  padding:4px 11px;border:1px solid transparent;
-  background:rgba(24,24,26,.06);color:var(--ink-m);
-  cursor:pointer;border-radius:2px;transition:all .12s;
-  white-space:nowrap;user-select:none;
-}
+.tag{font-family:var(--fm);font-size:10px;letter-spacing:.03em;padding:4px 11px;
+  border:1px solid transparent;background:rgba(24,24,26,.06);color:var(--ink-m);
+  cursor:pointer;border-radius:2px;transition:all .12s;white-space:nowrap;user-select:none}
 .tag:hover{background:rgba(24,24,26,.1);color:var(--ink)}
 .tag.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .tag[data-u=sequential].active  {background:#2471A3}
@@ -168,69 +153,48 @@ header{
 .tag[data-u=categorical].active {background:#7D3C98}
 .fright{margin-left:auto;font-family:var(--fm);font-size:10px;color:var(--ink-d);white-space:nowrap}
 
-/* ── GRID ───────────────────────────────────────────────── */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:16px;            /* ← SPACING between cards */
-  padding:20px 24px;   /* ← PADDING around grid */
-  background:var(--rule); /* thin rule color shows as gap */
-}
-/* Override: give each card a bg so the gap shows as paper color */
-.grid{background:var(--paper);gap:0}
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));padding:12px}
 
-/* Theme divider */
-.tdiv{
-  grid-column:1/-1;display:flex;align-items:baseline;gap:14px;
-  padding:20px 20px 10px;
-  border-bottom:1px solid var(--rule);
-  position:relative;
-}
-.tdiv-acc{position:absolute;bottom:0;left:20px;height:2px;width:40px;border-radius:1px}
-.tdiv-t{font-family:var(--fd);font-size:22px;font-style:italic;color:var(--ink-m)}
+/* theme divider spans full grid width */
+.tdiv{grid-column:1/-1;display:flex;align-items:baseline;gap:14px;
+  padding:18px 8px 8px;border-bottom:1px solid var(--rule);position:relative;margin:0 0 4px}
+.tdiv-acc{position:absolute;bottom:0;left:8px;height:2px;width:38px;border-radius:1px}
+.tdiv-t{font-family:var(--fd);font-size:21px;font-style:italic;color:var(--ink-m)}
 .tdiv-n{font-family:var(--fm);font-size:10px;color:var(--ink-d);letter-spacing:.05em}
 
-/* ── CARD ───────────────────────────────────────────────── */
+/* ── CARD ── */
 .card{
-  border:1px solid var(--rule);
-  margin:8px;            /* ← gap between cards */
-  display:flex;flex-direction:column;
-  background:var(--paper);transition:background .18s,box-shadow .18s;
-  opacity:0;animation:cin .35s ease both;
+  border:1px solid var(--rule);margin:6px;
+  display:flex;flex-direction:column;background:var(--paper);
+  transition:background .18s,box-shadow .18s;
+  opacity:0;animation:cin .3s ease both;
 }
-@keyframes cin{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-.card:hover{background:var(--warm);box-shadow:0 2px 12px rgba(0,0,0,.06)}
+@keyframes cin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{background:var(--warm);box-shadow:0 2px 14px rgba(0,0,0,.07)}
 .card.hidden{display:none}
 
 /* Swatches */
-.swr{display:flex;height:64px;flex-shrink:0}
+.swr{display:flex;height:60px;flex-shrink:0}
 .sw{flex:1;cursor:pointer;position:relative;transition:flex .2s cubic-bezier(.4,0,.2,1)}
 .sw:hover{flex:3.5}
-.sw::after{
-  content:attr(data-h);position:absolute;bottom:5px;left:50%;
+.sw::after{content:attr(data-h);position:absolute;bottom:5px;left:50%;
   transform:translateX(-50%);font-family:var(--fm);font-size:8px;
   white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;
-  color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.7);
-}
+  color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.7)}
 .sw:hover::after{opacity:1}
 @keyframes flash{0%{outline:2px solid rgba(255,255,255,.9);outline-offset:-2px}to{outline:2px solid transparent}}
 .sw.copied{animation:flash .5s ease}
 
 /* Card body */
-.cb{padding:12px 16px 8px;flex:1}
-.cmeta{
-  font-family:var(--fm);font-size:9px;letter-spacing:.06em;
-  color:var(--ink-d);text-transform:uppercase;margin-bottom:3px;
-  display:flex;align-items:center;gap:5px;
-}
+.cb{padding:11px 15px 7px;flex:1}
+.cmeta{font-family:var(--fm);font-size:9px;letter-spacing:.06em;color:var(--ink-d);
+  text-transform:uppercase;margin-bottom:3px;display:flex;align-items:center;gap:4px}
 .cdot{color:var(--ruled)}
-.cname{font-family:var(--fd);font-size:16px;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
-.ubadge{
-  display:inline-flex;align-items:center;gap:4px;
-  font-family:var(--fm);font-size:8px;letter-spacing:.06em;text-transform:uppercase;
-  padding:2px 7px;border:1px solid var(--rule);color:var(--ink-d);
-  border-radius:1px;margin-top:7px;
-}
+.cname{font-family:var(--fd);font-size:15px;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
+.ubadge{display:inline-flex;align-items:center;gap:4px;font-family:var(--fm);
+  font-size:8px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;
+  border:1px solid var(--rule);color:var(--ink-d);border-radius:1px;margin-top:6px}
 .upip{width:5px;height:5px;border-radius:50%;flex-shrink:0}
 .ubadge[data-u=sequential]  .upip{background:#2471A3}
 .ubadge[data-u=diverging]   .upip{background:#CA6F1E}
@@ -238,93 +202,72 @@ header{
 .ubadge[data-u=categorical] .upip{background:#7D3C98}
 
 /* Card footer */
-.cfoot{
-  padding:8px 16px 12px;border-top:1px solid var(--rule);
-  display:flex;align-items:center;gap:6px;margin-top:auto;
-}
+.cfoot{padding:7px 15px 11px;border-top:1px solid var(--rule);
+  display:flex;align-items:center;gap:5px;margin-top:auto}
 .nc{font-family:var(--fm);font-size:9px;color:var(--ink-f)}
-.dlg{display:flex;gap:3px;flex:1}
-.dlb{
-  font-family:var(--fm);font-size:9px;padding:4px 7px;
+.dlg{display:flex;gap:3px;flex:1;flex-wrap:wrap}
+.dlb{font-family:var(--fm);font-size:9px;padding:3px 7px;
   border:1px solid var(--rule);background:transparent;color:var(--ink-d);
-  cursor:pointer;border-radius:1px;transition:all .12s;letter-spacing:.03em;
-}
+  cursor:pointer;border-radius:1px;transition:all .12s}
 .dlb:hover{border-color:var(--ink-m);color:var(--ink);background:rgba(24,24,26,.04)}
-
-/* Map icon button */
 .map-btn{
   display:inline-flex;align-items:center;justify-content:center;
-  width:26px;height:26px;border-radius:2px;
-  border:1px solid var(--rule);background:transparent;
-  cursor:pointer;transition:all .15s;flex-shrink:0;
-  color:var(--ink-d);
+  width:24px;height:24px;border-radius:2px;border:1px solid var(--rule);
+  background:transparent;cursor:pointer;transition:all .15s;flex-shrink:0;color:var(--ink-d);
 }
 .map-btn:hover{border-color:#2471A3;color:#2471A3;background:rgba(36,113,163,.06)}
-.map-btn svg{width:13px;height:13px;fill:currentColor}
+.map-btn svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round}
 
-/* Vote */
-.vote-btn{
-  background:none;border:none;cursor:pointer;
-  font-size:13px;line-height:1;padding:4px;
-  opacity:.35;transition:opacity .15s,transform .15s;
-  display:inline-flex;align-items:center;color:var(--ink);
-}
-.vote-btn:hover{opacity:.7;transform:scale(1.2)}
-.vote-btn.voted{opacity:1;color:#E74C3C}
-
-/* ── TOAST ──────────────────────────────────────────────── */
-.toast{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);
   background:var(--ink);color:var(--paper);font-family:var(--fm);font-size:11px;
   letter-spacing:.04em;padding:8px 18px;border-radius:2px;
-  opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;white-space:nowrap;z-index:9999;
-}
+  opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;z-index:9999}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── FOOTER ─────────────────────────────────────────────── */
-footer{
-  border-top:2px solid var(--ink);padding:36px 40px 44px;
-  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;margin-top:8px;
-}
-.flogo{font-family:var(--fd);font-size:28px;font-style:italic;color:var(--ink);margin-bottom:8px}
-.fbody{font-size:13px;color:var(--ink-m);line-height:1.75;max-width:480px}
+/* ── FOOTER ── */
+footer{border-top:2px solid var(--ink);padding:36px 40px 40px;
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;margin-top:4px}
+.flogo{font-family:var(--fd);font-size:27px;font-style:italic;color:var(--ink);margin-bottom:7px}
+.fbody{font-size:13px;color:var(--ink-m);line-height:1.75;max-width:500px}
 .fbody a{color:var(--ink);text-underline-offset:2px}
-.fformats{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-.fft{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-d);margin-bottom:2px}
-.ff{font-family:var(--fm);font-size:11px;color:var(--ink-m);display:flex;align-items:center;gap:7px}
+.fright{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.fft{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-d);margin-bottom:2px}
+.ff{font-family:var(--fm);font-size:11px;color:var(--ink-m);
+  display:flex;align-items:center;gap:7px}
+.ff-app{font-family:var(--fm);font-size:9px;color:var(--ink-d);margin-left:2px}
 .ffd{width:4px;height:4px;border-radius:50%;background:var(--ruled)}
+.fdate{font-family:var(--fm);font-size:9px;color:var(--ink-f);
+  letter-spacing:.06em;margin-top:8px;text-align:right}
 
-/* ── RESPONSIVE ─────────────────────────────────────────── */
+/* ── RESPONSIVE ── */
 @media(max-width:800px){
   header{padding:0 16px}
   .masthead{grid-template-columns:1fr;min-height:auto}
-  .masthead-left{padding:36px 20px 28px 20px;min-height:200px}
-  .masthead-right{padding:20px 20px 32px;border-left:none;border-top:1px solid var(--rule)}
+  .masthead-left{padding:32px 20px 24px;min-height:180px}
+  .masthead-right{padding:20px 20px 30px;border-left:none;border-top:1px solid var(--rule)}
   .stats,.fbar{padding-left:20px;padding-right:20px}
-  footer{grid-template-columns:1fr;padding:28px 20px}
-  .fformats{align-items:flex-start}
-  .tdiv{padding:14px 12px 8px}
+  footer{grid-template-columns:1fr;padding:26px 20px}
+  .fright{align-items:flex-start}
   .arc-3,.arc-4,.arc-5{display:none}
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <a class="logo" href="#" id="logoEl">
-    <span class="logo-w" id="lw1"></span>
-    <span class="logo-of">of</span>
-    <span class="logo-w" id="lw2"></span>
+    <span class="lw" id="lw1"></span>
+    <span class="lof">of</span>
+    <span class="lw" id="lw2"></span>
   </a>
-  <nav class="hnav">
-    <a class="hlink" href="https://github.com/hregad" target="_blank">github.com/hregad</a>
-  </nav>
+  <a class="hlink" href="https://github.com/hregad" target="_blank">github.com/hregad</a>
 </header>
 
-<!-- MASTHEAD -->
-<div class="masthead">
-  <div class="masthead-arcs">
+<div class="masthead" id="masthead">
+  <div class="arcs">
     <div class="arc arc-1"></div>
     <div class="arc arc-2"></div>
     <div class="arc arc-3"></div>
@@ -332,85 +275,80 @@ footer{
     <div class="arc arc-5"></div>
   </div>
   <div class="masthead-left">
-    <div class="masthead-title">World<br><em>of</em><br>Colours</div>
+    <div class="mtitle">World<br><em>of</em><br>Colours</div>
   </div>
   <div class="masthead-right">
-    <div class="masthead-kicker">A colour atlas for GIS professionals</div>
-    <p class="masthead-desc">
+    <div class="mkicker">A colour atlas for GIS professionals</div>
+    <p class="mdesc">
       Curated palettes for cartographers and spatial analysts.
       Sequential, diverging, qualitative, categorical —
-      each palette exports to QGIS and ArcGIS in one click.
-      Click the <strong>map icon</strong> on any card to preview it on a world map.
+      every palette exports to your GIS in one click.
+      New themes added regularly — stay tuned.
     </p>
     <div class="vols" id="vols"></div>
   </div>
 </div>
 
-<!-- STATS -->
 <div class="stats" id="stats"></div>
-
-<!-- FILTER BAR -->
 <div class="fbar" id="fbar"></div>
-
-<!-- GRID -->
 <div class="grid" id="grid"></div>
 
-<!-- FOOTER -->
 <footer>
   <div>
     <div class="flogo">World of Colours</div>
     <p class="fbody">
-      A living atlas of GIS-ready colour palettes, maintained and expanded over time.
-      Open source and free to use. Maintained by
-      <a href="https://github.com/hregad" target="_blank">hregad</a> on GitHub.
+      A living atlas of GIS-ready colour palettes.
+      Open source, free to use, regularly updated.
+      Maintained by <a href="https://github.com/hregad" target="_blank">hregad</a> on GitHub.<br>
+      New themes and palettes are added regularly — star the repo to stay tuned.
     </p>
   </div>
-  <div class="fformats">
+  <div class="fright">
     <div class="fft">Export formats</div>
-    <div class="ff"><div class="ffd"></div>.gpl — QGIS / GIMP</div>
-    <div class="ff"><div class="ffd"></div>.clr — ArcGIS Color Ramp</div>
-    <div class="ff"><div class="ffd"></div>.json — ArcGIS Pro CIM</div>
-    <div class="ff"><div class="ffd"></div>.txt — Hex + RGB</div>
+    <div class="ff"><div class="ffd"></div>.qml<span class="ff-app">QGIS Style Manager</span></div>
+    <div class="ff"><div class="ffd"></div>.sld<span class="ff-app">GeoServer · MapServer · QGIS</span></div>
+    <div class="ff"><div class="ffd"></div>.clr<span class="ff-app">ArcGIS Color Ramp</span></div>
+    <div class="ff"><div class="ffd"></div>.json<span class="ff-app">ArcGIS Pro Style</span></div>
+    <div class="ff"><div class="ffd"></div>.gpl<span class="ff-app">GIMP · Inkscape · Krita</span></div>
+    <div class="ff"><div class="ffd"></div>.txt<span class="ff-app">HEX + RGB reference</span></div>
+    <div class="fdate">Vol. I — March 2025</div>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="exports.js"></script>
 <script src="popup-map.js"></script>
 <script>
-/* ── THEME ACCENTS ───────────────────────────────────── */
-const ACCENTS = { "Cartography Classics": "#2471A3" };
-const acc = t => ACCENTS[t] || "#18181A";
+/* ── Accents ── */
+const ACCENTS={"Cartography Classics":"#2471A3"};
+const acc=t=>ACCENTS[t]||"#18181A";
 
-/* ── LOGO LETTERS ────────────────────────────────────── */
-(function(){
-  const pairs = [['lw1','World'],['lw2','Colours']];
-  pairs.forEach(([id,word],wi)=>{
+/* ── Logo letters ── */
+(()=>{
+  [['lw1','World'],['lw2','Colours']].forEach(([id,w],wi)=>{
     const el=document.getElementById(id);
-    word.split('').forEach((ch,i)=>{
-      const s=document.createElement('span');
-      s.className='logo-l';
-      s.style.animationDelay=`${(wi*6+i)*.12}s`;
-      s.textContent=ch;
-      el.appendChild(s);
+    w.split('').forEach((ch,i)=>{
+      const s=document.createElement('span');s.className='ll';
+      s.style.animationDelay=`${(wi*6+i)*.12}s`;s.textContent=ch;el.appendChild(s);
     });
   });
 })();
 
-/* ── EXPORTS ─────────────────────────────────────────── */
-function h2r(h){const s=h.replace('#','');return{r:parseInt(s.slice(0,2),16),g:parseInt(s.slice(2,4),16),b:parseInt(s.slice(4,6),16)}}
-function toGPL(p){return['GIMP Palette',`Name: ${p.name}`,'Columns: 5','#',`# World of Colours — ${p.theme}/${p.faction}`,`# Use: ${p.use}`,`# github.com/hregad`,'#',...p.colors.map((h,i)=>{const{r,g,b}=h2r(h);return`${String(r).padStart(3)} ${String(g).padStart(3)} ${String(b).padStart(3)}\t${p.name} ${String(i+1).padStart(2,'0')}`})].join('\n')}
-function toCLR(p){return[`# World of Colours — ${p.name}`,`# ${p.theme}/${p.faction} ${p.use}`,`# github.com/hregad`,`nColors ${p.colors.length}`,...p.colors.map((h,i)=>{const{r,g,b}=h2r(h);return`${i} ${r} ${g} ${b} 255`})].join('\n')}
-function toJSON(p){return JSON.stringify({type:'CIMColorPalette',name:p.name,tags:['World of Colours',p.theme,p.faction,p.use],colors:p.colors.map((h,i)=>{const{r,g,b}=h2r(h);return{type:'CIMRGBColor',values:[r,g,b,100],name:`${p.name} ${i+1}`}})},null,2)}
-function toTXT(p){return[`World of Colours — ${p.name}`,`${p.theme} · ${p.faction} · ${p.use}`,'','HEX           R    G    B','─'.repeat(30),...p.colors.map(h=>{const{r,g,b}=h2r(h);return`${h.toUpperCase()}  ${String(r).padStart(3)}  ${String(g).padStart(3)}  ${String(b).padStart(3)}`}),'','— github.com/hregad'].join('\n')}
-function dl(c,n,m){const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([c],{type:m})),download:n});a.click();URL.revokeObjectURL(a.href)}
+/* ── Arc hover speed-up via JS (CSS animation-duration not transitionable) ── */
+(()=>{
+  const mh=document.getElementById('masthead');
+  const arcs=mh.querySelectorAll('.arc');
+  mh.addEventListener('mouseenter',()=>arcs.forEach(a=>a.classList.add('fast')));
+  mh.addEventListener('mouseleave',()=>arcs.forEach(a=>a.classList.remove('fast')));
+})();
 
-/* ── TOAST ───────────────────────────────────────────── */
+/* ── Toast ── */
 let _tt;
 function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>e.classList.remove('show'),1800)}
 
-/* ── COPY HEX ────────────────────────────────────────── */
+/* ── Copy hex ── */
 function copyHex(hex,el){
   const t=hex.toUpperCase();
   (navigator.clipboard?.writeText(t)??Promise.reject())
@@ -418,26 +356,21 @@ function copyHex(hex,el){
     .finally(()=>{el.classList.add('copied');setTimeout(()=>el.classList.remove('copied'),600);toast(`Copied ${t}`)});
 }
 
-/* ── VOTES ───────────────────────────────────────────── */
-function getV(){try{return JSON.parse(localStorage.getItem('woc_v')||'{}')}catch{return{}}}
-function saveV(v){localStorage.setItem('woc_v',JSON.stringify(v))}
-function toggleV(id){const v=getV();v[id]?delete v[id]:v[id]=1;saveV(v);return !!v[id]}
-function hasV(id){return !!getV()[id]}
+/* ── Taxonomy ── */
+function taxonomy(){
+  const t={};WOC_DATA.forEach(p=>{if(!t[p.theme])t[p.theme]=new Set();t[p.theme].add(p.faction)});return t;
+}
 
-/* ── TAXONOMY ────────────────────────────────────────── */
-function taxonomy(){const t={};WOC_DATA.forEach(p=>{if(!t[p.theme])t[p.theme]=new Set();t[p.theme].add(p.faction)});return t}
-
-/* ── STATS ───────────────────────────────────────────── */
+/* ── Stats ── */
 function buildStats(){
-  const el=document.getElementById('stats');
-  const tx=taxonomy();
+  const el=document.getElementById('stats');const tx=taxonomy();
   const uc=new Set(WOC_DATA.flatMap(p=>p.colors)).size;
-  [[WOC_DATA.length,'Palettes'],[Object.keys(tx).length,'Themes'],[uc,'Unique colours'],[4,'Export formats']].forEach(([n,l])=>{
+  [[WOC_DATA.length,'Palettes'],[Object.keys(tx).length,'Themes'],[uc,'Unique colours'],[6,'Export formats']].forEach(([n,l])=>{
     el.innerHTML+=`<div class="stat"><div class="sn">${n}</div><div class="sl">${l}</div></div>`;
   });
 }
 
-/* ── MASTHEAD VOLS ───────────────────────────────────── */
+/* ── Masthead vols ── */
 function buildVols(){
   const el=document.getElementById('vols');const tx=taxonomy();
   Object.keys(tx).forEach(th=>{
@@ -446,7 +379,7 @@ function buildVols(){
   });
 }
 
-/* ── FILTERS ─────────────────────────────────────────── */
+/* ── Filters ── */
 let aT='all',aF='all',aU='all';
 function renderFilters(){
   const tx=taxonomy();const bar=document.getElementById('fbar');bar.innerHTML='';
@@ -461,7 +394,7 @@ function renderFilters(){
     [...tx[aT]].sort().forEach(f=>fg.appendChild(mkT(f,f,'f',aF===f)));
     bar.appendChild(fg);
   }
-  const sep2=document.createElement('div');sep2.className='fsep';bar.appendChild(sep2);
+  const s2=document.createElement('div');s2.className='fsep';bar.appendChild(s2);
   const ug=Object.assign(document.createElement('div'),{style:'display:flex;align-items:center;gap:6px;flex-wrap:wrap;'});
   ['all','sequential','diverging','qualitative','categorical'].forEach(u=>{
     const b=document.createElement('button');b.className='tag'+(aU===u?' active':'');
@@ -474,24 +407,21 @@ function renderFilters(){
 }
 function mkT(label,value,type,isActive){
   const b=document.createElement('button');b.className='tag'+(isActive?' active':'');b.textContent=label;
-  b.addEventListener('click',()=>{if(type==='t'){aT=value;aF='all';}else{aF=value;}renderFilters();renderGrid()});
+  b.addEventListener('click',()=>{type==='t'?(aT=value,aF='all'):aF=value;renderFilters();renderGrid()});
   return b;
 }
 function updateCount(){const e=document.getElementById('vc');if(e){const n=getFiltered().length;e.textContent=`${n} palette${n!==1?'s':''}`}}
 function getFiltered(){return WOC_DATA.filter(p=>(aT==='all'||p.theme===aT)&&(aF==='all'||p.faction===aF)&&(aU==='all'||p.use===aU))}
 
-/* ── MAP ICON SVG ────────────────────────────────────── */
-const MAP_ICON = `<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 1a5 5 0 1 0 0 10A5 5 0 0 0 8 1zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z"/>
-  <path d="M5.5 2.5C5.5 4 6 6 8 6s2.5-2 2.5-3.5M5.5 13.5C5.5 12 6 10 8 10s2.5 2 2.5 3.5M1 8h14M2 4.5C3.5 5.5 5.5 6 8 6s4.5-.5 6-1.5M2 11.5C3.5 10.5 5.5 10 8 10s4.5.5 6 1.5"/>
-</svg>`;
+/* ── Map icon (globe SVG, stroke-based) ── */
+const MAP_SVG=`<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C8 1.5 5.5 4 5.5 8s2.5 6.5 2.5 6.5M8 1.5C8 1.5 10.5 4 10.5 8s-2.5 6.5-2.5 6.5M1.5 8h13M2 5h12M2 11h12"/></svg>`;
 
-/* ── GRID ────────────────────────────────────────────── */
+/* ── Grid ── */
 function renderGrid(){
   const grid=document.getElementById('grid');grid.innerHTML='';
-  const filtered=getFiltered();
-  if(!filtered.length){grid.innerHTML='<p style="padding:48px 24px;font-family:var(--fm);font-size:12px;color:var(--ink-d);">No palettes match.</p>';return}
-  const byTheme={};filtered.forEach(p=>{if(!byTheme[p.theme])byTheme[p.theme]=[];byTheme[p.theme].push(p)});
+  const f=getFiltered();
+  if(!f.length){grid.innerHTML='<p style="padding:48px 20px;font-family:var(--fm);font-size:12px;color:var(--ink-d);">No palettes match.</p>';return}
+  const byTheme={};f.forEach(p=>{if(!byTheme[p.theme])byTheme[p.theme]=[];byTheme[p.theme].push(p)});
   const themes=Object.keys(byTheme);const multi=themes.length>1;let idx=0;
   themes.forEach(th=>{
     if(multi){
@@ -504,9 +434,8 @@ function renderGrid(){
 }
 
 function mkCard(p,idx){
-  const card=document.createElement('div');
-  card.className='card';
-  card.style.animationDelay=`${Math.min(idx,28)*.02}s`;
+  const card=document.createElement('div');card.className='card';
+  card.style.animationDelay=`${Math.min(idx,30)*.018}s`;
 
   // Swatches
   const sr=document.createElement('div');sr.className='swr';
@@ -517,57 +446,36 @@ function mkCard(p,idx){
 
   // Body
   const cb=document.createElement('div');cb.className='cb';
-  cb.innerHTML=`<div class="cmeta"><span>${p.theme}</span><span class="cdot">·</span><span>${p.faction}</span></div>
-    <div class="cname">${p.name}</div>
-    <div class="ubadge" data-u="${p.use}"><div class="upip"></div>${p.use}</div>`;
+  cb.innerHTML=`<div class="cmeta"><span>${p.faction}</span></div><div class="cname">${p.name}</div><div class="ubadge" data-u="${p.use}"><div class="upip"></div>${p.use}</div>`;
 
   // Footer
   const foot=document.createElement('div');foot.className='cfoot';
-
-  // Count
-  const nc=document.createElement('span');nc.className='nc';nc.textContent=`${p.colors.length}`;
-
-  // Downloads
+  const nc=document.createElement('span');nc.className='nc';nc.textContent=p.colors.length;
   const dlg=document.createElement('div');dlg.className='dlg';
-  [['.gpl',()=>dl(toGPL(p),`${p.id}.gpl`,'text/plain'),'QGIS/GIMP'],
-   ['.clr',()=>dl(toCLR(p),`${p.id}.clr`,'text/plain'),'ArcGIS'],
-   ['.json',()=>dl(toJSON(p),`${p.id}.json`,'application/json'),'ArcGIS Pro'],
-   ['.txt',()=>dl(toTXT(p),`${p.id}.txt`,'text/plain'),'HEX']
+
+  [
+    ['.qml', ()=>Exports.qml(p), 'QGIS Style Manager'],
+    ['.sld', ()=>Exports.sld(p), 'GeoServer / MapServer / QGIS'],
+    ['.clr', ()=>Exports.clr(p), 'ArcGIS Color Ramp'],
+    ['.json',()=>Exports.json(p),'ArcGIS Pro Style'],
+    ['.gpl', ()=>Exports.gpl(p), 'GIMP · Inkscape · Krita'],
+    ['.txt', ()=>Exports.txt(p), 'HEX + RGB sheet'],
   ].forEach(([l,fn,t])=>{
     const b=document.createElement('button');b.className='dlb';b.textContent=l;b.title=t;
-    b.addEventListener('click',e=>{e.stopPropagation();fn();toast(`Downloaded ${p.name}${l}`)});
+    b.addEventListener('click',e=>{e.stopPropagation();fn();toast(`↓ ${p.name}${l}`)});
     dlg.appendChild(b);
   });
 
-  // Map preview icon
-  const mapBtn=document.createElement('button');
-  mapBtn.className='map-btn';
-  mapBtn.title='Preview on map';
-  mapBtn.innerHTML=MAP_ICON;
-  mapBtn.addEventListener('click',e=>{e.stopPropagation();MapPopup.open(p)});
+  const mb=document.createElement('button');mb.className='map-btn';mb.title='Preview on map';
+  mb.innerHTML=MAP_SVG;mb.addEventListener('click',e=>{e.stopPropagation();MapPopup.open(p)});
 
-  // Vote
-  const voted=hasV(p.id);
-  const vBtn=document.createElement('button');
-  vBtn.className='vote-btn'+(voted?' voted':'');
-  vBtn.title='Like';vBtn.textContent=voted?'♥':'♡';
-  vBtn.addEventListener('click',()=>{
-    const now=toggleV(p.id);
-    vBtn.textContent=now?'♥':'♡';
-    vBtn.classList.toggle('voted',now);
-    if(now)toast(`Saved — ${p.name}`);
-  });
-
-  foot.appendChild(nc);
-  foot.appendChild(dlg);
-  foot.appendChild(mapBtn);
-  foot.appendChild(vBtn);
+  foot.appendChild(nc);foot.appendChild(dlg);foot.appendChild(mb);
 
   card.appendChild(sr);card.appendChild(cb);card.appendChild(foot);
   return card;
 }
 
-/* ── INIT ────────────────────────────────────────────── */
+/* ── Init ── */
 buildVols();buildStats();renderFilters();renderGrid();
 </script>
 </body>
