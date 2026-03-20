@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World of Colours — A Colour Atlas for GIS</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23E74C3C'/><stop offset='33%25' stop-color='%2327AE60'/><stop offset='66%25' stop-color='%232980B9'/><stop offset='100%25' stop-color='%239B59B6'/></linearGradient></defs><circle cx='16' cy='16' r='15' fill='url(%23g)'/><text x='16' y='22' text-anchor='middle' font-family='Georgia,serif' font-style='italic' font-size='20' fill='white'>w</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&family=DM+Sans:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens ── */
+:root{
+  --ink:#18181A; --ink-m:#52525A; --ink-d:#9090A0; --ink-f:#C8C8D8;
+  --paper:#F6F4EF; --warm:#EDEAE2; --rule:#D8D4CC; --ruled:#B0AAA0;
+  --fd:'DM Serif Display',Georgia,serif;
+  --fm:'DM Mono',monospace;
+  --fs:'DM Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--fs);font-weight:300;
+  min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:50;background:rgba(246,244,239,.96);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);
+  height:54px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;gap:16px}
+.logo{font-family:var(--fd);font-size:19px;letter-spacing:-.01em;
+  text-decoration:none;display:flex;align-items:baseline;gap:2px}
+.lw{display:inline-flex}
+.ll{display:inline-block;animation:lc 9s ease-in-out infinite;animation-fill-mode:both}
+.ll:nth-child(1){animation-delay:0s}.ll:nth-child(2){animation-delay:.12s}.ll:nth-child(3){animation-delay:.24s}
+.ll:nth-child(4){animation-delay:.36s}.ll:nth-child(5){animation-delay:.48s}.ll:nth-child(6){animation-delay:.72s}
+.ll:nth-child(7){animation-delay:.84s}.ll:nth-child(8){animation-delay:.96s}.ll:nth-child(9){animation-delay:1.08s}
+.ll:nth-child(10){animation-delay:1.20s}.ll:nth-child(11){animation-delay:1.32s}.ll:nth-child(12){animation-delay:1.44s}
+.ll:nth-child(13){animation-delay:1.56s}
+#lw2{position:relative;top:3px}
+@keyframes lc{0%,55%,100%{color:var(--ink)}14%{color:#E74C3C}21%{color:#E67E22}28%{color:#27AE60}35%{color:#2980B9}42%{color:#9B59B6}}
+.lof{font-family:var(--fd);font-style:italic;font-size:19px;color:var(--ink-m);margin:0 3px}
+.hnav{display:flex;align-items:center;gap:14px}
+.hlink{font-family:var(--fm);font-size:10px;letter-spacing:.05em;color:var(--ink-d);
+  text-decoration:none;transition:color .15s}
+.hlink:hover{color:var(--ink)}
+.help-btn{font-family:var(--fm);font-size:10px;letter-spacing:.05em;
+  padding:5px 12px;border:1px solid var(--rule);background:transparent;
+  color:var(--ink-d);cursor:pointer;border-radius:2px;transition:all .15s}
+.help-btn:hover{border-color:var(--ink-m);color:var(--ink)}
+
+/* ── MASTHEAD ── */
+.masthead{border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr 320px;
+  min-height:295px;position:relative;overflow:hidden}
+.arcs{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.arc{position:absolute;border-radius:50%;border-style:solid;
+  animation:aspin var(--dur,18s) linear infinite;opacity:var(--op,.16);
+  transition:opacity .5s}
+.arc.fast{animation-duration:var(--fdur)!important}
+.masthead:hover .arc{opacity:var(--hop,.48)}
+.arc-1{width:460px;height:460px;top:-90px;left:-60px;--dur:22s;--fdur:3.5s;--hop:.45;
+  border-width:1.2px;border-color:#aaa transparent transparent transparent}
+.arc-2{width:360px;height:360px;top:-50px;left:-20px;--dur:17s;--fdur:2.8s;--hop:.45;
+  animation-direction:reverse;border-width:1.2px;border-color:transparent #bbb transparent transparent}
+.arc-3{width:270px;height:270px;top:-10px;left:20px;--dur:13s;--fdur:2.2s;--hop:.4;
+  border-width:1px;border-color:transparent transparent #999 transparent}
+.arc-4{width:190px;height:190px;top:28px;left:55px;--dur:10s;--fdur:1.8s;--hop:.35;
+  animation-direction:reverse;border-width:1px;border-color:transparent transparent transparent #bbb}
+.arc-5{width:120px;height:120px;top:60px;left:88px;--dur:8s;--fdur:1.4s;--hop:.3;
+  border-width:.8px;border-color:#ccc transparent transparent transparent}
+@keyframes aspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.masthead-left{position:relative;z-index:1;display:flex;align-items:flex-end;
+  padding:42px 32px 38px 40px}
+.mtitle{font-family:var(--fd);font-size:clamp(50px,6.5vw,86px);line-height:.88;
+  letter-spacing:-.025em;
+  background:linear-gradient(135deg,#18181A 0%,#18181A 18%,#C0392B 26%,#E67E22 38%,
+    #27AE60 50%,#2980B9 62%,#9B59B6 73%,#18181A 82%,#18181A 100%);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:titleshift 14s ease-in-out infinite}
+@keyframes titleshift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.mtitle em{font-style:italic}
+.masthead-right{padding:42px 40px 38px 34px;display:flex;flex-direction:column;
+  justify-content:flex-end;border-left:1px solid var(--rule);position:relative;z-index:1}
+.mkicker{font-family:var(--fm);font-size:10px;letter-spacing:.12em;color:var(--ink-d);
+  text-transform:uppercase;margin-bottom:12px}
+.mdesc{font-size:13px;line-height:1.75;color:var(--ink-m);max-width:380px;margin-bottom:20px}
+.mdesc a{color:var(--ink);text-underline-offset:2px}
+.vols{display:flex;flex-direction:column;gap:7px}
+.vr{display:flex;align-items:center;gap:9px;font-family:var(--fm);font-size:10px;
+  letter-spacing:.04em;color:var(--ink-d);opacity:0;transform:translateX(-7px);
+  animation:vin .5s ease both}
+.vr:nth-child(1){animation-delay:.1s}.vr:nth-child(2){animation-delay:.2s}
+.vr:nth-child(3){animation-delay:.3s}
+@keyframes vin{to{opacity:1;transform:translateX(0)}}
+.vc{width:18px;height:4px;border-radius:2px;flex-shrink:0}
+
+/* ── STATS ── */
+.stats{display:flex;padding:0 40px;border-bottom:1px solid var(--rule)}
+.stat{flex:1;padding:11px 0;border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;gap:1px}
+.stat:last-child{border-right:none}
+.sn{font-family:var(--fd);font-size:25px;color:var(--ink);line-height:1;font-style:italic}
+.sl{font-family:var(--fm);font-size:9px;letter-spacing:.08em;color:var(--ink-d);text-transform:uppercase}
+
+/* ── FILTER BAR ── */
+.fbar{position:sticky;top:54px;z-index:40;background:rgba(246,244,239,.97);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--rule);
+  padding:9px 40px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:46px}
+.fsep{width:1px;height:18px;background:var(--rule);margin:0 3px;flex-shrink:0}
+.tag-group{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+
+/* Dropdown */
+.drop-wrap{position:relative;flex-shrink:0}
+.drop-btn{font-family:var(--fm);font-size:10px;letter-spacing:.03em;
+  padding:5px 10px;border:1px solid var(--ruled);background:var(--paper);
+  color:var(--ink-m);cursor:pointer;border-radius:2px;transition:all .12s;
+  display:flex;align-items:center;gap:6px;white-space:nowrap}
+.drop-btn:hover,.drop-btn.open{border-color:var(--ink-m);color:var(--ink)}
+.drop-btn svg{transition:transform .15s;flex-shrink:0;opacity:.5}
+.drop-btn.open svg{transform:rotate(180deg)}
+.drop-menu{position:absolute;top:calc(100% + 4px);left:0;z-index:100;
+  background:var(--paper);border:1px solid var(--ruled);border-radius:2px;
+  min-width:200px;max-height:300px;overflow-y:auto;
+  display:none;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.drop-menu.open{display:block}
+.drop-opt{font-family:var(--fm);font-size:10px;padding:7px 12px;cursor:pointer;
+  color:var(--ink-m);transition:background .1s;white-space:nowrap}
+.drop-opt:hover{background:var(--warm);color:var(--ink)}
+.drop-opt.active{color:var(--ink);background:rgba(36,113,163,.08)}
+
+/* Tags */
+.tag{font-family:var(--fm);font-size:10px;letter-spacing:.03em;padding:4px 10px;
+  border:1px solid transparent;background:rgba(24,24,26,.06);color:var(--ink-m);
+  cursor:pointer;border-radius:2px;transition:all .12s;white-space:nowrap;user-select:none}
+.tag:hover{background:rgba(24,24,26,.1);color:var(--ink)}
+.tag.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tag[data-u=sequential].active  {background:#2471A3}
+.tag[data-u=diverging].active   {background:#CA6F1E}
+.tag[data-u=qualitative].active {background:#1E8449}
+
+/* Active tag chips */
+.tag-chip{font-family:var(--fm);font-size:9px;padding:3px 8px;border:1px solid var(--ink-d);
+  background:rgba(24,24,26,.08);color:var(--ink-m);cursor:pointer;border-radius:2px;
+  display:inline-flex;align-items:center;gap:5px;transition:all .12s}
+.tag-chip.active{border-color:#2471A3;color:#2471A3;background:rgba(36,113,163,.08)}
+.tag-chip:hover{background:rgba(24,24,26,.14)}
+.chip-x{font-size:11px;opacity:.6}
+
+/* Tag search */
+.tag-search-wrap{position:relative}
+.tag-search{font-family:var(--fm);font-size:10px;letter-spacing:.03em;
+  padding:4px 10px;border:1px solid var(--rule);background:transparent;
+  color:var(--ink);border-radius:2px;outline:none;width:130px;transition:border-color .15s}
+.tag-search:focus{border-color:var(--ink-m);width:170px}
+.tag-search::placeholder{color:var(--ink-f)}
+.tag-suggestions{position:absolute;top:calc(100% + 3px);left:0;z-index:99;
+  background:var(--paper);border:1px solid var(--ruled);border-radius:2px;
+  min-width:160px;display:flex;flex-direction:column;
+  box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.tag-sugg-item{font-family:var(--fm);font-size:10px;padding:6px 10px;
+  cursor:pointer;color:var(--ink-m);transition:background .1s}
+.tag-sugg-item:hover{background:var(--warm);color:var(--ink)}
+.tag-sugg-item strong{color:var(--ink)}
+
+.fright{margin-left:auto;font-family:var(--fm);font-size:10px;color:var(--ink-d);white-space:nowrap}
+.empty-msg{padding:48px 20px;font-family:var(--fm);font-size:12px;color:var(--ink-d);grid-column:1/-1}
+
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));padding:10px}
+.tdiv{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;
+  padding:16px 8px 8px;border-bottom:1px solid var(--rule);position:relative;margin:0 0 2px}
+.tdiv-acc{position:absolute;bottom:0;left:8px;height:2px;width:36px;border-radius:1px}
+.tdiv-t{font-family:var(--fd);font-size:20px;font-style:italic;color:var(--ink-m)}
+.tdiv-n{font-family:var(--fm);font-size:10px;color:var(--ink-d);letter-spacing:.05em}
+
+/* ── CARD ── */
+.card{border:1px solid var(--rule);margin:6px;display:flex;flex-direction:column;
+  background:var(--paper);transition:background .18s,box-shadow .18s;
+  opacity:0;animation:cin .3s ease both}
+@keyframes cin{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{background:var(--warm);box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.card.hidden{display:none}
+
+/* Swatches */
+.swr{display:flex;height:60px;flex-shrink:0}
+.sw{flex:1;cursor:pointer;position:relative;transition:flex .2s cubic-bezier(.4,0,.2,1)}
+.sw:hover{flex:3.5}
+.sw::after{content:attr(data-h);position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
+  font-family:var(--fm);font-size:8px;white-space:nowrap;opacity:0;transition:opacity .15s;
+  pointer-events:none;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.sw:hover::after{opacity:1}
+@keyframes flash{0%{outline:2px solid rgba(255,255,255,.9);outline-offset:-2px}to{outline:2px solid transparent}}
+.sw.copied{animation:flash .5s ease}
+
+/* Card body */
+.cb{padding:11px 14px 7px;flex:1}
+.cmeta{font-family:var(--fm);font-size:9px;letter-spacing:.06em;color:var(--ink-d);
+  text-transform:uppercase;margin-bottom:3px}
+.cname{font-family:var(--fd);font-size:15px;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
+.ubadge{display:inline-flex;align-items:center;gap:4px;font-family:var(--fm);
+  font-size:8px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;
+  border:1px solid var(--rule);color:var(--ink-d);border-radius:1px;margin-top:6px}
+.upip{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ubadge[data-u=sequential]  .upip{background:#2471A3}
+.ubadge[data-u=diverging]   .upip{background:#CA6F1E}
+.ubadge[data-u=qualitative] .upip{background:#1E8449}
+
+/* Inline tags on card */
+.ctags{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.ctag{font-family:var(--fm);font-size:8px;padding:1px 5px;
+  border:1px solid var(--rule);color:var(--ink-f);border-radius:1px;
+  cursor:pointer;transition:all .12s;letter-spacing:.04em}
+.ctag:hover{border-color:var(--ink-d);color:var(--ink-d);background:rgba(24,24,26,.06)}
+
+/* Card footer */
+.cfoot{padding:7px 14px 10px;border-top:1px solid var(--rule);
+  display:flex;align-items:center;gap:5px;margin-top:auto;flex-wrap:wrap}
+.nc{font-family:var(--fm);font-size:9px;color:var(--ink-f);flex-shrink:0}
+.dlg{display:flex;gap:2px;flex-wrap:wrap;flex:1}
+.dlb{font-family:var(--fm);font-size:9px;padding:3px 6px;border:1px solid var(--rule);
+  background:transparent;color:var(--ink-d);cursor:pointer;border-radius:1px;transition:all .12s}
+.dlb:hover{border-color:var(--ink-m);color:var(--ink);background:rgba(24,24,26,.04)}
+.map-btn{display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:2px;border:1px solid var(--rule);
+  background:transparent;cursor:pointer;transition:all .15s;flex-shrink:0;color:var(--ink-d)}
+.map-btn:hover{border-color:#2471A3;color:#2471A3;background:rgba(36,113,163,.06)}
+.map-btn svg{width:12px;height:12px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:var(--ink);color:var(--paper);font-family:var(--fm);font-size:11px;
+  letter-spacing:.04em;padding:8px 18px;border-radius:2px;
+  opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;z-index:9999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── HELP MODAL ── */
+.help-overlay{position:fixed;inset:0;z-index:8000;background:rgba(18,18,20,.7);
+  backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;transition:opacity .2s}
+.help-overlay.open{opacity:1}
+.help-panel{background:var(--paper);border:1px solid var(--rule);width:min(640px,100%);
+  max-height:85vh;display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(12px) scale(.97);transition:transform .24s cubic-bezier(.16,1,.3,1)}
+.help-overlay.open .help-panel{transform:none}
+.help-head{padding:14px 18px;border-bottom:1px solid var(--rule);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.help-title{font-family:var(--fd);font-size:17px;font-style:italic;color:var(--ink)}
+.help-close{background:none;border:none;cursor:pointer;font-family:var(--fm);
+  font-size:16px;color:var(--ink-d);padding:2px 5px;transition:color .12s}
+.help-close:hover{color:var(--ink)}
+.help-body{overflow-y:auto;padding:8px 0}
+.help-row{display:grid;grid-template-columns:60px 1fr;gap:0;
+  padding:10px 18px;border-bottom:1px solid rgba(0,0,0,.04)}
+.help-row:last-child{border-bottom:none}
+.help-ext{font-family:var(--fm);font-size:10px;color:#2471A3;letter-spacing:.04em;
+  padding-top:1px;font-weight:500}
+.help-label{font-family:var(--fs);font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.help-apps{font-family:var(--fm);font-size:9px;color:var(--ink-d);font-weight:300;margin-left:8px}
+.help-how{font-family:var(--fm);font-size:10px;color:var(--ink-m);line-height:1.5}
+
+/* ── FOOTER ── */
+footer{border-top:2px solid var(--ink);padding:32px 40px 40px;
+  display:grid;grid-template-columns:1fr auto;gap:40px;align-items:start;margin-top:4px}
+.flogo{font-family:var(--fd);font-size:26px;font-style:italic;color:var(--ink);margin-bottom:7px}
+.fbody{font-size:13px;color:var(--ink-m);line-height:1.75;max-width:480px}
+.fbody a{color:var(--ink);text-underline-offset:2px}
+.fright{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.fft{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-d);margin-bottom:2px}
+.ff{font-family:var(--fm);font-size:11px;color:var(--ink-m);display:flex;align-items:center;gap:7px}
+.ff-app{font-size:9px;color:var(--ink-d);margin-left:2px}
+.ffd{width:4px;height:4px;border-radius:50%;background:var(--ruled)}
+.fdate{font-family:var(--fm);font-size:9px;color:var(--ink-f);letter-spacing:.06em;
+  margin-top:6px;text-align:right}
+
+/* ── RESPONSIVE ── */
+@media(max-width:800px){
+  header{padding:0 16px}
+  .masthead{grid-template-columns:1fr;min-height:auto}
+  .masthead-left{padding:30px 20px 22px;min-height:170px}
+  .masthead-right{padding:18px 20px 28px;border-left:none;border-top:1px solid var(--rule)}
+  .stats,.fbar{padding-left:16px;padding-right:16px}
+  footer{grid-template-columns:1fr;padding:24px 20px}
+  .fright{align-items:flex-start}
+  .arc-3,.arc-4,.arc-5{display:none}
+  .drop-btn{font-size:9px}
+}
+
+/* ── FEATURED PALETTE (masthead right column) ── */
+.masthead-featured{
+  border-left:1px solid var(--rule);
+  display:flex;flex-direction:column;
+  position:relative;z-index:1;
+  overflow:hidden;
+}
+.mf-label{
+  padding:14px 18px 10px;
+  font-family:var(--fm);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-d);
+  border-bottom:1px solid var(--rule);flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.mf-shuffle{
+  background:none;border:none;cursor:pointer;
+  font-family:var(--fm);font-size:9px;color:var(--ink-f);
+  letter-spacing:.06em;padding:0;transition:color .15s;
+}
+.mf-shuffle:hover{color:var(--ink-d)}
+.mf-swatches{display:flex;height:56px;flex-shrink:0;cursor:pointer}
+.mf-sw{flex:1;transition:flex .2s cubic-bezier(.4,0,.2,1)}
+.mf-sw:hover{flex:3}
+.mf-body{padding:14px 18px 12px;flex:1;display:flex;flex-direction:column;gap:5px}
+.mf-faction{font-family:var(--fm);font-size:9px;letter-spacing:.06em;
+  color:var(--ink-d);text-transform:uppercase}
+.mf-name{font-family:var(--fd);font-size:18px;letter-spacing:-.01em;
+  color:var(--ink);line-height:1.1}
+.mf-badge{display:inline-flex;align-items:center;gap:4px;font-family:var(--fm);
+  font-size:8px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;
+  border:1px solid var(--rule);color:var(--ink-d);border-radius:1px}
+.mf-pip{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.mf-badge[data-u=sequential]  .mf-pip{background:#2471A3}
+.mf-badge[data-u=diverging]   .mf-pip{background:#CA6F1E}
+.mf-badge[data-u=qualitative] .mf-pip{background:#1E8449}
+.mf-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
+.mf-tag{font-family:var(--fm);font-size:8px;padding:1px 5px;
+  border:1px solid var(--rule);color:var(--ink-f);border-radius:1px}
+.mf-footer{padding:10px 18px 14px;border-top:1px solid var(--rule);
+  display:flex;gap:3px;flex-wrap:wrap;flex-shrink:0}
+.mf-dlb{font-family:var(--fm);font-size:9px;padding:3px 6px;
+  border:1px solid var(--rule);background:transparent;color:var(--ink-d);
+  cursor:pointer;border-radius:1px;transition:all .12s}
+.mf-dlb:hover{border-color:var(--ink-m);color:var(--ink);background:rgba(24,24,26,.04)}
+.mf-map{display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:2px;border:1px solid var(--rule);
+  background:transparent;cursor:pointer;transition:all .15s;color:var(--ink-d)}
+.mf-map:hover{border-color:#2471A3;color:#2471A3}
+.mf-map svg{width:12px;height:12px}
+@media(max-width:800px){.masthead-featured{display:none}}
+@media(max-width:1100px){
+  .masthead{grid-template-columns:1fr 1fr}
+  .masthead-featured{display:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#" id="logoEl">
+    <span class="lw" id="lw1"></span>
+    <span class="lof">of</span>
+    <span class="lw" id="lw2"></span>
+  </a>
+  <div class="hnav">
+    <button class="help-btn" id="helpBtn">Import guide ↗</button>
+    <a class="hlink" href="https://github.com/hregad" target="_blank">github.com/hregad</a>
+  </div>
+</header>
+
+<div class="masthead" id="masthead">
+  <div class="arcs">
+    <div class="arc arc-1"></div><div class="arc arc-2"></div>
+    <div class="arc arc-3"></div><div class="arc arc-4"></div>
+    <div class="arc arc-5"></div>
+  </div>
+  <div class="masthead-left">
+    <div class="mtitle">World<br><em>of</em><br>Colours</div>
+  </div>
+  <div class="masthead-right">
+    <div class="mkicker">A colour atlas for GIS professionals</div>
+    <p class="mdesc">
+      Curated palettes for cartographers and spatial analysts.
+      Sequential, diverging, qualitative —
+      every palette exports to your GIS in one click.
+      New themes added regularly — stay tuned.
+    </p>
+    <div class="vols" id="vols"></div>
+  </div>
+  <div class="masthead-featured" id="masthead-featured"></div>
+</div>
+
+<div class="stats" id="stats"></div>
+<div class="fbar" id="fbar"></div>
+<div class="grid" id="grid"></div>
+
+<footer>
+  <div>
+    <div class="flogo">World of Colours</div>
+    <p class="fbody">
+      A living atlas of GIS-ready colour palettes, open source and free to use.
+      New themes and palettes are added regularly — stay tuned.<br>
+      A tool provided by <a href="https://github.com/hregad" target="_blank">H. Regad</a>.
+      Looking to build your own palette? <a href="https://colorbrewer2.org" target="_blank">ColorBrewer</a> is the reference tool for that.
+    </p>
+  </div>
+  <div class="fright">
+    <div class="fft">Export formats</div>
+    <div class="ff"><div class="ffd"></div>.qml <span class="ff-app">QGIS 3.x &amp; 4.x — Style Manager</span></div>
+    <div class="ff"><div class="ffd"></div>.sld <span class="ff-app">GeoServer · MapServer · QGIS</span></div>
+    <div class="ff"><div class="ffd"></div>.clr <span class="ff-app">ArcGIS Color Ramp</span></div>
+    <div class="ff"><div class="ffd"></div>.json <span class="ff-app">ArcGIS Pro Style</span></div>
+    <div class="ff"><div class="ffd"></div>.gpl <span class="ff-app">GIMP · Inkscape · Krita</span></div>
+    <div class="ff"><div class="ffd"></div>.ase <span class="ff-app">Illustrator · Photoshop · InDesign</span></div>
+    <div class="ff"><div class="ffd"></div>.aco <span class="ff-app">Photoshop Swatches</span></div>
+    <div class="ff"><div class="ffd"></div>.txt <span class="ff-app">HEX + RGB reference</span></div>
+    <div class="fdate">Vol. I — March 2025</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── data.js ──────────────────────────────────────────────
+/**
+ * World of Colours — Palette Data  v1.2
+ * ──────────────────────────────────────
+ * id      — unique kebab-case slug
+ * theme   — top-level collection (drives dropdown)
+ * faction — sub-group within theme
+ * name    — display name
+ * use     — "sequential" | "diverging" | "qualitative"
+ * tags    — open-ended thematic keywords (used for search + tag filter)
+ * colors  — hex array (6–12 recommended)
+ */
+const WOC_DATA = [
+
+  // ═══════════════════════════════════════════════════════
+  // CARTOGRAPHY CLASSICS
+  // ═══════════════════════════════════════════════════════
+
+  // ── Terrain & Hypsometry ───────────────────────────────
+  {id:"c-hypsometric",theme:"Cartography Classics",faction:"Terrain",name:"Hypsometric Tints",use:"sequential",
+   tags:["topographic","terrain","elevation","hypsometric","topo-standard","land"],
+   colors:["#1A5276","#2980B9","#76B7D1","#A8D8A8","#78B060","#4E8A28","#C8A050","#A07838","#785830","#F0EDE8"]},
+  {id:"c-terrain-warm",theme:"Cartography Classics",faction:"Terrain",name:"Warm Terrain",use:"sequential",
+   tags:["topographic","terrain","elevation","topo-standard","land"],
+   colors:["#3D8C60","#6AAF60","#A8C870","#D4D890","#C8A86A","#A87840","#886030","#6A4820","#907878","#F0EDE8"]},
+  {id:"c-terrain-arctic",theme:"Cartography Classics",faction:"Terrain",name:"Arctic Terrain",use:"sequential",
+   tags:["topographic","terrain","arctic","elevation","polar","topo-standard","land"],
+   colors:["#2C4A6E","#4A7A9B","#7AAABF","#A8C8D8","#C8DCE8","#E0EEF0","#D0E0C0","#B0C8A0","#8AA880","#688860"]},
+  {id:"c-terrain-desert",theme:"Cartography Classics",faction:"Terrain",name:"Desert & Arid",use:"sequential",
+   tags:["topographic","terrain","arid","desert","topo-standard","land"],
+   colors:["#1A0E00","#3A2208","#5C3A10","#7A5020","#9A6A30","#B88A50","#D0A870","#E4C898","#F0DEC0","#FBF0E0"]},
+  {id:"c-terrain-tropical",theme:"Cartography Classics",faction:"Terrain",name:"Tropical Relief",use:"sequential",
+   tags:["topographic","terrain","tropical","elevation","topo-standard","land"],
+   colors:["#006080","#0090A0","#40B8B0","#80D8C0","#8AC870","#50A030","#288018","#206010","#C8A060","#E8D0A0"]},
+  // 3 new topographic palettes
+  {id:"c-terrain-alpine",theme:"Cartography Classics",faction:"Terrain",name:"Alpine Relief",use:"sequential",
+   tags:["topographic","terrain","elevation","alpine","mountain","topo-standard","land"],
+   colors:["#2E8B57","#5AAD6A","#8FC878","#C8DC90","#E8E0B0","#D8C8A0","#C0A878","#A08860","#907878","#FFFFFF"]},
+  {id:"c-terrain-ign",theme:"Cartography Classics",faction:"Terrain",name:"IGN-Style Topo",use:"sequential",
+   tags:["topographic","terrain","elevation","ign","topo-standard","land","french"],
+   colors:["#A8D8A8","#90C890","#70B870","#50A850","#309830","#108810","#C8A060","#A87840","#806040","#F8F4F0"]},
+  {id:"c-terrain-srtm",theme:"Cartography Classics",faction:"Terrain",name:"SRTM Classic",use:"sequential",
+   tags:["topographic","terrain","elevation","srtm","dem","remote-sensing","land"],
+   colors:["#003820","#1A6030","#409050","#70C070","#A8D890","#E0F0C8","#F8E8A0","#E8C060","#C08040","#A04820"]},
+
+  // ── Bathymetric ────────────────────────────────────────
+  {id:"c-bathymetry",theme:"Cartography Classics",faction:"Terrain",name:"Bathymetric Depth",use:"sequential",
+   tags:["bathymetric","ocean","depth","marine","sea","gebco"],
+   colors:["#D0EAF8","#90C8EE","#50A0E0","#1878C8","#0050A0","#003880","#002060","#001040","#000820","#000410"]},
+  {id:"c-ocean-thermal",theme:"Cartography Classics",faction:"Terrain",name:"Ocean Thermal",use:"sequential",
+   tags:["bathymetric","ocean","thermal","marine","temperature","sea"],
+   colors:["#05004E","#0E0671","#1A22A8","#1858C8","#1A9AD0","#40C8C8","#80E0A0","#D0F060","#F8C020","#F03800"]},
+  // 3 new bathymetric palettes
+  {id:"c-bathy-gebco",theme:"Cartography Classics",faction:"Terrain",name:"GEBCO Relief",use:"sequential",
+   tags:["bathymetric","ocean","depth","marine","gebco","sea","etopo"],
+   colors:["#08306B","#0B4D96","#2171B5","#4393C3","#74A9CF","#A8CCE2","#D0E8F8","#E8F0F5","#F0F4F8","#F8FBFF"]},
+  {id:"c-bathy-deep",theme:"Cartography Classics",faction:"Terrain",name:"Abyss",use:"sequential",
+   tags:["bathymetric","ocean","deep-sea","marine","abyssal","sea"],
+   colors:["#000004","#060018","#0A0030","#0C0050","#0A1080","#0830B0","#1060D0","#2898E8","#60C0F0","#B0E8FF"]},
+  {id:"c-bathy-coastal",theme:"Cartography Classics",faction:"Terrain",name:"Coastal Waters",use:"sequential",
+   tags:["bathymetric","ocean","coastal","shallow","marine","sea","estuary"],
+   colors:["#F0F8FF","#D0EAF8","#A0D0F0","#70B8E8","#4090D0","#1870B0","#0A5090","#063870","#032858","#011840"]},
+
+  // ── Other Terrain ──────────────────────────────────────
+  {id:"c-relief-grey",theme:"Cartography Classics",faction:"Terrain",name:"Relief Grey",use:"sequential",
+   tags:["topographic","hillshade","relief","grayscale","print","topo-standard"],
+   colors:["#FFFFFF","#EBEBEB","#D4D4D4","#BABABA","#9E9E9E","#828282","#686868","#4E4E4E","#363636","#1A1A1A"]},
+  {id:"c-slope",theme:"Cartography Classics",faction:"Terrain",name:"Slope Angle",use:"sequential",
+   tags:["topographic","slope","terrain","geomorphology","topo-analysis"],
+   colors:["#E8F5E0","#C0E090","#90C840","#60A000","#308000","#186000","#D08000","#B06000","#903000","#700000"]},
+
+  // ── Military ───────────────────────────────────────────
+  {id:"c-military-topo",theme:"Cartography Classics",faction:"Military",name:"Military Topography",use:"sequential",
+   tags:["military","topographic","terrain","nato","topo-standard","land"],
+   colors:["#C8E6A0","#A8CC78","#88B050","#688830","#8C7050","#A08060","#B89878","#D0B898","#E8D8C0","#F5EEE0"]},
+  {id:"c-tactical-air",theme:"Cartography Classics",faction:"Military",name:"Tactical Air Chart",use:"qualitative",
+   tags:["military","aeronautical","chart","aviation","tactical"],
+   colors:["#1A3A5C","#2C5F8A","#4A8CBF","#7AB8D4","#B8D8E8","#F0F0F0","#D4E8D0","#A0C898","#609858","#306830"]},
+
+  // ── Sequential ─────────────────────────────────────────
+  {id:"c-blues",theme:"Cartography Classics",faction:"Sequential",name:"Blues",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","single-hue"],
+   colors:["#F7FBFF","#DEEBF7","#C6DBEF","#9ECAE1","#6BAED6","#4292C6","#2171B5","#08519C","#08306B","#041B3D"]},
+  {id:"c-greens",theme:"Cartography Classics",faction:"Sequential",name:"Greens",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","single-hue","vegetation"],
+   colors:["#F7FCF5","#E5F5E0","#C7E9C0","#A1D99B","#74C476","#41AB5D","#238B45","#006D2C","#00441B","#002710"]},
+  {id:"c-reds",theme:"Cartography Classics",faction:"Sequential",name:"Reds",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","single-hue","risk","hazard"],
+   colors:["#FFF5F0","#FEE0D2","#FCBBA1","#FC9272","#FB6A4A","#EF3B2C","#CB181D","#A50F15","#67000D","#3D0007"]},
+  {id:"c-purples",theme:"Cartography Classics",faction:"Sequential",name:"Purples",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","single-hue"],
+   colors:["#FCFBFD","#EFEDF5","#DADAEB","#BCBDDC","#9E9AC8","#807DBA","#6A51A3","#54278F","#3F007D","#250049"]},
+  {id:"c-oranges",theme:"Cartography Classics",faction:"Sequential",name:"Oranges",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","single-hue"],
+   colors:["#FFF5EB","#FEE6CE","#FDD0A2","#FDAE6B","#FD8D3C","#F16913","#D94801","#A63603","#7F2704","#4A1600"]},
+  {id:"c-ylgnbu",theme:"Cartography Classics",faction:"Sequential",name:"Yellow-Green-Blue",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","multi-hue"],
+   colors:["#FFFFD9","#EDF8B1","#C7E9B4","#7FCDBB","#41B6C4","#1D91C0","#225EA8","#253494","#081D58","#030C2A"]},
+  {id:"c-ylorbr",theme:"Cartography Classics",faction:"Sequential",name:"Yellow-Orange-Brown",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","multi-hue"],
+   colors:["#FFFFE5","#FFF7BC","#FEE391","#FEC44F","#FE9929","#EC7014","#CC4C02","#993404","#662506","#3D1400"]},
+  {id:"c-bupu",theme:"Cartography Classics",faction:"Sequential",name:"Blue-Purple",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","multi-hue"],
+   colors:["#F7FCFD","#E0ECF4","#BFD3E6","#9EBCDA","#8C96C6","#8C6BB1","#88419D","#810F7C","#4D004B","#260028"]},
+  {id:"c-gnbu",theme:"Cartography Classics",faction:"Sequential",name:"Green-Blue",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","multi-hue","hydrology"],
+   colors:["#F7FCF0","#E0F3DB","#CCEBC5","#A8DDB5","#7BCCC4","#4EB3D3","#2B8CBE","#0868AC","#084081","#042040"]},
+  {id:"c-rdpu",theme:"Cartography Classics",faction:"Sequential",name:"Red-Purple",use:"sequential",
+   tags:["statistic","choropleth","colorbrewer","multi-hue"],
+   colors:["#FFF7F3","#FDE0DD","#FCC5C0","#FA9FB5","#F768A1","#DD3497","#AE017E","#7A0177","#49006A","#25003A"]},
+  {id:"c-viridis",theme:"Cartography Classics",faction:"Sequential",name:"Viridis",use:"sequential",
+   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
+   colors:["#440154","#482878","#3E4A89","#31688E","#26838F","#1F9D8A","#35B779","#6DCD59","#B4DE2C","#FDE725"]},
+  {id:"c-plasma",theme:"Cartography Classics",faction:"Sequential",name:"Plasma",use:"sequential",
+   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
+   colors:["#0D0887","#41049D","#6A00A8","#8F0DA4","#B12A90","#CC4778","#E16462","#F2844B","#FCA636","#FCCE25"]},
+  {id:"c-inferno",theme:"Cartography Classics",faction:"Sequential",name:"Inferno",use:"sequential",
+   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
+   colors:["#000004","#1B0C41","#4B0C6B","#781C6D","#A52C60","#CF4446","#ED6925","#FB9B06","#F7D13D","#FCFFA4"]},
+  {id:"c-magma",theme:"Cartography Classics",faction:"Sequential",name:"Magma",use:"sequential",
+   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
+   colors:["#000004","#180F3E","#450F75","#721F81","#9E2F7F","#CD4071","#F1605D","#FD9567","#FEC98D","#FCFDBF"]},
+  {id:"c-cividis",theme:"Cartography Classics",faction:"Sequential",name:"Cividis",use:"sequential",
+   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
+   colors:["#00204C","#09306B","#1B4981","#2E608E","#43788C","#588F88","#70A884","#8EC07B","#ACD870","#E4F263"]},
+
+  // ── Diverging ──────────────────────────────────────────
+  {id:"c-rdbu",theme:"Cartography Classics",faction:"Diverging",name:"Red-Blue",use:"diverging",
+   tags:["statistic","bivariate","diverging","anomaly","colorbrewer","climate"],
+   colors:["#67001F","#B2182B","#D6604D","#F4A582","#FDDBC7","#F7F7F7","#D1E5F0","#92C5DE","#4393C3","#2166AC","#053061"]},
+  {id:"c-rdylgn",theme:"Cartography Classics",faction:"Diverging",name:"Red-Yellow-Green",use:"diverging",
+   tags:["statistic","bivariate","diverging","risk","colorbrewer","environmental"],
+   colors:["#A50026","#D73027","#F46D43","#FDAE61","#FEE08B","#FFFFBF","#D9EF8B","#A6D96A","#66BD63","#1A9850","#006837"]},
+  {id:"c-brbg",theme:"Cartography Classics",faction:"Diverging",name:"Brown-Green",use:"diverging",
+   tags:["statistic","bivariate","diverging","vegetation","colorbrewer","drought"],
+   colors:["#543005","#8C510A","#BF812D","#DFC27D","#F6E8C3","#F5F5F5","#C7EAE5","#80CDC1","#35978F","#01665E","#003C30"]},
+  {id:"c-spectral",theme:"Cartography Classics",faction:"Diverging",name:"Spectral",use:"diverging",
+   tags:["statistic","diverging","classification","colorbrewer","multi-class"],
+   colors:["#9E0142","#D53E4F","#F46D43","#FDAE61","#FEE08B","#FFFFBF","#E6F598","#ABDDA4","#66C2A5","#3288BD","#5E4FA2"]},
+  {id:"c-piyg",theme:"Cartography Classics",faction:"Diverging",name:"Pink-Green",use:"diverging",
+   tags:["statistic","bivariate","diverging","colorbrewer"],
+   colors:["#8E0152","#C51B7D","#DE77AE","#F1B6DA","#FDE0EF","#F7F7F7","#E6F5D0","#B8E186","#7FBC41","#4D9221","#276419"]},
+  {id:"c-puor",theme:"Cartography Classics",faction:"Diverging",name:"Purple-Orange",use:"diverging",
+   tags:["statistic","bivariate","diverging","colorbrewer"],
+   colors:["#2D004B","#542788","#8073AC","#B2ABD2","#D8DAEB","#F7F7F7","#FEE0B6","#FDB863","#E08214","#B35806","#7F3B08"]},
+  {id:"c-coolwarm",theme:"Cartography Classics",faction:"Diverging",name:"Cool-Warm",use:"diverging",
+   tags:["statistic","bivariate","diverging","temperature","climate","anomaly"],
+   colors:["#3B4CC0","#6282EA","#8DB0FE","#C0D4F5","#EAD4C8","#F7AC90","#E7755B","#C94B3B","#B40426"]},
+  {id:"c-delta",theme:"Cartography Classics",faction:"Diverging",name:"Delta (Ocean–Land)",use:"diverging",
+   tags:["bathymetric","topographic","bivariate","diverging","elevation","dem","land"],
+   colors:["#093061","#1A5A8A","#3D8EB0","#80C4CC","#C5E5D5","#FFFFFF","#D5E8C5","#A8D090","#60A850","#307820","#0A4808"]},
+  {id:"c-temp-anomaly",theme:"Cartography Classics",faction:"Diverging",name:"Temperature Anomaly",use:"diverging",
+   tags:["statistic","bivariate","diverging","temperature","climate","anomaly","colorbrewer"],
+   colors:["#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#FFFFFF","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"]},
+  {id:"c-drought",theme:"Cartography Classics",faction:"Diverging",name:"Drought Index",use:"diverging",
+   tags:["statistic","bivariate","diverging","climate","vegetation","drought","environmental"],
+   colors:["#7B3A10","#A85A20","#C88040","#DDB070","#EDD8A8","#F5F5F5","#C0D8A0","#80B860","#408830","#186000","#003800"]},
+  {id:"c-rdgy",theme:"Cartography Classics",faction:"Diverging",name:"Red-Grey",use:"diverging",
+   tags:["statistic","bivariate","diverging","colorbrewer"],
+   colors:["#67001F","#B2182B","#D6604D","#F4A582","#FDDBC7","#FFFFFF","#E0E0E0","#BABABA","#878787","#4D4D4D","#1A1A1A"]},
+
+  // ── Qualitative ────────────────────────────────────────
+  {id:"c-set1",theme:"Cartography Classics",faction:"Qualitative",name:"Set I — Vivid",use:"qualitative",
+   tags:["statistic","classification","colorbrewer"],
+   colors:["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#FFFF33","#A6CEE3"]},
+  {id:"c-pastel",theme:"Cartography Classics",faction:"Qualitative",name:"Pastel Regions",use:"qualitative",
+   tags:["statistic","classification","administrative","choropleth","colorbrewer","print"],
+   colors:["#FBB4AE","#B3CDE3","#CCEBC5","#DECBE4","#FED9A6","#FFFFCC","#E5D8BD","#FDDAEC","#F2F2F2","#B3E2CD"]},
+  {id:"c-dark2",theme:"Cartography Classics",faction:"Qualitative",name:"Dark Classes",use:"qualitative",
+   tags:["statistic","classification","colorbrewer"],
+   colors:["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","#666666","#2C7BB6","#B2182B"]},
+  {id:"c-paired",theme:"Cartography Classics",faction:"Qualitative",name:"Paired",use:"qualitative",
+   tags:["statistic","classification","colorbrewer","bivariate"],
+   colors:["#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A"]},
+  {id:"c-tableau10",theme:"Cartography Classics",faction:"Qualitative",name:"Tableau 10",use:"qualitative",
+   tags:["statistic","classification","chart","dataviz"],
+   colors:["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC948","#B07AA1","#FF9DA7","#9C755F","#BAB0AC"]},
+  {id:"c-safe",theme:"Cartography Classics",faction:"Qualitative",name:"Colourblind-Safe 7",use:"qualitative",
+   tags:["colorblind-safe","classification","accessibility"],
+   colors:["#0077BB","#33BBEE","#009988","#EE7733","#CC3311","#EE3377","#BBBBBB"]},
+  {id:"c-earth-tones",theme:"Cartography Classics",faction:"Qualitative",name:"Earth Tones",use:"qualitative",
+   tags:["topographic","terrain","classification","geological","land"],
+   colors:["#6B4C3B","#9B7653","#C4A882","#D4C5A9","#8B9E5C","#4E6B3E","#3A5E7E","#6B8FA8","#A05050","#D07070"]},
+  {id:"c-antique",theme:"Cartography Classics",faction:"Qualitative",name:"Antique Map",use:"qualitative",
+   tags:["topographic","historical","classification","administrative","print"],
+   colors:["#855C75","#D9AF6B","#AF6458","#736F4C","#526A83","#625377","#68855C","#9C9C5E","#A06177","#8C785A"]},
+
+  // ── Thematic ───────────────────────────────────────────
+  {id:"c-population",theme:"Cartography Classics",faction:"Thematic",name:"Population Density",use:"sequential",
+   tags:["statistic","choropleth","demography","urban"],
+   colors:["#FFFFF0","#FEFEC0","#FEE090","#FDBB50","#FC8D30","#E85C10","#C02808","#901000","#600000","#300000"]},
+  {id:"c-nightlights",theme:"Cartography Classics",faction:"Thematic",name:"Night Lights (NTL)",use:"sequential",
+   tags:["statistic","remote-sensing","urban","energy","viirs","dmsp","satellite"],
+   colors:["#000000","#0A0808","#180C04","#301806","#502808","#784010","#A86820","#D0A030","#F0C840","#FFEE80"]},
+  {id:"c-landcover",theme:"Cartography Classics",faction:"Thematic",name:"Land Cover",use:"qualitative",
+   tags:["remote-sensing","classification","environmental","land","corine"],
+   colors:["#1A6B1A","#8CC850","#F0E060","#D09030","#C03020","#808080","#4090D0","#B0D0F0","#F0F0F0","#604020"]},
+  {id:"c-ndvi",theme:"Cartography Classics",faction:"Thematic",name:"NDVI Vegetation",use:"diverging",
+   tags:["remote-sensing","vegetation","bivariate","environmental","satellite","index"],
+   colors:["#8B4513","#C8860A","#E8C44A","#F5E080","#D4E880","#A8D050","#68B020","#308010","#146000","#004820"]},
+  {id:"c-precip",theme:"Cartography Classics",faction:"Thematic",name:"Precipitation",use:"sequential",
+   tags:["statistic","climate","hydrology","choropleth","rainfall"],
+   colors:["#FFFFF0","#EFF8C0","#C8E880","#88C840","#50A810","#208000","#0060D0","#0028A0","#001060","#000020"]},
+  {id:"c-flood-risk",theme:"Cartography Classics",faction:"Thematic",name:"Flood Risk",use:"sequential",
+   tags:["statistic","hydrology","risk","hazard","flood","disaster"],
+   colors:["#F7FBFF","#D0E8F8","#A0C8F0","#60A0E0","#2070C8","#0040A0","#002880","#001060","#000840","#000420"]},
+  {id:"c-wildfire",theme:"Cartography Classics",faction:"Thematic",name:"Wildfire Risk",use:"sequential",
+   tags:["statistic","environmental","risk","hazard","fire","disaster"],
+   colors:["#FFFFD4","#FEE391","#FEC44F","#FE9929","#EC7014","#CC4C02","#8C2D04","#630000","#3D0000","#1A0000"]},
+  {id:"c-urban-heat",theme:"Cartography Classics",faction:"Thematic",name:"Urban Heat Island",use:"sequential",
+   tags:["statistic","urban","temperature","remote-sensing","climate","satellite"],
+   colors:["#2B2D42","#424A6E","#4A7A9B","#52B0C0","#80C880","#C8D840","#F0C000","#E87000","#D03000","#900000"]},
+  {id:"c-air-quality",theme:"Cartography Classics",faction:"Thematic",name:"Air Quality Index",use:"sequential",
+   tags:["statistic","environmental","risk","health","pollution","aqi"],
+   colors:["#00E400","#FFFF00","#FF7E00","#FF0000","#8F3F97","#7E0023"]},
+  {id:"c-sar-coherence",theme:"Cartography Classics",faction:"Thematic",name:"SAR Coherence",use:"sequential",
+   tags:["remote-sensing","radar","sar","satellite","interferometry","insar"],
+   colors:["#000000","#1A1A2E","#16213E","#0F3460","#164B8A","#1A6BC0","#2090E0","#40B8F0","#80D8F8","#E0F8FF"]},
+  {id:"c-soil-type",theme:"Cartography Classics",faction:"Thematic",name:"Soil Classification",use:"qualitative",
+   tags:["geological","soil","classification","environmental","land"],
+   colors:["#8B5E3C","#C89050","#D4B080","#A0A060","#606840","#486828","#A08060","#C0A880","#888060","#504028"]},
+  {id:"c-geology",theme:"Cartography Classics",faction:"Thematic",name:"Geological Units",use:"qualitative",
+   tags:["geological","classification","lithology"],
+   colors:["#F4A460","#8FBC8F","#4682B4","#9370DB","#CD853F","#BC8F5F","#708090","#6B8E23","#B8860B","#556B2F"]},
+
+  // ── Risk (new faction) ─────────────────────────────────
+  {id:"r-multi-hazard",theme:"Cartography Classics",faction:"Risk",name:"Multi-Hazard",use:"sequential",
+   tags:["risk","hazard","disaster","statistic","choropleth","humanitarian"],
+   colors:["#FFFDE7","#FFF9C4","#FFF176","#FFD600","#FFC107","#FF9800","#F44336","#C62828","#880E4F","#4A148C"]},
+  {id:"r-seismic",theme:"Cartography Classics",faction:"Risk",name:"Seismic Risk",use:"sequential",
+   tags:["risk","hazard","seismic","earthquake","geological","disaster"],
+   colors:["#F9FBE7","#F0F4C3","#DCE775","#C6CC28","#AFB42B","#EF6C00","#E53935","#B71C1C","#880E0E","#4A0606"]},
+  {id:"r-tsunami",theme:"Cartography Classics",faction:"Risk",name:"Tsunami Inundation",use:"sequential",
+   tags:["risk","hazard","tsunami","flood","coastal","marine","disaster","bathymetric"],
+   colors:["#F0F8FF","#B8D8F8","#70B0F0","#3080E0","#0850B8","#0030A0","#002080","#001060","#000840","#000420"]},
+  // 1 more risk for total of 3 new risk palettes + existing ones in Thematic
+  {id:"r-exposure",theme:"Cartography Classics",faction:"Risk",name:"Exposure Index",use:"diverging",
+   tags:["risk","hazard","disaster","statistic","bivariate","humanitarian","exposure"],
+   colors:["#1A9850","#91CF60","#D9EF8B","#FFFFBF","#FEE08B","#FC8D59","#D73027","#A50026"]},
+
+  // ── Political ──────────────────────────────────────────
+  {id:"c-political",theme:"Cartography Classics",faction:"Political",name:"Political Regions",use:"qualitative",
+   tags:["administrative","political","classification"],
+   colors:["#E8D44D","#4DB8E8","#E8784D","#4DE88C","#E84D8C","#8C4DE8","#4D8CE8","#E8AC4D","#4DE8D4","#E84D4D"]},
+  {id:"c-admin-muted",theme:"Cartography Classics",faction:"Political",name:"Admin Muted",use:"qualitative",
+   tags:["administrative","political","choropleth","muted","print"],
+   colors:["#CADEA7","#A8CBB5","#B8C9D5","#D5BEC9","#D5CEB5","#C2C8B5","#B5C2C8","#C8B5C2","#C8C2B5","#B5C8C2"]},
+  {id:"c-election",theme:"Cartography Classics",faction:"Political",name:"Election — Bipartite",use:"diverging",
+   tags:["statistic","bivariate","political","election","diverging"],
+   colors:["#B22222","#CC3333","#DD5555","#EE8888","#FFBBBB","#FFFFFF","#BBBBFF","#8888EE","#5555DD","#3333CC","#2222B2"]},
+  {id:"c-conflict",theme:"Cartography Classics",faction:"Political",name:"Conflict Intensity",use:"sequential",
+   tags:["statistic","military","risk","humanitarian","choropleth","hazard"],
+   colors:["#FFF9C4","#FFE082","#FFB74D","#FF8A65","#E57373","#EF5350","#E53935","#C62828","#B71C1C","#7F0000"]},
+  {id:"c-humanitarian",theme:"Cartography Classics",faction:"Political",name:"Humanitarian Crisis",use:"sequential",
+   tags:["statistic","humanitarian","risk","choropleth","disaster","exposure"],
+   colors:["#FFF8DC","#FFE4B5","#FFC04C","#FF9F2E","#FF7800","#E85000","#C83000","#A01000","#780000","#400000"]},
+
+  // ── Accessibility ──────────────────────────────────────
+  {id:"c-print-grey",theme:"Cartography Classics",faction:"Accessibility",name:"Print-Safe Grey",use:"sequential",
+   tags:["accessibility","print","grayscale","statistic","colorblind-safe"],
+   colors:["#F5F5F5","#E0E0E0","#C8C8C8","#ADADAD","#919191","#737373","#575757","#3D3D3D","#242424","#0D0D0D"]},
+  {id:"c-cb-sequential",theme:"Cartography Classics",faction:"Accessibility",name:"Colourblind Sequential",use:"sequential",
+   tags:["accessibility","colorblind-safe","statistic","choropleth"],
+   colors:["#FDE8CD","#FCC98A","#F9A94A","#E88020","#C05800","#903800","#602000","#401008","#200800"]},
+  {id:"c-cb-diverging",theme:"Cartography Classics",faction:"Accessibility",name:"Colourblind Diverging",use:"diverging",
+   tags:["accessibility","colorblind-safe","bivariate","diverging"],
+   colors:["#2166AC","#4393C3","#92C5DE","#D1E5F0","#FFFFFF","#FDDBC7","#F4A582","#D6604D","#B2182B"]},
+  {id:"c-high-contrast",theme:"Cartography Classics",faction:"Accessibility",name:"High Contrast",use:"qualitative",
+   tags:["accessibility","print","classification","high-contrast","colorblind-safe"],
+   colors:["#000000","#FFFFFF","#FF0000","#0000FF","#00CC00","#FF00FF","#00CCCC","#FF8000"]},
+
+];
+
+// Derived list of all unique tags (used for autocomplete)
+const ALL_TAGS = [...new Set(WOC_DATA.flatMap(p => p.tags))].sort();
+
+
+// ── exports.js ───────────────────────────────────────────
+/**
+ * World of Colours — Export Functions  v1.2
+ * ──────────────────────────────────────────
+ * Formats:
+ *  .qml  — QGIS 3.x / 4.x gradient colour ramp
+ *  .sld  — OGC SLD 1.0.0 (GeoServer, MapServer, QGIS)
+ *  .clr  — ArcGIS ASCII color ramp
+ *  .json — ArcGIS Pro CIMColorPalette
+ *  .gpl  — GIMP / Inkscape / Krita palette
+ *  .ase  — Adobe Swatch Exchange (binary, Illustrator / Photoshop / InDesign)
+ *  .aco  — Adobe Color (binary Photoshop swatches)
+ *  .txt  — Plain HEX + RGB reference
+ */
+
+const SITE_URL = 'https://hregad.github.io/World_of_colours';
+
+// ── Utilities ─────────────────────────────────────────────
+function h2r(hex) {
+  const s = hex.replace('#','');
+  return { r:parseInt(s.slice(0,2),16), g:parseInt(s.slice(2,4),16), b:parseInt(s.slice(4,6),16) };
+}
+
+function exportDate() {
+  return new Date().toISOString().slice(0,10); // YYYY-MM-DD
+}
+
+function dlText(content, name, mime='text/plain') {
+  const url = URL.createObjectURL(new Blob([content], { type: mime }));
+  Object.assign(document.createElement('a'), { href:url, download:name }).click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function dlBin(buffer, name) {
+  const url = URL.createObjectURL(new Blob([buffer], { type:'application/octet-stream' }));
+  Object.assign(document.createElement('a'), { href:url, download:name }).click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// ── QML — QGIS 3.x / 4.x Gradient Colour Ramp ────────────
+// Compatible with QGIS 3.x AND 4.x (same .qml schema, no breaking change).
+// Import: Settings → Style Manager → Import/Export → Import Item(s) → select .qml
+// The colorrampstyle element is a native QGIS style item.
+// Stops format: "pos;R,G,B,A:pos;R,G,B,A" — colon separates stops, semicolon separates pos from colour.
+function toQML(p) {
+  const n = p.colors.length;
+  const c1 = h2r(p.colors[0]);
+  const cN = h2r(p.colors[n-1]);
+
+  // Middle stops only (color1 = index 0, color2 = index n-1)
+  const midStops = p.colors.slice(1, -1).map((hex, i) => {
+    const {r,g,b} = h2r(hex);
+    const pos = ((i+1) / (n-1)).toFixed(6);
+    return `${pos};${r},${g},${b},255`;
+  }).join(':');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis version="3.28">
+  <!--
+    World of Colours — ${p.name}
+    Theme: ${p.theme} / Faction: ${p.faction} / Use: ${p.use}
+    Tags: ${p.tags.join(', ')}
+    Source: ${SITE_URL}
+    Exported: ${exportDate()}
+    Compatible with QGIS 3.x and QGIS 4.x
+    Import: Settings → Style Manager → Import/Export → Import Item(s)
+  -->
+  <colorrampstyle name="${p.name}" favorite="0" tags="${p.tags.join(',')}">
+    <colorramp name="${p.name}" type="gradient">
+      <prop k="color1" v="${c1.r},${c1.g},${c1.b},255"/>
+      <prop k="color2" v="${cN.r},${cN.g},${cN.b},255"/>
+      <prop k="discrete" v="0"/>
+      <prop k="rampType" v="gradient"/>
+      ${midStops ? `<prop k="stops" v="${midStops}"/>` : ''}
+    </colorramp>
+  </colorrampstyle>
+</qgis>`;
+}
+
+// ── SLD — OGC SLD 1.0.0 ───────────────────────────────────
+// Standard: OGC 02-070 (SLD 1.0.0) — most widely supported version.
+// Compatible: GeoServer, MapServer, QGIS, Geomajas, OpenLayers.
+// Ramp (sequential/diverging) → RasterSymbolizer with ColorMap type="ramp".
+// Classified (qualitative/categorical) → PolygonSymbolizer Rules.
+function toSLD(p) {
+  const n = p.colors.length;
+  const isRamp = p.use === 'sequential' || p.use === 'diverging';
+
+  const symbolizer = isRamp
+    ? `<Rule>
+      <RasterSymbolizer>
+        <ChannelSelection>
+          <GrayChannel><SourceChannelName>1</SourceChannelName></GrayChannel>
+        </ChannelSelection>
+        <ColorMap type="ramp">
+${p.colors.map((hex, i) => {
+  const q = (i/(n-1)).toFixed(4);
+  return `          <ColorMapEntry color="${hex}" quantity="${q}" label="${p.name} ${i+1}" opacity="1"/>`;
+}).join('\n')}
+        </ColorMap>
+      </RasterSymbolizer>
+    </Rule>`
+    : p.colors.map((hex, i) => `<Rule>
+      <n>${p.name} — class ${i+1}</n>
+      <PolygonSymbolizer>
+        <Fill><CssParameter name="fill">${hex}</CssParameter></Fill>
+        <Stroke>
+          <CssParameter name="stroke">#888888</CssParameter>
+          <CssParameter name="stroke-width">0.5</CssParameter>
+        </Stroke>
+      </PolygonSymbolizer>
+    </Rule>`).join('\n    ');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<StyledLayerDescriptor version="1.0.0"
+  xmlns="http://www.opengis.net/sld"
+  xmlns:ogc="http://www.opengis.net/ogc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd">
+  <!--
+    World of Colours — ${p.name}
+    Theme: ${p.theme} / Faction: ${p.faction} / Use: ${p.use}
+    Tags: ${p.tags.join(', ')}
+    Source: ${SITE_URL}
+    Exported: ${exportDate()}
+    Standard: OGC SLD 1.0.0
+    Compatible: GeoServer, MapServer, QGIS, OpenLayers
+  -->
+  <NamedLayer>
+    <n>${p.name}</n>
+    <UserStyle>
+      <Title>${p.name} — World of Colours</Title>
+      <Abstract>${p.theme} / ${p.faction} / ${p.use} | ${SITE_URL} | ${exportDate()}</Abstract>
+      <FeatureTypeStyle>
+    ${symbolizer}
+      </FeatureTypeStyle>
+    </UserStyle>
+  </NamedLayer>
+</StyledLayerDescriptor>`;
+}
+
+// ── CLR — ArcGIS ASCII Color Ramp ─────────────────────────
+// Standard: Esri ASCII Color Map (.clr) — text format VALUE R G B A per line.
+// Compatible: ArcMap 10.x, ArcGIS Pro (Raster Symbology → Classify → Import).
+// Also usable as color map for raster layers (File → Save As → Color Map).
+function toCLR(p) {
+  return [
+    `# World of Colours — ${p.name}`,
+    `# Theme: ${p.theme} | Faction: ${p.faction} | Use: ${p.use}`,
+    `# Tags: ${p.tags.join(', ')}`,
+    `# Source: ${SITE_URL}`,
+    `# Exported: ${exportDate()}`,
+    `# Standard: Esri ASCII Color Ramp (.clr)`,
+    `# Import: ArcGIS Pro → Symbology → Color Ramp → More Color Ramps → Import`,
+    `nColors ${p.colors.length}`,
+    ...p.colors.map((h, i) => {
+      const {r,g,b} = h2r(h);
+      return `${i} ${r} ${g} ${b} 255`;
+    })
+  ].join('\n');
+}
+
+// ── JSON — ArcGIS Pro CIMColorPalette ─────────────────────
+// Standard: Esri CIM (Cartographic Information Model) JSON.
+// Compatible: ArcGIS Pro 2.x+ (Insert → Styles, or Catalog → Styles → Import).
+function toCIMJSON(p) {
+  return JSON.stringify({
+    type: 'CIMColorPalette',
+    name: p.name,
+    tags: p.tags,
+    description: `${p.theme} / ${p.faction} / ${p.use} — ${SITE_URL} — Exported ${exportDate()}`,
+    colors: p.colors.map((h, i) => {
+      const {r,g,b} = h2r(h);
+      return { type:'CIMRGBColor', values:[r,g,b,100], name:`${p.name} ${i+1}` };
+    })
+  }, null, 2);
+}
+
+// ── GPL — GIMP / Inkscape / Krita ─────────────────────────
+// Standard: GIMP Palette format (.gpl) — plain text, widely supported.
+// Compatible: GIMP 2.10+, Inkscape 1.x, Krita 5.x, MyPaint.
+// NOT natively imported by QGIS (use .qml) or ArcGIS (use .clr or .json).
+// Import GIMP: Windows → Dockable Dialogs → Palettes → Import Palette.
+// Import Inkscape: Object → Swatches → open palette file.
+// Import Krita: Settings → Manage Resources → Palettes → Import.
+function toGPL(p) {
+  return [
+    'GIMP Palette',
+    `Name: ${p.name}`,
+    'Columns: 5',
+    '#',
+    `# World of Colours — ${p.theme} / ${p.faction}`,
+    `# Use: ${p.use} | Tags: ${p.tags.join(', ')}`,
+    `# Source: ${SITE_URL}`,
+    `# Exported: ${exportDate()}`,
+    `# Standard: GIMP Palette (.gpl)`,
+    `# Compatible: GIMP, Inkscape, Krita, MyPaint`,
+    `# For QGIS: use .qml | For ArcGIS: use .clr or .json`,
+    '#',
+    ...p.colors.map((h, i) => {
+      const {r,g,b} = h2r(h);
+      return `${String(r).padStart(3)} ${String(g).padStart(3)} ${String(b).padStart(3)}\t${p.name} ${String(i+1).padStart(2,'0')}`;
+    })
+  ].join('\n');
+}
+
+// ── ASE — Adobe Swatch Exchange (binary) ──────────────────
+// Standard: Adobe ASE binary format — magic ASEF, version 1.0.
+// Compatible: Illustrator CC+, Photoshop CC+, InDesign CC+, After Effects.
+// Color values: IEEE 754 float32, big-endian, range 0.0–1.0 (RGB space code 'RGB ').
+// Import Illustrator: Swatches panel → ≡ → Open Swatch Library → Other Library → .ase
+// Import Photoshop: Swatches panel → ≡ → Load Swatches → .ase
+function toASE(p) {
+  function encUTF16(s) {
+    // s + null terminator, big-endian UTF-16
+    const buf = new ArrayBuffer((s.length + 1) * 2);
+    const dv = new DataView(buf);
+    for (let i = 0; i < s.length; i++) dv.setUint16(i*2, s.charCodeAt(i), false);
+    dv.setUint16(s.length*2, 0, false);
+    return new Uint8Array(buf);
+  }
+
+  const blocks = [];
+
+  // Group start block
+  const gname = encUTF16(p.name);
+  const gdata = new Uint8Array(2 + gname.length);
+  new DataView(gdata.buffer).setUint16(0, p.name.length + 1, false);
+  gdata.set(gname, 2);
+  blocks.push({ type:0x0001, data:gdata });
+
+  // Color entry blocks
+  p.colors.forEach((hex, i) => {
+    const {r,g,b} = h2r(hex);
+    const cname = `${p.name} ${i+1}`;
+    const cn = encUTF16(cname);
+    // name_len(2) + name + colorspace(4) + r(4) + g(4) + b(4) + type(2)
+    const data = new Uint8Array(2 + cn.length + 4 + 12 + 2);
+    const dv = new DataView(data.buffer);
+    dv.setUint16(0, cname.length + 1, false);
+    data.set(cn, 2);
+    let off = 2 + cn.length;
+    // 'RGB ' = 0x52 0x47 0x42 0x20
+    data[off]=0x52; data[off+1]=0x47; data[off+2]=0x42; data[off+3]=0x20;
+    dv.setFloat32(off+4,  r/255, false);
+    dv.setFloat32(off+8,  g/255, false);
+    dv.setFloat32(off+12, b/255, false);
+    dv.setUint16(off+16, 2, false); // 0=global, 1=spot, 2=normal
+    blocks.push({ type:0xC001, data });
+  });
+
+  // Group end
+  blocks.push({ type:0x0002, data:new Uint8Array(0) });
+
+  // Assemble binary
+  let size = 12; // magic(4) + version(4) + count(4)
+  blocks.forEach(b => size += 6 + b.data.length);
+  const buf = new ArrayBuffer(size);
+  const out = new Uint8Array(buf);
+  const dv  = new DataView(buf);
+  // Magic 'ASEF'
+  out[0]=0x41; out[1]=0x53; out[2]=0x45; out[3]=0x46;
+  // Version 1.0
+  dv.setUint16(4, 1, false); dv.setUint16(6, 0, false);
+  // Block count
+  dv.setUint32(8, blocks.length, false);
+  let off = 12;
+  blocks.forEach(b => {
+    dv.setUint16(off, b.type, false);
+    dv.setUint32(off+2, b.data.length, false);
+    out.set(b.data, off+6);
+    off += 6 + b.data.length;
+  });
+  return buf;
+}
+
+// ── ACO — Adobe Color / Photoshop Swatches (binary) ───────
+// Standard: Adobe ACO format — version 1 block + version 2 block (with names).
+// Compatible: Photoshop CC+ (swatches panel).
+// Color space 0 = RGB, values scale 0–65535 (multiply 8-bit value by 257).
+// Import: Swatches panel → ≡ → Load Swatches → select .aco
+function toACO(p) {
+  const n = p.colors.length;
+  // v2 name sizes vary: 10 (color entry) + 4 (unused+namelen) + (len+1)*2 (UTF-16 + null)
+  const v2NameSizes = p.colors.map((_,i) => {
+    const name = `${p.name} ${i+1}`;
+    return 10 + 4 + (name.length + 1) * 2;
+  });
+  const v1Bytes = 4 + n * 10;
+  const v2Bytes = 4 + v2NameSizes.reduce((a,b) => a+b, 0);
+  const buf = new ArrayBuffer(v1Bytes + v2Bytes);
+  const dv  = new DataView(buf);
+  let off = 0;
+
+  function writeEntry(hex, version, name) {
+    const {r,g,b} = h2r(hex);
+    dv.setUint16(off,   0,      false); // color space: 0 = RGB
+    dv.setUint16(off+2, r*257,  false); // R 0–65535
+    dv.setUint16(off+4, g*257,  false); // G
+    dv.setUint16(off+6, b*257,  false); // B
+    dv.setUint16(off+8, 0,      false); // unused (component 4)
+    off += 10;
+    if (version === 2) {
+      dv.setUint16(off, 0, false); off += 2; // unused
+      dv.setUint16(off, name.length + 1, false); off += 2;
+      for (let ci = 0; ci < name.length; ci++) {
+        dv.setUint16(off, name.charCodeAt(ci), false); off += 2;
+      }
+      dv.setUint16(off, 0, false); off += 2; // null terminator
+    }
+  }
+
+  // Version 1 block
+  dv.setUint16(off, 1, false); off += 2;
+  dv.setUint16(off, n, false); off += 2;
+  p.colors.forEach(h => writeEntry(h, 1, ''));
+
+  // Version 2 block (adds colour names — required by modern Photoshop)
+  dv.setUint16(off, 2, false); off += 2;
+  dv.setUint16(off, n, false); off += 2;
+  p.colors.forEach((h, i) => writeEntry(h, 2, `${p.name} ${i+1}`));
+
+  return buf;
+}
+
+// ── TXT — Plain HEX + RGB ──────────────────────────────────
+function toTXT(p) {
+  return [
+    `World of Colours — ${p.name}`,
+    `Theme: ${p.theme} | Faction: ${p.faction} | Use: ${p.use}`,
+    `Tags: ${p.tags.join(', ')}`,
+    `Source: ${SITE_URL}`,
+    `Exported: ${exportDate()}`,
+    '',
+    'HEX           R    G    B',
+    '─'.repeat(30),
+    ...p.colors.map(h => {
+      const {r,g,b} = h2r(h);
+      return `${h.toUpperCase()}  ${String(r).padStart(3)}  ${String(g).padStart(3)}  ${String(b).padStart(3)}`;
+    }),
+    '',
+    `— World of Colours · ${SITE_URL}`
+  ].join('\n');
+}
+
+// ── Download dispatch ──────────────────────────────────────
+const Exports = {
+  qml:  p => dlText(toQML(p),     `${p.id}.qml`,  'application/xml'),
+  sld:  p => dlText(toSLD(p),     `${p.id}.sld`,  'application/xml'),
+  clr:  p => dlText(toCLR(p),     `${p.id}.clr`,  'text/plain'),
+  json: p => dlText(toCIMJSON(p), `${p.id}.json`, 'application/json'),
+  gpl:  p => dlText(toGPL(p),     `${p.id}.gpl`,  'text/plain'),
+  ase:  p => dlBin(toASE(p),      `${p.id}.ase`),
+  aco:  p => dlBin(toACO(p),      `${p.id}.aco`),
+  txt:  p => dlText(toTXT(p),     `${p.id}.txt`,  'text/plain'),
+};
+
+// ── Format metadata (used by help modal in ui.js) ─────────
+const FORMAT_INFO = [
+  { ext:'.qml',  label:'QGIS Style (3.x / 4.x)',        apps:['QGIS 3.x','QGIS 4.x'],
+    how:'Settings → Style Manager → Import/Export → Import Item(s) → select .qml. Works with QGIS 3.x and 4.x (same schema).' },
+  { ext:'.sld',  label:'OGC SLD 1.0',                   apps:['GeoServer','MapServer','QGIS'],
+    how:'GeoServer: Styles → Add new style → upload .sld. QGIS: Layer → Properties → Symbology → Save Style → SLD (can also import). MapServer: reference in .map file.' },
+  { ext:'.clr',  label:'ArcGIS Color Ramp',              apps:['ArcMap','ArcGIS Pro'],
+    how:'ArcGIS Pro: Raster layer → Symbology → Classify → Color Ramp → More Color Ramps → Import .clr. Also usable as a color map file for raster layers.' },
+  { ext:'.json', label:'ArcGIS Pro CIM Style',           apps:['ArcGIS Pro 2.x+'],
+    how:'ArcGIS Pro: Insert → Styles → Add Style and point to directory, or Catalog pane → Styles → right-click → Import.' },
+  { ext:'.gpl',  label:'GIMP / Inkscape / Krita',        apps:['GIMP','Inkscape','Krita','MyPaint'],
+    how:'GIMP: Windows → Dockable Dialogs → Palettes → Import Palette → select .gpl. Inkscape: Object → Swatches → open .gpl. Krita: Settings → Manage Resources → Palettes → Import.' },
+  { ext:'.ase',  label:'Adobe Swatch Exchange',          apps:['Illustrator','Photoshop','InDesign'],
+    how:'Illustrator: Swatches panel → ≡ → Open Swatch Library → Other Library → select .ase. Photoshop: Swatches panel → ≡ → Load Swatches → select .ase.' },
+  { ext:'.aco',  label:'Adobe Color (Photoshop)',        apps:['Photoshop'],
+    how:'Photoshop: Swatches panel → ≡ → Load Swatches → select .aco. Supports colour names (v2 format).' },
+  { ext:'.txt',  label:'HEX + RGB Reference',            apps:['Any text editor'],
+    how:'Open in any text editor. Hex codes and RGB values ready to copy into any tool, CSS, or code.' },
+];
+
+
+// ── popup-map.js ─────────────────────────────────────────
+/**
+ * World of Colours — Map Preview Popup  v1.0
+ * Opens a Leaflet choropleth popup for any palette.
+ * Usage: MapPopup.open(paletteObject)
+ */
+const MapPopup = (() => {
+  const L_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+  const L_JS  = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+
+  let mapInst = null, geoLayer = null, overlay = null;
+  let geoCache = null;
+
+  // Deterministic hash so same country always gets same class for one opening
+  function strHash(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  }
+
+  function loadLeaflet() {
+    return new Promise(res => {
+      if (window.L) { res(); return; }
+      if (!document.querySelector('link[href*="leaflet"]')) {
+        const l = document.createElement('link');
+        l.rel = 'stylesheet'; l.href = L_CSS;
+        document.head.appendChild(l);
+      }
+      const s = document.createElement('script');
+      s.src = L_JS; s.onload = res;
+      document.head.appendChild(s);
+    });
+  }
+
+  function ensureStyles() {
+    if (document.getElementById('mp-css')) return;
+    const st = document.createElement('style');
+    st.id = 'mp-css';
+    st.textContent = `
+.mp-ov{position:fixed;inset:0;z-index:8000;background:rgba(18,18,20,.75);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;transition:opacity .2s}
+.mp-ov.on{opacity:1}
+.mp-panel{background:#F6F4EF;border:1px solid #D8D4CC;width:min(760px,100%);max-height:90vh;
+  display:flex;flex-direction:column;
+  transform:translateY(14px) scale(.97);transition:transform .26s cubic-bezier(.16,1,.3,1)}
+.mp-ov.on .mp-panel{transform:none}
+.mp-head{padding:13px 16px 11px;border-bottom:1px solid #D8D4CC;
+  display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+.mp-info{display:flex;flex-direction:column;gap:3px}
+.mp-name{font-family:'DM Serif Display',Georgia,serif;font-style:italic;font-size:18px;color:#18181A;line-height:1}
+.mp-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:#9090A0}
+.mp-chips{display:flex;height:5px;margin-top:7px;border-radius:1px;overflow:hidden;width:200px}
+.mp-chips span{flex:1}
+.mp-x{background:none;border:none;cursor:pointer;font-family:'DM Mono',monospace;
+  font-size:16px;color:#9090A0;padding:2px 5px;line-height:1;transition:color .12s}
+.mp-x:hover{color:#18181A}
+.mp-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:#B0AAA0;
+  padding:5px 16px;border-bottom:1px solid #D8D4CC;flex-shrink:0}
+#mp-map{flex:1;min-height:420px;position:relative}
+.mp-leg{position:absolute;bottom:14px;right:10px;z-index:999;
+  background:rgba(246,244,239,.94);border:1px solid #D8D4CC;padding:9px 11px;
+  backdrop-filter:blur(4px);max-height:320px;overflow-y:auto}
+.mp-leg-t{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;
+  text-transform:uppercase;color:#9090A0;margin-bottom:6px}
+.mp-leg-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.mp-leg-chip{width:13px;height:8px;border-radius:1px;border:1px solid rgba(0,0,0,.09);flex-shrink:0}
+.mp-leg-lbl{font-family:'DM Mono',monospace;font-size:9px;color:#52525A}
+.leaflet-container{font-family:'DM Sans',sans-serif!important;background:#D4D0C8}
+.leaflet-tooltip{font-family:'DM Mono',monospace!important;font-size:10px!important;
+  background:#F6F4EF!important;border:1px solid #B0AAA0!important;
+  border-radius:2px!important;box-shadow:none!important;
+  padding:4px 8px!important;color:#18181A!important}
+    `;
+    document.head.appendChild(st);
+  }
+
+  function build(palette) {
+    ensureStyles();
+    overlay = document.createElement('div');
+    overlay.className = 'mp-ov';
+
+    const chips = palette.colors.map(c => `<span style="background:${c}"></span>`).join('');
+    overlay.innerHTML = `
+<div class="mp-panel">
+  <div class="mp-head">
+    <div class="mp-info">
+      <div class="mp-name">${palette.name}</div>
+      <div class="mp-sub">${palette.theme} · ${palette.faction} · ${palette.use}</div>
+      <div class="mp-chips">${chips}</div>
+    </div>
+    <button class="mp-x">✕</button>
+  </div>
+  <div class="mp-note">Random country classification — ${palette.colors.length} colour classes · hover for name</div>
+  <div id="mp-map"><div class="mp-leg"><div class="mp-leg-t">Classes</div><div id="mp-leg-items"></div></div></div>
+</div>`;
+
+    overlay.querySelector('.mp-x').addEventListener('click', close);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', escFn);
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('on')));
+  }
+
+  function escFn(e) { if (e.key === 'Escape') close(); }
+
+  function close() {
+    if (!overlay) return;
+    overlay.classList.remove('on');
+    setTimeout(() => {
+      if (mapInst) { mapInst.remove(); mapInst = null; }
+      overlay?.remove(); overlay = null; geoLayer = null;
+    }, 260);
+    document.removeEventListener('keydown', escFn);
+  }
+
+  function initMap(palette) {
+    const el = document.getElementById('mp-map');
+    if (!el) return;
+    mapInst = L.map('mp-map', { center: [20, 0], zoom: 1, zoomControl: true, attributionControl: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+      { subdomains: 'abcd', maxZoom: 6, opacity: 0.22 }).addTo(mapInst);
+    fetchAndRender(palette);
+  }
+
+  function fetchAndRender(palette) {
+    const render = geo => { geoCache = geo; draw(palette); };
+    if (geoCache) { render(geoCache); return; }
+    // Primary source
+    fetch('https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson')
+      .then(r => { if (!r.ok) throw 0; return r.json(); })
+      .then(render)
+      .catch(() =>
+        // Fallback
+        fetch('https://cdn.jsdelivr.net/gh/datasets/geo-countries@0.1.0/data/countries.geojson')
+          .then(r => r.json()).then(render)
+          .catch(() => {
+            const el = document.getElementById('mp-map');
+            if (el) el.innerHTML += '<p style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:monospace;font-size:11px;color:#888;text-align:center;padding:20px;">Unable to load world data.<br>Check your internet connection.</p>';
+          })
+      );
+  }
+
+  function draw(palette) {
+    if (!mapInst || !geoCache) return;
+    if (geoLayer) { mapInst.removeLayer(geoLayer); geoLayer = null; }
+
+    const colors = palette.colors;
+    const n = colors.length;
+    // Use a random salt per open so re-opening gives fresh shuffle
+    const salt = Math.floor(Math.random() * 999);
+
+    // Assign each country a class using hash(iso + salt) % n
+    // This guarantees different countries get different-looking distribution
+    function classFor(iso) {
+      return strHash(iso + salt) % n;
+    }
+
+    geoLayer = L.geoJSON(geoCache, {
+      style: f => {
+        const iso = f.properties.ISO_A3 || f.properties.iso_a3 || f.properties.ADM0_A3 || f.properties.name || '';
+        return {
+          fillColor: colors[classFor(iso)],
+          fillOpacity: 0.82,
+          weight: 0.5,
+          color: 'rgba(80,80,80,.35)',
+          opacity: 1
+        };
+      },
+      onEachFeature: (f, layer) => {
+        const iso = f.properties.ISO_A3 || f.properties.iso_a3 || f.properties.ADM0_A3 || '';
+        const name = f.properties.ADMIN || f.properties.name || f.properties.NAME || iso;
+        layer.bindTooltip(`<strong>${name}</strong> — class ${classFor(iso) + 1}`, { sticky: true, opacity: 1 });
+        layer.on({
+          mouseover: e => e.target.setStyle({ weight: 1.5, color: '#333', fillOpacity: .95 }),
+          mouseout: e => geoLayer && geoLayer.resetStyle(e.target)
+        });
+      }
+    }).addTo(mapInst);
+
+    try { mapInst.fitBounds(geoLayer.getBounds(), { padding: [6, 6], maxZoom: 3 }); } catch(e) {}
+
+    // Legend
+    const leg = document.getElementById('mp-leg-items');
+    if (leg) {
+      leg.innerHTML = colors.map((c, i) =>
+        `<div class="mp-leg-row"><div class="mp-leg-chip" style="background:${c}"></div><span class="mp-leg-lbl">Class ${i + 1}</span></div>`
+      ).join('');
+    }
+  }
+
+  async function open(palette) {
+    if (overlay) close();
+    await loadLeaflet();
+    build(palette);
+    setTimeout(() => initMap(palette), 60);
+  }
+
+  return { open };
+})();
+
+
+// ── ui.js ────────────────────────────────────────────────
+/**
+ * World of Colours — UI  v1.1
+ * ────────────────────────────
+ * Handles: filter bar (dropdown + use-type tags + tag search),
+ *          grid rendering, copy hex, toast, help modal.
+ */
+
+// ── State ─────────────────────────────────────────────────
+const State = {
+  theme:    'all',
+  faction:  'all',
+  use:      'all',
+  tagSearch: '',       // free-text tag search
+  activeTags: new Set(), // selected tag chips
+};
+
+// ── Toast ──────────────────────────────────────────────────
+let _toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+// ── Copy hex ───────────────────────────────────────────────
+function copyHex(hex, swatchEl) {
+  const t = hex.toUpperCase();
+  (navigator.clipboard?.writeText(t) ?? Promise.reject())
+    .catch(() => {
+      const ta = Object.assign(document.createElement('textarea'), { value: t });
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+    })
+    .finally(() => {
+      swatchEl.classList.add('copied');
+      setTimeout(() => swatchEl.classList.remove('copied'), 600);
+      toast(`Copied ${t}`);
+    });
+}
+
+// ── Taxonomy from data ─────────────────────────────────────
+function taxonomy() {
+  const t = {};
+  WOC_DATA.forEach(p => {
+    if (!t[p.theme]) t[p.theme] = new Set();
+    t[p.theme].add(p.faction);
+  });
+  return t;
+}
+
+// ── Accent per theme ───────────────────────────────────────
+const ACCENTS = { 'Cartography Classics': '#2471A3' };
+const accent = t => ACCENTS[t] || '#18181A';
+
+// ── Filter logic ───────────────────────────────────────────
+function getFiltered() {
+  const { theme, faction, use, activeTags } = State;
+  return WOC_DATA.filter(p => {
+    if (theme   !== 'all' && p.theme   !== theme)   return false;
+    if (faction !== 'all' && p.faction !== faction) return false;
+    if (use     !== 'all' && p.use     !== use)     return false;
+    if (activeTags.size > 0 && !p.tags.some(t => activeTags.has(t))) return false;
+    return true;
+  });
+}
+
+// ── FILTER BAR ─────────────────────────────────────────────
+function renderFilterBar() {
+  const tx  = taxonomy();
+  const bar = document.getElementById('fbar');
+  bar.innerHTML = '';
+
+  // 1) Theme dropdown
+  const dropWrap = document.createElement('div');
+  dropWrap.className = 'drop-wrap';
+
+  const themes = Object.keys(tx);
+  const themeLabel = State.theme === 'all'
+    ? 'All collections'
+    : (State.faction !== 'all' ? `${State.theme} / ${State.faction}` : State.theme);
+
+  const dropBtn = document.createElement('button');
+  dropBtn.className = 'drop-btn';
+  dropBtn.innerHTML = `<span>${themeLabel}</span><svg width="10" height="6" viewBox="0 0 10 6"><path d="M0 0l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
+  dropBtn.addEventListener('click', e => { e.stopPropagation(); toggleDropdown(dropMenu, dropBtn); });
+
+  const dropMenu = document.createElement('div');
+  dropMenu.className = 'drop-menu';
+
+  // "All" option
+  const allOpt = mkDropOpt('All collections', 'all', null, State.theme === 'all');
+  dropMenu.appendChild(allOpt);
+
+  themes.forEach(th => {
+    // Theme header
+    const thOpt = mkDropOpt(th, th, null, State.theme === th && State.faction === 'all');
+    thOpt.dataset.isTheme = '1';
+    dropMenu.appendChild(thOpt);
+
+    // Faction options indented
+    [...tx[th]].sort().forEach(f => {
+      const fOpt = mkDropOpt(`  ${f}`, th, f, State.theme === th && State.faction === f);
+      fOpt.style.paddingLeft = '20px';
+      dropMenu.appendChild(fOpt);
+    });
+  });
+
+  dropWrap.appendChild(dropBtn);
+  dropWrap.appendChild(dropMenu);
+  bar.appendChild(dropWrap);
+
+  // 2) Use-type tags
+  const sep1 = document.createElement('div'); sep1.className = 'fsep';
+  bar.appendChild(sep1);
+
+  const useGroup = document.createElement('div');
+  useGroup.className = 'tag-group';
+  ['all','sequential','diverging','qualitative'].forEach(u => {
+    const b = document.createElement('button');
+    b.className = 'tag' + (State.use === u ? ' active' : '');
+    b.textContent = u === 'all' ? 'All types' : u;
+    if (u !== 'all') b.dataset.u = u;
+    b.addEventListener('click', () => { State.use = u; refresh(); });
+    useGroup.appendChild(b);
+  });
+  bar.appendChild(useGroup);
+
+  // 3) Tag search
+  const sep2 = document.createElement('div'); sep2.className = 'fsep';
+  bar.appendChild(sep2);
+
+  bar.appendChild(buildTagSearch());
+
+  // 4) Active tag chips
+  if (State.activeTags.size > 0) {
+    const sep3 = document.createElement('div'); sep3.className = 'fsep';
+    bar.appendChild(sep3);
+
+    const chipGroup = document.createElement('div');
+    chipGroup.className = 'tag-group';
+    State.activeTags.forEach(tag => {
+      const chip = document.createElement('button');
+      chip.className = 'tag-chip active';
+      chip.innerHTML = `${tag} <span class="chip-x">×</span>`;
+      chip.addEventListener('click', () => { State.activeTags.delete(tag); refresh(); });
+      chipGroup.appendChild(chip);
+    });
+    bar.appendChild(chipGroup);
+  }
+
+  // 5) Count
+  const count = document.createElement('span');
+  count.className = 'fright';
+  const n = getFiltered().length;
+  count.textContent = `${n} palette${n !== 1 ? 's' : ''}`;
+  bar.appendChild(count);
+}
+
+function mkDropOpt(label, theme, faction, isActive) {
+  const opt = document.createElement('div');
+  opt.className = 'drop-opt' + (isActive ? ' active' : '');
+  opt.textContent = label.trim();
+  if (!faction && theme !== 'all') {
+    opt.style.fontWeight = '500';
+    opt.style.borderTop = '1px solid var(--rule)';
+    opt.style.marginTop = '2px';
+    opt.style.paddingTop = '6px';
+  }
+  opt.addEventListener('click', () => {
+    State.theme   = theme;
+    State.faction = faction || 'all';
+    closeAllDropdowns();
+    refresh();
+  });
+  return opt;
+}
+
+function toggleDropdown(menu, btn) {
+  const isOpen = menu.classList.contains('open');
+  closeAllDropdowns();
+  if (!isOpen) {
+    menu.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+function closeAllDropdowns() {
+  document.querySelectorAll('.drop-menu.open').forEach(m => m.classList.remove('open'));
+  document.querySelectorAll('.drop-btn.open').forEach(b => b.classList.remove('open'));
+}
+
+document.addEventListener('click', closeAllDropdowns);
+
+// ── Tag search + autocomplete ──────────────────────────────
+function buildTagSearch() {
+  const wrap = document.createElement('div');
+  wrap.className = 'tag-search-wrap';
+
+  const input = document.createElement('input');
+  input.className = 'tag-search';
+  input.type = 'text';
+  input.placeholder = 'Search tags…';
+  input.value = State.tagSearch;
+  input.spellcheck = false;
+  input.autocomplete = 'off';
+
+  const suggestions = document.createElement('div');
+  suggestions.className = 'tag-suggestions';
+
+  input.addEventListener('input', () => {
+    State.tagSearch = input.value.trim().toLowerCase();
+    renderSuggestions(suggestions, input.value.trim());
+  });
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      State.tagSearch = '';
+      input.value = '';
+      suggestions.innerHTML = '';
+      refresh();
+    }
+  });
+
+  wrap.appendChild(input);
+  wrap.appendChild(suggestions);
+  return wrap;
+}
+
+function renderSuggestions(container, query) {
+  container.innerHTML = '';
+  if (!query || query.length < 1) return;
+  const q = query.toLowerCase();
+  const matches = ALL_TAGS.filter(t => t.startsWith(q) && !State.activeTags.has(t)).slice(0, 8);
+  matches.forEach(tag => {
+    const item = document.createElement('div');
+    item.className = 'tag-sugg-item';
+    // Bold the matching prefix
+    item.innerHTML = `<strong>${tag.slice(0, q.length)}</strong>${tag.slice(q.length)}`;
+    item.addEventListener('mousedown', e => {
+      e.preventDefault();
+      State.activeTags.add(tag);
+      State.tagSearch = '';
+      refresh();
+    });
+    container.appendChild(item);
+  });
+}
+
+// ── MAP ICON ───────────────────────────────────────────────
+const MAP_SVG = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 1.5C6.5 3.5 5.5 5.5 5.5 8s1 4.5 2.5 6.5M8 1.5C9.5 3.5 10.5 5.5 10.5 8s-1 4.5-2.5 6.5M1.5 8h13M2.2 5.5h11.6M2.2 10.5h11.6"/></svg>`;
+
+// ── GRID ───────────────────────────────────────────────────
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const filtered = getFiltered();
+
+  if (!filtered.length) {
+    grid.innerHTML = '<p class="empty-msg">No palettes match the current filters.</p>';
+    return;
+  }
+
+  // Group by theme
+  const byTheme = {};
+  filtered.forEach(p => {
+    if (!byTheme[p.theme]) byTheme[p.theme] = [];
+    byTheme[p.theme].push(p);
+  });
+
+  const themes = Object.keys(byTheme);
+  const multi = themes.length > 1;
+  let idx = 0;
+
+  themes.forEach(th => {
+    if (multi) {
+      const div = document.createElement('div');
+      div.className = 'tdiv';
+      div.innerHTML = `<span class="tdiv-t">${th}</span><span class="tdiv-n">${byTheme[th].length}</span><div class="tdiv-acc" style="background:${accent(th)}"></div>`;
+      grid.appendChild(div);
+    }
+    byTheme[th].forEach(p => grid.appendChild(mkCard(p, idx++)));
+  });
+}
+
+function mkCard(p, idx) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.style.animationDelay = `${Math.min(idx, 30) * 0.018}s`;
+
+  // Swatches
+  const swr = document.createElement('div');
+  swr.className = 'swr';
+  p.colors.forEach(h => {
+    const s = document.createElement('div');
+    s.className = 'sw'; s.style.background = h; s.dataset.h = h.toUpperCase();
+    s.addEventListener('click', () => copyHex(h, s));
+    swr.appendChild(s);
+  });
+
+  // Body
+  const cb = document.createElement('div');
+  cb.className = 'cb';
+  cb.innerHTML = `
+    <div class="cmeta"><span>${p.faction}</span></div>
+    <div class="cname">${p.name}</div>
+    <div class="ubadge" data-u="${p.use}"><div class="upip"></div>${p.use}</div>
+    ${p.tags.length ? `<div class="ctags">${p.tags.map(t => `<span class="ctag" data-tag="${t}">${t}</span>`).join('')}</div>` : ''}`;
+
+  // Clickable inline tags
+  cb.querySelectorAll('.ctag').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const tag = chip.dataset.tag;
+      if (!State.activeTags.has(tag)) {
+        State.activeTags.add(tag);
+        refresh();
+      }
+    });
+  });
+
+  // Footer
+  const foot = document.createElement('div');
+  foot.className = 'cfoot';
+  const nc = document.createElement('span');
+  nc.className = 'nc'; nc.textContent = p.colors.length;
+  const dlg = document.createElement('div');
+  dlg.className = 'dlg';
+
+  [
+    ['.qml',  'qml',  'QGIS Style Manager'],
+    ['.sld',  'sld',  'GeoServer · MapServer · QGIS'],
+    ['.clr',  'clr',  'ArcGIS Color Ramp'],
+    ['.json', 'json', 'ArcGIS Pro Style'],
+    ['.gpl',  'gpl',  'GIMP · Inkscape · Krita'],
+    ['.ase',  'ase',  'Adobe Illustrator · Photoshop · InDesign'],
+    ['.aco',  'aco',  'Adobe Photoshop swatches'],
+    ['.txt',  'txt',  'HEX + RGB reference'],
+  ].forEach(([label, key, title]) => {
+    const b = document.createElement('button');
+    b.className = 'dlb'; b.textContent = label; b.title = title;
+    b.addEventListener('click', e => {
+      e.stopPropagation();
+      Exports[key](p);
+      toast(`↓ ${p.name}${label}`);
+    });
+    dlg.appendChild(b);
+  });
+
+  const mb = document.createElement('button');
+  mb.className = 'map-btn'; mb.title = 'Preview on map';
+  mb.innerHTML = MAP_SVG;
+  mb.addEventListener('click', e => { e.stopPropagation(); MapPopup.open(p); });
+
+  foot.appendChild(nc);
+  foot.appendChild(dlg);
+  foot.appendChild(mb);
+  card.appendChild(swr);
+  card.appendChild(cb);
+  card.appendChild(foot);
+  return card;
+}
+
+// ── STATS BAR ──────────────────────────────────────────────
+function buildStats() {
+  const el = document.getElementById('stats');
+  const tx = taxonomy();
+  const uc = new Set(WOC_DATA.flatMap(p => p.colors)).size;
+  [
+    [WOC_DATA.length, 'Palettes'],
+    [Object.keys(tx).length, 'Themes'],
+    [uc, 'Unique colours'],
+    [8, 'Export formats'],
+  ].forEach(([n, l]) => {
+    el.innerHTML += `<div class="stat"><div class="sn">${n}</div><div class="sl">${l}</div></div>`;
+  });
+}
+
+// ── MASTHEAD VOLS ──────────────────────────────────────────
+function buildVols() {
+  const el = document.getElementById('vols');
+  const tx = taxonomy();
+  Object.keys(tx).forEach(th => {
+    const n = WOC_DATA.filter(p => p.theme === th).length;
+    el.innerHTML += `<div class="vr"><div class="vc" style="background:${accent(th)}"></div>${th} — ${n} palettes</div>`;
+  });
+}
+
+// ── HELP MODAL ─────────────────────────────────────────────
+function buildHelpModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'help-overlay';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeHelp(); });
+
+  const panel = document.createElement('div');
+  panel.className = 'help-panel';
+  panel.innerHTML = `
+    <div class="help-head">
+      <span class="help-title">How to import palettes into your software</span>
+      <button class="help-close" onclick="closeHelp()">✕</button>
+    </div>
+    <div class="help-body">
+      ${FORMAT_INFO.map(f => `
+        <div class="help-row">
+          <div class="help-ext">${f.ext}</div>
+          <div class="help-detail">
+            <div class="help-label">${f.label} <span class="help-apps">${f.apps.join(' · ')}</span></div>
+            <div class="help-how">${f.how}</div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('open')));
+  document.addEventListener('keydown', function esc(e) {
+    if (e.key === 'Escape') { closeHelp(); document.removeEventListener('keydown', esc); }
+  });
+}
+
+function closeHelp() {
+  const ov = document.querySelector('.help-overlay');
+  if (!ov) return;
+  ov.classList.remove('open');
+  setTimeout(() => ov.remove(), 220);
+}
+
+// ── LOGO LETTERS (animated) ────────────────────────────────
+function buildLogo() {
+  [['lw1','World'],['lw2','Colours']].forEach(([id, word], wi) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    word.split('').forEach((ch, i) => {
+      const s = document.createElement('span');
+      s.className = 'll';
+      s.style.animationDelay = `${(wi * 6 + i) * 0.12}s`;
+      s.textContent = ch;
+      el.appendChild(s);
+    });
+  });
+}
+
+// ── ARC HOVER SPEED ────────────────────────────────────────
+function initArcHover() {
+  const mh = document.getElementById('masthead');
+  if (!mh) return;
+  const arcs = mh.querySelectorAll('.arc');
+  mh.addEventListener('mouseenter', () => arcs.forEach(a => a.classList.add('fast')));
+  mh.addEventListener('mouseleave', () => arcs.forEach(a => a.classList.remove('fast')));
+}
+
+// ── MAIN REFRESH ───────────────────────────────────────────
+function refresh() {
+  renderFilterBar();
+  renderGrid();
+}
+
+// ── FEATURED PALETTE ───────────────────────────────────────
+let _featuredId = null;
+
+function buildFeatured(forceNew) {
+  const el = document.getElementById('masthead-featured');
+  if (!el) return;
+
+  // Pick a random palette (different from last shown)
+  let candidates = WOC_DATA.filter(p => p.id !== _featuredId);
+  const p = candidates[Math.floor(Math.random() * candidates.length)];
+  _featuredId = p.id;
+
+  // Swatches
+  const swatchesHtml = p.colors.map(h =>
+    `<div class="mf-sw" style="background:${h}" title="${h.toUpperCase()}" onclick="copyHex('${h}',this)"></div>`
+  ).join('');
+
+  // Tags (max 4 shown)
+  const tagsHtml = p.tags.slice(0,4).map(t =>
+    `<span class="mf-tag">${t}</span>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="mf-label">
+      <span>Did you try this palette?</span>
+      <button class="mf-shuffle" onclick="buildFeatured(true)" title="Shuffle">↺ shuffle</button>
+    </div>
+    <div class="mf-swatches">${swatchesHtml}</div>
+    <div class="mf-body">
+      <div class="mf-faction">${p.faction}</div>
+      <div class="mf-name">${p.name}</div>
+      <div class="mf-badge" data-u="${p.use}"><div class="mf-pip"></div>${p.use}</div>
+      <div class="mf-tags">${tagsHtml}</div>
+    </div>
+    <div class="mf-footer">
+      ${[
+        ['.qml','qml','QGIS'],
+        ['.sld','sld','SLD'],
+        ['.clr','clr','ArcGIS'],
+        ['.json','json','ArcGIS Pro'],
+        ['.gpl','gpl','GIMP/Inkscape'],
+        ['.ase','ase','Adobe'],
+        ['.txt','txt','HEX'],
+      ].map(([l,k,t]) =>
+        `<button class="mf-dlb" title="${t}" onclick="Exports.${k}(WOC_DATA.find(p=>p.id==='${p.id}'));toast('↓ ${p.name}${l}')">${l}</button>`
+      ).join('')}
+      <button class="mf-map" title="Preview on map" onclick="MapPopup.open(WOC_DATA.find(p=>p.id==='${p.id}'))">${MAP_SVG_FEATURED.slice(1,-1)}</button>
+    </div>`;
+}
+
+// ── INIT ───────────────────────────────────────────────────
+function initUI() {
+  buildLogo();
+  buildVols();
+  buildStats();
+  initArcHover();
+  buildFeatured();
+  refresh();
+
+  // Help button
+  const helpBtn = document.getElementById('helpBtn');
+  if (helpBtn) helpBtn.addEventListener('click', buildHelpModal);
+}
+
+document.addEventListener('DOMContentLoaded', initUI);
+
+</script>
+</body>
+</html>
