@@ -5,7 +5,7 @@
  * theme   — top-level collection (drives dropdown)
  * faction — sub-group within theme
  * name    — display name
- * use     — "sequential" | "diverging" | "qualitative" | "categorical"
+ * use     — "sequential" | "diverging" | "qualitative"
  * tags    — open-ended thematic keywords (used for search + tag filter)
  * colors  — hex array (6–12 recommended)
  */
@@ -160,22 +160,22 @@ const WOC_DATA = [
 
   // ── Qualitative ────────────────────────────────────────
   {id:"c-set1",theme:"Cartography Classics",faction:"Qualitative",name:"Set I — Vivid",use:"qualitative",
-   tags:["statistic","classification","categorical","colorbrewer"],
+   tags:["statistic","classification","colorbrewer"],
    colors:["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#FFFF33","#A6CEE3"]},
   {id:"c-pastel",theme:"Cartography Classics",faction:"Qualitative",name:"Pastel Regions",use:"qualitative",
    tags:["statistic","classification","administrative","choropleth","colorbrewer","print"],
    colors:["#FBB4AE","#B3CDE3","#CCEBC5","#DECBE4","#FED9A6","#FFFFCC","#E5D8BD","#FDDAEC","#F2F2F2","#B3E2CD"]},
   {id:"c-dark2",theme:"Cartography Classics",faction:"Qualitative",name:"Dark Classes",use:"qualitative",
-   tags:["statistic","classification","categorical","colorbrewer"],
+   tags:["statistic","classification","colorbrewer"],
    colors:["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","#666666","#2C7BB6","#B2182B"]},
   {id:"c-paired",theme:"Cartography Classics",faction:"Qualitative",name:"Paired",use:"qualitative",
-   tags:["statistic","classification","categorical","colorbrewer","bivariate"],
+   tags:["statistic","classification","colorbrewer","bivariate"],
    colors:["#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A"]},
   {id:"c-tableau10",theme:"Cartography Classics",faction:"Qualitative",name:"Tableau 10",use:"qualitative",
-   tags:["statistic","classification","categorical","chart","dataviz"],
+   tags:["statistic","classification","chart","dataviz"],
    colors:["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC948","#B07AA1","#FF9DA7","#9C755F","#BAB0AC"]},
   {id:"c-safe",theme:"Cartography Classics",faction:"Qualitative",name:"Colourblind-Safe 7",use:"qualitative",
-   tags:["colorblind-safe","classification","accessibility","categorical"],
+   tags:["colorblind-safe","classification","accessibility"],
    colors:["#0077BB","#33BBEE","#009988","#EE7733","#CC3311","#EE3377","#BBBBBB"]},
   {id:"c-earth-tones",theme:"Cartography Classics",faction:"Qualitative",name:"Earth Tones",use:"qualitative",
    tags:["topographic","terrain","classification","geological","land"],
@@ -192,7 +192,7 @@ const WOC_DATA = [
    tags:["statistic","remote-sensing","urban","energy","viirs","dmsp","satellite"],
    colors:["#000000","#0A0808","#180C04","#301806","#502808","#784010","#A86820","#D0A030","#F0C840","#FFEE80"]},
   {id:"c-landcover",theme:"Cartography Classics",faction:"Thematic",name:"Land Cover",use:"qualitative",
-   tags:["remote-sensing","classification","environmental","categorical","land","corine"],
+   tags:["remote-sensing","classification","environmental","land","corine"],
    colors:["#1A6B1A","#8CC850","#F0E060","#D09030","#C03020","#808080","#4090D0","#B0D0F0","#F0F0F0","#604020"]},
   {id:"c-ndvi",theme:"Cartography Classics",faction:"Thematic",name:"NDVI Vegetation",use:"diverging",
    tags:["remote-sensing","vegetation","bivariate","environmental","satellite","index"],
@@ -215,15 +215,11 @@ const WOC_DATA = [
   {id:"c-sar-coherence",theme:"Cartography Classics",faction:"Thematic",name:"SAR Coherence",use:"sequential",
    tags:["remote-sensing","radar","sar","satellite","interferometry","insar"],
    colors:["#000000","#1A1A2E","#16213E","#0F3460","#164B8A","#1A6BC0","#2090E0","#40B8F0","#80D8F8","#E0F8FF"]},
-  // SAR Change Detection — revised to a clean 4-colour categorical
-  {id:"c-sar-change",theme:"Cartography Classics",faction:"Thematic",name:"SAR Change Detection",use:"categorical",
-   tags:["remote-sensing","radar","sar","change-detection","satellite","disaster"],
-   colors:["#2C3E50","#27AE60","#E74C3C","#F1C40F"]},
   {id:"c-soil-type",theme:"Cartography Classics",faction:"Thematic",name:"Soil Classification",use:"qualitative",
    tags:["geological","soil","classification","environmental","land"],
    colors:["#8B5E3C","#C89050","#D4B080","#A0A060","#606840","#486828","#A08060","#C0A880","#888060","#504028"]},
   {id:"c-geology",theme:"Cartography Classics",faction:"Thematic",name:"Geological Units",use:"qualitative",
-   tags:["geological","classification","categorical","lithology"],
+   tags:["geological","classification","lithology"],
    colors:["#F4A460","#8FBC8F","#4682B4","#9370DB","#CD853F","#BC8F5F","#708090","#6B8E23","#B8860B","#556B2F"]},
 
   // ── Risk (new faction) ─────────────────────────────────
@@ -243,7 +239,7 @@ const WOC_DATA = [
 
   // ── Political ──────────────────────────────────────────
   {id:"c-political",theme:"Cartography Classics",faction:"Political",name:"Political Regions",use:"qualitative",
-   tags:["administrative","political","classification","categorical"],
+   tags:["administrative","political","classification"],
    colors:["#E8D44D","#4DB8E8","#E8784D","#4DE88C","#E84D8C","#8C4DE8","#4D8CE8","#E8AC4D","#4DE8D4","#E84D4D"]},
   {id:"c-admin-muted",theme:"Cartography Classics",faction:"Political",name:"Admin Muted",use:"qualitative",
    tags:["administrative","political","choropleth","muted","print"],

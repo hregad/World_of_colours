@@ -118,7 +118,7 @@ function renderFilterBar() {
 
   const useGroup = document.createElement('div');
   useGroup.className = 'tag-group';
-  ['all','sequential','diverging','qualitative','categorical'].forEach(u => {
+  ['all','sequential','diverging','qualitative'].forEach(u => {
     const b = document.createElement('button');
     b.className = 'tag' + (State.use === u ? ' active' : '');
     b.textContent = u === 'all' ? 'All types' : u;
