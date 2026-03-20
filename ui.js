@@ -502,7 +502,7 @@ function buildFeatured(forceNew) {
       ].map(([l,k,t]) =>
         `<button class="mf-dlb" title="${t}" onclick="Exports.${k}(WOC_DATA.find(p=>p.id==='${p.id}'));toast('↓ ${p.name}${l}')">${l}</button>`
       ).join('')}
-      <button class="mf-map" title="Preview on map" onclick="MapPopup.open(WOC_DATA.find(p=>p.id==='${p.id}'))">${MAP_SVG_FEATURED.slice(1,-1)}</button>
+      <button class="mf-map" title="Preview on map" onclick="MapPopup.open(WOC_DATA.find(p=>p.id==='${p.id}'))">${MAP_SVG}</button>
     </div>`;
 }
 

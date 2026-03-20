@@ -409,7 +409,6 @@ footer{border-top:2px solid var(--ink);padding:32px 40px 40px;
 <div class="toast" id="toast"></div>
 
 <script>
-// ── data.js ──────────────────────────────────────────────
 /**
  * World of Colours — Palette Data  v1.2
  * ──────────────────────────────────────
@@ -685,8 +684,6 @@ const WOC_DATA = [
 // Derived list of all unique tags (used for autocomplete)
 const ALL_TAGS = [...new Set(WOC_DATA.flatMap(p => p.tags))].sort();
 
-
-// ── exports.js ───────────────────────────────────────────
 /**
  * World of Colours — Export Functions  v1.2
  * ──────────────────────────────────────────
@@ -1064,8 +1061,6 @@ const FORMAT_INFO = [
     how:'Open in any text editor. Hex codes and RGB values ready to copy into any tool, CSS, or code.' },
 ];
 
-
-// ── popup-map.js ─────────────────────────────────────────
 /**
  * World of Colours — Map Preview Popup  v1.0
  * Opens a Leaflet choropleth popup for any palette.
@@ -1266,8 +1261,6 @@ const MapPopup = (() => {
   return { open };
 })();
 
-
-// ── ui.js ────────────────────────────────────────────────
 /**
  * World of Colours — UI  v1.1
  * ────────────────────────────
@@ -1772,7 +1765,7 @@ function buildFeatured(forceNew) {
       ].map(([l,k,t]) =>
         `<button class="mf-dlb" title="${t}" onclick="Exports.${k}(WOC_DATA.find(p=>p.id==='${p.id}'));toast('↓ ${p.name}${l}')">${l}</button>`
       ).join('')}
-      <button class="mf-map" title="Preview on map" onclick="MapPopup.open(WOC_DATA.find(p=>p.id==='${p.id}'))">${MAP_SVG_FEATURED.slice(1,-1)}</button>
+      <button class="mf-map" title="Preview on map" onclick="MapPopup.open(WOC_DATA.find(p=>p.id==='${p.id}'))">${MAP_SVG}</button>
     </div>`;
 }
 
