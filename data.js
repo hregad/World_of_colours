@@ -266,7 +266,7 @@ const WOC_DATA = [
    colors:["#2166AC","#4393C3","#92C5DE","#D1E5F0","#FFFFFF","#FDDBC7","#F4A582","#D6604D","#B2182B"]},
   {id:"c-high-contrast",theme:"Cartography Classics",faction:"Accessibility",name:"High Contrast",use:"qualitative",
    tags:["accessibility","print","classification","high-contrast","colorblind-safe"],
-   colors:["#000000","#FFFFFF","#FF0000","#0000FF","#00CC00","#FF00FF","#00CCCC","#FF8000"]},
+   colors:["#000000","#FFFFFF","#FF0000","#0000FF","#F0E442","#FF00FF","#00CCCC","#FF8000"]},
 
 ];
 

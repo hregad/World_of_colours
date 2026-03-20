@@ -329,7 +329,7 @@ function mkCard(p, idx) {
   dlg.className = 'dlg';
 
   [
-    ['.qml',  'qml',  'QGIS Style Manager'],
+    ['.xml',  'qml',  'QGIS Style Manager'],
     ['.sld',  'sld',  'GeoServer · MapServer · QGIS'],
     ['.clr',  'clr',  'ArcGIS Color Ramp'],
     ['.json', 'json', 'ArcGIS Pro Style'],
@@ -492,7 +492,7 @@ function buildFeatured(forceNew) {
     </div>
     <div class="mf-footer">
       ${[
-        ['.qml','qml','QGIS'],
+        ['.xml','xml','QGIS Style Manager'],
         ['.sld','sld','SLD'],
         ['.clr','clr','ArcGIS'],
         ['.json','json','ArcGIS Pro'],
