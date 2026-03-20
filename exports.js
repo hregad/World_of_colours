@@ -18,6 +18,14 @@ function h2r(hex) {
   const s = hex.replace('#', '');
   return { r:parseInt(s.slice(0,2),16), g:parseInt(s.slice(2,4),16), b:parseInt(s.slice(4,6),16) };
 }
+function xmlEsc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
 function exportDate() { return new Date().toISOString().slice(0,10); }
 function dlText(content, name, mime) {
   const url = URL.createObjectURL(new Blob([content], { type: mime||'text/plain' }));
@@ -31,7 +39,7 @@ function dlBin(buffer, name) {
 }
 
 // ── XML — QGIS 3.x / 4.x Style Manager ───────────────────
-// Verified format: <!DOCTYPE qgis_style><qgis_style version="0">
+// Verified format: <!DOCTYPE qgis_style><qgis_style version="1">
 // Extension: .xml (NOT .qml — .qml is for layer styles, not colour ramps)
 // Stops format: "pos;R,G,B,A:pos;R,G,B,A" (colon-separated entries)
 // Import: Settings → Style Manager → Import/Export → Import Item(s)
@@ -47,9 +55,9 @@ function toQGISXML(p) {
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE qgis_style>
-<qgis_style version="0">
+<qgis_style version="1">
   <!--
-    World of Colours — ${p.name}
+    World of Colours — ${xmlEsc(p.name)}
     ${p.theme} / ${p.faction} / ${p.use}
     Source: ${SITE_URL}
     Exported: ${exportDate()}
@@ -57,12 +65,12 @@ function toQGISXML(p) {
   -->
   <symbols/>
   <colorramps>
-    <colorramp type="gradient" name="${p.name}" tags="${p.tags.join(',')}">
+    <colorramp type="gradient" name="${xmlEsc(p.name)}" tags="${xmlEsc(p.tags.join(','))}">
       <prop k="color1" v="${c1.r},${c1.g},${c1.b},255"/>
       <prop k="color2" v="${cN.r},${cN.g},${cN.b},255"/>
       <prop k="discrete" v="0"/>
       <prop k="rampType" v="gradient"/>
-      ${midStops ? `<prop k="stops" v="${midStops}"/>` : ''}
+      ${midStops ? '<prop k="stops" v="' + midStops + '"/>' : ''}
     </colorramp>
   </colorramps>
   <textformats/>
@@ -85,7 +93,7 @@ function toSLD(p) {
   const cmType = isRamp ? 'ramp' : 'values';
   const entries = p.colors.map((hex,i) => {
     const q = isRamp ? (i/(n-1)).toFixed(4) : String(i);
-    return `          <se:ColorMapEntry color="${hex}" quantity="${q}" label="${p.name} ${i+1}" opacity="1.0"/>`;
+    return `          <se:ColorMapEntry color="${hex}" quantity="${q}" label="${xmlEsc(p.name)} ${i+1}" opacity="1.0"/>`;
   }).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -98,7 +106,7 @@ function toSLD(p) {
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.1.0/StyledLayerDescriptor.xsd">
   <!--
-    World of Colours — ${p.name}
+    World of Colours — ${xmlEsc(p.name)}
     ${p.theme} / ${p.faction} / ${p.use}
     Source: ${SITE_URL} — Exported: ${exportDate()}
     OGC SLD 1.1.0 — raster layers (ColorMap)
@@ -106,12 +114,12 @@ function toSLD(p) {
     GeoServer: Styles → Add a new style → upload this file
   -->
   <NamedLayer>
-    <se:Name>${p.name}</se:Name>
+    <se:Name>${xmlEsc(p.name)}</se:Name>
     <UserStyle>
-      <se:Name>${p.name}</se:Name>
+      <se:Name>${xmlEsc(p.name)}</se:Name>
       <se:FeatureTypeStyle>
         <se:Rule>
-          <se:Name>${p.name}</se:Name>
+          <se:Name>${xmlEsc(p.name)}</se:Name>
           <se:RasterSymbolizer>
             <se:ColorMap type="${cmType}">
 ${entries}
