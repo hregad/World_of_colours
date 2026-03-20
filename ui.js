@@ -456,12 +456,63 @@ function refresh() {
   renderGrid();
 }
 
+// ── FEATURED PALETTE ───────────────────────────────────────
+let _featuredId = null;
+
+function buildFeatured(forceNew) {
+  const el = document.getElementById('masthead-featured');
+  if (!el) return;
+
+  // Pick a random palette (different from last shown)
+  let candidates = WOC_DATA.filter(p => p.id !== _featuredId);
+  const p = candidates[Math.floor(Math.random() * candidates.length)];
+  _featuredId = p.id;
+
+  // Swatches
+  const swatchesHtml = p.colors.map(h =>
+    `<div class="mf-sw" style="background:${h}" title="${h.toUpperCase()}" onclick="copyHex('${h}',this)"></div>`
+  ).join('');
+
+  // Tags (max 4 shown)
+  const tagsHtml = p.tags.slice(0,4).map(t =>
+    `<span class="mf-tag">${t}</span>`
+  ).join('');
+
+  el.innerHTML = `
+    <div class="mf-label">
+      <span>Did you try this palette?</span>
+      <button class="mf-shuffle" onclick="buildFeatured(true)" title="Shuffle">↺ shuffle</button>
+    </div>
+    <div class="mf-swatches">${swatchesHtml}</div>
+    <div class="mf-body">
+      <div class="mf-faction">${p.faction}</div>
+      <div class="mf-name">${p.name}</div>
+      <div class="mf-badge" data-u="${p.use}"><div class="mf-pip"></div>${p.use}</div>
+      <div class="mf-tags">${tagsHtml}</div>
+    </div>
+    <div class="mf-footer">
+      ${[
+        ['.qml','qml','QGIS'],
+        ['.sld','sld','SLD'],
+        ['.clr','clr','ArcGIS'],
+        ['.json','json','ArcGIS Pro'],
+        ['.gpl','gpl','GIMP/Inkscape'],
+        ['.ase','ase','Adobe'],
+        ['.txt','txt','HEX'],
+      ].map(([l,k,t]) =>
+        `<button class="mf-dlb" title="${t}" onclick="Exports.${k}(WOC_DATA.find(p=>p.id==='${p.id}'));toast('↓ ${p.name}${l}')">${l}</button>`
+      ).join('')}
+      <button class="mf-map" title="Preview on map" onclick="MapPopup.open(WOC_DATA.find(p=>p.id==='${p.id}'))">${MAP_SVG_FEATURED.slice(1,-1)}</button>
+    </div>`;
+}
+
 // ── INIT ───────────────────────────────────────────────────
 function initUI() {
   buildLogo();
   buildVols();
   buildStats();
   initArcHover();
+  buildFeatured();
   refresh();
 
   // Help button
