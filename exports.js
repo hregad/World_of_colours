@@ -81,20 +81,24 @@ function toQGISXML(p) {
 }
 
 // ── SLD — OGC SLD 1.1.0 ───────────────────────────────────
-// Format verified from real QGIS SLD export.
-// QGIS uses SLD 1.1.0 with se: namespace (Symbology Encoding).
-// <se:Name> (not <Name>), <se:FeatureTypeStyle>, <se:Rule>, etc.
-// This is a RasterSymbolizer ColorMap — for raster layers.
-// Import QGIS: Layer → Properties → Symbology → Style → Load Style
+// Format verified against real QGIS SLD exports.
+// Version 1.1.0 with se: namespace — matches QGIS output exactly.
+// Exports vector PolygonSymbolizer rules: works for any vector layer.
+// Import QGIS: Layer → Properties → Symbology → Style → Load Style → .sld
 // Import GeoServer: Styles → Add a new style → upload .sld
 function toSLD(p) {
-  const n = p.colors.length;
-  const isRamp = p.use === 'sequential' || p.use === 'diverging';
-  const cmType = isRamp ? 'ramp' : 'values';
-  const entries = p.colors.map((hex,i) => {
-    const q = isRamp ? (i/(n-1)).toFixed(4) : String(i);
-    return `          <se:ColorMapEntry color="${hex}" quantity="${q}" label="${xmlEsc(p.name)} ${i+1}" opacity="1.0"/>`;
-  }).join('\n');
+  const rules = p.colors.map((hex, i) => `        <se:Rule>
+          <se:Name>${xmlEsc(p.name)} ${i+1}</se:Name>
+          <se:PolygonSymbolizer>
+            <se:Fill>
+              <se:SvgParameter name="fill">${hex}</se:SvgParameter>
+            </se:Fill>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#ffffff</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">0.5</se:SvgParameter>
+            </se:Stroke>
+          </se:PolygonSymbolizer>
+        </se:Rule>`).join('\n');
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <StyledLayerDescriptor
@@ -109,23 +113,16 @@ function toSLD(p) {
     World of Colours — ${xmlEsc(p.name)}
     ${p.theme} / ${p.faction} / ${p.use}
     Source: ${SITE_URL} — Exported: ${exportDate()}
-    OGC SLD 1.1.0 — raster layers (ColorMap)
-    QGIS: Layer → Properties → Symbology → Style → Load Style
-    GeoServer: Styles → Add a new style → upload this file
+    OGC SLD 1.1.0 — vector layers (PolygonSymbolizer rules)
+    QGIS: Layer -> Properties -> Symbology -> Style -> Load Style
+    GeoServer: Styles -> Add a new style -> upload this file
   -->
   <NamedLayer>
     <se:Name>${xmlEsc(p.name)}</se:Name>
     <UserStyle>
       <se:Name>${xmlEsc(p.name)}</se:Name>
       <se:FeatureTypeStyle>
-        <se:Rule>
-          <se:Name>${xmlEsc(p.name)}</se:Name>
-          <se:RasterSymbolizer>
-            <se:ColorMap type="${cmType}">
-${entries}
-            </se:ColorMap>
-          </se:RasterSymbolizer>
-        </se:Rule>
+${rules}
       </se:FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
