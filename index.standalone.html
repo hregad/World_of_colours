@@ -394,7 +394,7 @@ footer{border-top:2px solid var(--ink);padding:32px 40px 40px;
   <div class="fright">
     <div class="fft">Export formats</div>
     <div class="ff"><div class="ffd"></div>.xml <span class="ff-app">QGIS 3.x &amp; 4.x — Style Manager</span></div>
-    <div class="ff"><div class="ffd"></div>.sld <span class="ff-app">GeoServer · MapServer · QGIS</span></div>
+    <div class="ff"><div class="ffd"></div>.sld <span class="ff-app">QGIS · GeoServer — raster &amp; vecteur</span></div>
     <div class="ff"><div class="ffd"></div>.clr <span class="ff-app">ArcGIS Color Ramp</span></div>
     <div class="ff"><div class="ffd"></div>.json <span class="ff-app">ArcGIS Pro Style</span></div>
     <div class="ff"><div class="ffd"></div>.gpl <span class="ff-app">GIMP · Inkscape · Krita</span></div>
@@ -765,26 +765,15 @@ function toQGISXML(p) {
 </qgis_style>`;
 }
 
-// ── SLD — OGC SLD 1.1.0 ───────────────────────────────────
-// Format verified against real QGIS SLD exports.
-// Version 1.1.0 with se: namespace — matches QGIS output exactly.
-// Exports vector PolygonSymbolizer rules: works for any vector layer.
-// Import QGIS: Layer → Properties → Symbology → Style → Load Style → .sld
-// Import GeoServer: Styles → Add a new style → upload .sld
-function toSLD(p) {
-  const rules = p.colors.map((hex, i) => `        <se:Rule>
-          <se:Name>${xmlEsc(p.name)} ${i+1}</se:Name>
-          <se:PolygonSymbolizer>
-            <se:Fill>
-              <se:SvgParameter name="fill">${hex}</se:SvgParameter>
-            </se:Fill>
-            <se:Stroke>
-              <se:SvgParameter name="stroke">#ffffff</se:SvgParameter>
-              <se:SvgParameter name="stroke-width">0.5</se:SvgParameter>
-            </se:Stroke>
-          </se:PolygonSymbolizer>
-        </se:Rule>`).join('\n');
+// ── SLD — OGC SLD 1.1.0, two variants ────────────────────────────────
+// toSLDRaster: RasterSymbolizer + ColorMap — for raster layers
+//   QGIS: Layer → Properties → Symbology → Style → Load Style → .sld
+//   GeoServer: Styles → Add a new style → upload .sld
+// toSLDVector: PolygonSymbolizer Rules — for vector layers
+//   QGIS: Layer → Properties → Symbology → Style → Load Style → .sld
+// Both use SLD 1.1.0 with se: namespace (matches real QGIS exports).
 
+function _sldWrapper(p, innerContent) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <StyledLayerDescriptor
   version="1.1.0"
@@ -798,34 +787,69 @@ function toSLD(p) {
     World of Colours — ${xmlEsc(p.name)}
     ${p.theme} / ${p.faction} / ${p.use}
     Source: ${SITE_URL} — Exported: ${exportDate()}
-    OGC SLD 1.1.0 — vector layers (PolygonSymbolizer rules)
-    QGIS: Layer -> Properties -> Symbology -> Style -> Load Style
-    GeoServer: Styles -> Add a new style -> upload this file
   -->
   <NamedLayer>
     <se:Name>${xmlEsc(p.name)}</se:Name>
     <UserStyle>
       <se:Name>${xmlEsc(p.name)}</se:Name>
       <se:FeatureTypeStyle>
-${rules}
+${innerContent}
       </se:FeatureTypeStyle>
     </UserStyle>
   </NamedLayer>
 </StyledLayerDescriptor>`;
 }
 
-// ── CLR — Esri Color Map ───────────────────────────────────
-// Format: VALUE R G B per line, space-delimited.
-// ArcMap: Layer Properties → Symbology → Colormap → Load
+function toSLDRaster(p) {
+  const n = p.colors.length;
+  const isRamp = p.use === 'sequential' || p.use === 'diverging';
+  const entries = p.colors.map((hex, i) => {
+    const q = isRamp ? (i / (n-1)).toFixed(4) : String(i);
+    return `          <se:ColorMapEntry color="${hex}" quantity="${q}" label="${xmlEsc(p.name)} ${i+1}" opacity="1.0"/>`;
+  }).join('\n');
+  const inner = `        <se:Rule>
+          <se:RasterSymbolizer>
+            <se:ColorMap type="${isRamp ? 'ramp' : 'values'}">
+${entries}
+            </se:ColorMap>
+          </se:RasterSymbolizer>
+        </se:Rule>`;
+  return _sldWrapper(p, inner);
+}
+
+function toSLDVector(p) {
+  const rules = p.colors.map((hex, i) => `        <se:Rule>
+          <se:Name>${xmlEsc(p.name)} ${i+1}</se:Name>
+          <se:PolygonSymbolizer>
+            <se:Fill>
+              <se:SvgParameter name="fill">${hex}</se:SvgParameter>
+            </se:Fill>
+            <se:Stroke>
+              <se:SvgParameter name="stroke">#ffffff</se:SvgParameter>
+              <se:SvgParameter name="stroke-width">0.5</se:SvgParameter>
+            </se:Stroke>
+          </se:PolygonSymbolizer>
+        </se:Rule>`).join('\n');
+  return _sldWrapper(p, rules);
+}
+
+// ── CLR — QGIS / Esri Raster Colormap ────────────────────────────────
+// QGIS colormap format: INTERPOLATION header + value,R,G,B,A,label rows.
+// No comment lines — QGIS parses it strictly.
+// QGIS import: Layer Properties → Symbology → load colormap from file (icon)
 // ArcGIS Pro: Raster layer → Symbology → Colormap → Import Color Map
 function toCLR(p) {
+  const n = p.colors.length;
+  // Map palette indices to 0–255 value range
+  const rows = p.colors.map((h, i) => {
+    const {r,g,b} = h2r(h);
+    const val = Math.round(i * 255 / (n - 1));
+    const label = i === 0 ? 'min' : i === n-1 ? 'max' : '';
+    return `${val},${r},${g},${b},255,${label}`;
+  });
   return [
-    `# World of Colours — ${p.name}`,
-    `# ${p.theme} / ${p.faction} — ${SITE_URL} — ${exportDate()}`,
-    `# Esri Color Map (.clr) — raster colormap`,
-    `# ArcMap: Layer Properties → Symbology → Colormap → Load`,
-    `# ArcGIS Pro: Symbology → Colormap → Import Color Map`,
-    ...p.colors.map((h,i) => { const {r,g,b}=h2r(h); return `${i} ${r} ${g} ${b}`; })
+    'INTERPOLATION:LINEAR',
+    ...rows
   ].join('\n');
 }
 
@@ -930,7 +954,8 @@ function toTXT(p) {
 
 const Exports = {
   xml:  p => dlText(toQGISXML(p), `${p.id}.xml`,  'application/xml'),
-  sld:  p => dlText(toSLD(p),     `${p.id}.sld`,  'application/xml'),
+  sldr: p => dlText(toSLDRaster(p), `${p.id}_raster.sld`, 'application/xml'),
+  sldv: p => dlText(toSLDVector(p), `${p.id}_vector.sld`, 'application/xml'),
   clr:  p => dlText(toCLR(p),     `${p.id}.clr`,  'text/plain'),
   json: p => dlText(toCIMJSON(p), `${p.id}.json`, 'application/json'),
   gpl:  p => dlText(toGPL(p),     `${p.id}.gpl`,  'text/plain'),
@@ -944,8 +969,8 @@ const FORMAT_INFO = [
    how:'Settings → Style Manager → Import/Export → Import Item(s) → select .xml. The colour ramp appears in Style Manager and can be applied to any layer.'},
   {ext:'.sld', label:'OGC SLD 1.1.0 — raster layers', apps:['QGIS','GeoServer','MapServer'],
    how:'For raster layers. QGIS: Layer → Properties → Symbology → Style → Load Style → select .sld. GeoServer: Styles → Add a new style → upload .sld.'},
-  {ext:'.clr', label:'Esri Color Map — raster only', apps:['ArcMap','ArcGIS Pro'],
-   how:'For raster layers only. ArcMap: Layer Properties → Symbology → Colormap → Load. ArcGIS Pro: Raster layer → Symbology pane → Colormap → Import Color Map.'},
+  {ext:'.clr', label:'QGIS / Esri Raster Colormap', apps:['QGIS','ArcMap','ArcGIS Pro'],
+   how:'For raster layers. QGIS: Layer → Properties → Symbology → load colormap from file (folder icon). ArcGIS Pro: Raster layer → Symbology → Colormap → Import Color Map.'},
   {ext:'.json', label:'ArcGIS Pro Style (CIM)', apps:['ArcGIS Pro 2.x+'],
    how:'Insert tab → Styles → Add Style → point to the folder containing the .json file. Or: Catalog pane → Styles → right-click a style → Manage Style → import.'},
   {ext:'.gpl', label:'GIMP / Inkscape / Krita', apps:['GIMP','Inkscape','Krita'],
@@ -1490,7 +1515,8 @@ function mkCard(p, idx) {
 
   [
     ['.xml',  'xml',  'QGIS Style Manager'],
-    ['.sld',  'sld',  'GeoServer · MapServer · QGIS'],
+    ['.sld↑', 'sldr', 'SLD raster'],
+    ['.sld↓', 'sldv', 'SLD vecteur'],
     ['.clr',  'clr',  'ArcGIS Color Ramp'],
     ['.json', 'json', 'ArcGIS Pro Style'],
     ['.gpl',  'gpl',  'GIMP · Inkscape · Krita'],
@@ -1653,7 +1679,8 @@ function buildFeatured(forceNew) {
     <div class="mf-footer">
       ${[
         ['.xml','xml','QGIS Style Manager'],
-        ['.sld','sld','SLD'],
+        ['.sld↑','sldr','SLD raster'],
+        ['.sld↓','sldv','SLD vecteur'],
         ['.clr','clr','ArcGIS'],
         ['.json','json','ArcGIS Pro'],
         ['.gpl','gpl','GIMP/Inkscape'],

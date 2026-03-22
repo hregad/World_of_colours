@@ -330,7 +330,8 @@ function mkCard(p, idx) {
 
   [
     ['.xml',  'xml',  'QGIS Style Manager'],
-    ['.sld',  'sld',  'GeoServer · MapServer · QGIS'],
+    ['.sld↑', 'sldr', 'SLD raster'],
+    ['.sld↓', 'sldv', 'SLD vecteur'],
     ['.clr',  'clr',  'ArcGIS Color Ramp'],
     ['.json', 'json', 'ArcGIS Pro Style'],
     ['.gpl',  'gpl',  'GIMP · Inkscape · Krita'],
@@ -493,7 +494,8 @@ function buildFeatured(forceNew) {
     <div class="mf-footer">
       ${[
         ['.xml','xml','QGIS Style Manager'],
-        ['.sld','sld','SLD'],
+        ['.sld↑','sldr','SLD raster'],
+        ['.sld↓','sldv','SLD vecteur'],
         ['.clr','clr','ArcGIS'],
         ['.json','json','ArcGIS Pro'],
         ['.gpl','gpl','GIMP/Inkscape'],
