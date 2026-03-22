@@ -329,15 +329,10 @@ function mkCard(p, idx) {
   dlg.className = 'dlg';
 
   [
-    ['.xml',  'xml',  'QGIS Style Manager'],
-    ['.sld↑', 'sldr', 'SLD raster'],
-    ['.sld↓', 'sldv', 'SLD vecteur'],
-    ['.clr',  'clr',  'ArcGIS Color Ramp'],
-    ['.json', 'json', 'ArcGIS Pro Style'],
-    ['.gpl',  'gpl',  'GIMP · Inkscape · Krita'],
-    ['.ase',  'ase',  'Adobe Illustrator · Photoshop · InDesign'],
-    ['.aco',  'aco',  'Adobe Photoshop swatches'],
-    ['.txt',  'txt',  'HEX + RGB reference'],
+    ['.xml',  'xml',  'QGIS — ramp + symboles'],
+    ['.json', 'json', 'ArcGIS Pro'],
+    ['.ase',  'ase',  'Adobe'],
+    ['.txt',  'txt',  'HEX + RGB'],
   ].forEach(([label, key, title]) => {
     const b = document.createElement('button');
     b.className = 'dlb'; b.textContent = label; b.title = title;
@@ -493,12 +488,8 @@ function buildFeatured(forceNew) {
     </div>
     <div class="mf-footer">
       ${[
-        ['.xml','xml','QGIS Style Manager'],
-        ['.sld↑','sldr','SLD raster'],
-        ['.sld↓','sldv','SLD vecteur'],
-        ['.clr','clr','ArcGIS'],
+        ['.xml','xml','QGIS'],
         ['.json','json','ArcGIS Pro'],
-        ['.gpl','gpl','GIMP/Inkscape'],
         ['.ase','ase','Adobe'],
         ['.txt','txt','HEX'],
       ].map(([l,k,t]) =>

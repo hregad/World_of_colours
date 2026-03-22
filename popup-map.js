@@ -7,7 +7,8 @@ const MapPopup = (() => {
   const L_CSS = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
   const L_JS  = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
 
-  let mapInst = null, geoLayer = null, overlay = null;
+  let mapInst = null, geoLayer = null, overlay = null, rasterCanvas = null;
+  let _mode = 'vector';
   let geoCache = null;
 
   // Deterministic hash so same country always gets same class for one opening
@@ -57,6 +58,13 @@ const MapPopup = (() => {
 .mp-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:#B0AAA0;
   padding:5px 16px;border-bottom:1px solid #D8D4CC;flex-shrink:0}
 #mp-map{flex:1;min-height:420px;position:relative}
+.mp-note{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.mp-mode-btns{display:flex;gap:3px;flex-shrink:0}
+.mp-mode-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;
+  padding:3px 9px;border:1px solid #B0AAA0;background:transparent;
+  color:#9090A0;cursor:pointer;border-radius:2px;transition:all .12s}
+.mp-mode-btn:hover{color:#18181A;border-color:#52525A}
+.mp-mode-btn.active{background:#18181A;color:#F6F4EF;border-color:#18181A}
 .mp-leg{position:absolute;bottom:14px;right:10px;z-index:999;
   background:rgba(246,244,239,.94);border:1px solid #D8D4CC;padding:9px 11px;
   backdrop-filter:blur(4px);max-height:320px;overflow-y:auto}
@@ -90,7 +98,13 @@ const MapPopup = (() => {
     </div>
     <button class="mp-x">✕</button>
   </div>
-  <div class="mp-note">Random country classification — ${palette.colors.length} colour classes · hover for name</div>
+  <div class="mp-note">
+    <span id="mp-note-txt">Mode vecteur — ${palette.colors.length} classes · hover pour le nom</span>
+    <div class="mp-mode-btns">
+      <button class="mp-mode-btn active" id="mp-btn-vec" onclick="MapPopup._setMode('vector')">Vecteur</button>
+      <button class="mp-mode-btn" id="mp-btn-ras" onclick="MapPopup._setMode('raster')">Raster</button>
+    </div>
+  </div>
   <div id="mp-map"><div class="mp-leg"><div class="mp-leg-t">Classes</div><div id="mp-leg-items"></div></div></div>
 </div>`;
 
@@ -119,6 +133,7 @@ const MapPopup = (() => {
     mapInst = L.map('mp-map', { center: [20, 0], zoom: 1, zoomControl: true, attributionControl: false });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
       { subdomains: 'abcd', maxZoom: 6, opacity: 0.22 }).addTo(mapInst);
+    _currentPaletteId = palette.id;
     fetchAndRender(palette);
   }
 
@@ -141,6 +156,7 @@ const MapPopup = (() => {
   }
 
   function draw(palette) {
+    _currentPaletteId = palette.id;
     if (!mapInst || !geoCache) return;
     if (geoLayer) { mapInst.removeLayer(geoLayer); geoLayer = null; }
 
@@ -195,5 +211,104 @@ const MapPopup = (() => {
     setTimeout(() => initMap(palette), 60);
   }
 
-  return { open };
+  function _setMode(mode) {
+    _mode = mode;
+    // Update button states
+    const bv = document.getElementById('mp-btn-vec');
+    const br = document.getElementById('mp-btn-ras');
+    const nt = document.getElementById('mp-note-txt');
+    if (bv) bv.classList.toggle('active', mode === 'vector');
+    if (br) br.classList.toggle('active', mode === 'raster');
+    // Redraw
+    if (!mapInst || !geoCache) return;
+    const pal = WOC_DATA.find(p => p.id === _currentPaletteId);
+    if (!pal) return;
+    if (mode === 'vector') {
+      if (nt) nt.textContent = `Mode vecteur — ${pal.colors.length} classes · hover pour le nom`;
+      if (rasterCanvas) { mapInst.removeLayer(rasterCanvas); rasterCanvas = null; }
+      draw(pal);
+    } else {
+      if (nt) nt.textContent = `Mode raster — dégradé simulé sur données synthétiques`;
+      if (geoLayer) { mapInst.removeLayer(geoLayer); geoLayer = null; }
+      drawRaster(pal);
+    }
+  }
+
+  let _currentPaletteId = null;
+
+  function drawRaster(palette) {
+    // Draw a synthetic raster: smooth gradient over the map using a canvas overlay
+    // We use a Canvas tile layer that renders a gradient based on latitude
+    if (rasterCanvas) { mapInst.removeLayer(rasterCanvas); rasterCanvas = null; }
+
+    const colors = palette.colors;
+    const n = colors.length;
+
+    function hexToRgb(hex) {
+      const h = hex.replace('#','');
+      return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+    }
+
+    // Interpolate colour along palette (t = 0..1)
+    function sampleColor(t) {
+      const pos = t * (n-1);
+      const i = Math.min(Math.floor(pos), n-2);
+      const f = pos - i;
+      const [r1,g1,b1] = hexToRgb(colors[i]);
+      const [r2,g2,b2] = hexToRgb(colors[i+1]);
+      return [
+        Math.round(r1 + (r2-r1)*f),
+        Math.round(g1 + (g2-g1)*f),
+        Math.round(b1 + (b2-b1)*f)
+      ];
+    }
+
+    // Canvas tile layer — renders gradient based on pixel latitude (north=high, south=low)
+    rasterCanvas = L.GridLayer.extend({
+      createTile(coords) {
+        const tile = document.createElement('canvas');
+        tile.width = tile.height = 256;
+        const ctx = tile.getContext('2d');
+        const imgData = ctx.createImageData(256, 256);
+        const data = imgData.data;
+        // World bounds: lat -85..85 mapped to value 0..1
+        // Use a simple noise-like pattern (sine waves by lat+lon) for visual interest
+        for (let y = 0; y < 256; y++) {
+          for (let x = 0; x < 256; x++) {
+            // Approximate lat/lon from tile coords
+            const lat = y / 256;   // 0=top, 1=bottom
+            const lon = x / 256;
+            // Synthetic value: combine lat gradient + gentle waves
+            const t = Math.max(0, Math.min(1,
+              (1 - lat) * 0.7 +
+              Math.sin(lat * Math.PI * 3 + coords.z) * 0.1 +
+              Math.cos(lon * Math.PI * 4 + coords.z * 0.7) * 0.1 +
+              Math.sin((lat + lon) * Math.PI * 2) * 0.1
+            ));
+            const [r,g,b] = sampleColor(t);
+            const idx = (y * 256 + x) * 4;
+            data[idx]   = r;
+            data[idx+1] = g;
+            data[idx+2] = b;
+            data[idx+3] = 200; // slight transparency
+          }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        return tile;
+      }
+    });
+
+    rasterCanvas = new rasterCanvas({ tileSize:256, opacity:0.85, zIndex:2 }).addTo(mapInst);
+
+    // Update legend with gradient
+    const leg = document.getElementById('mp-leg-items');
+    if (leg) {
+      leg.innerHTML = colors.map((c,i) =>
+        `<div class="mp-leg-row"><div class="mp-leg-chip" style="background:${c}"></div><span class="mp-leg-lbl">${i === 0 ? 'Min' : i === colors.length-1 ? 'Max' : ''}</span></div>`
+      ).filter((_,i) => i === 0 || i === colors.length-1 || i % Math.ceil(colors.length/4) === 0)
+       .join('');
+    }
+  }
+
+  return { open, _setMode };
 })();
