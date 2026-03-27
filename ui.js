@@ -415,13 +415,21 @@ function mkPackCard(pack, idx) {
 
   const dlBtn = document.createElement('button');
   dlBtn.className = 'pack-dl-btn';
-  dlBtn.title = 'Download pack (.xml)';
-  dlBtn.textContent = '↓ Pack .xml';
+  dlBtn.title = 'Download pack QGIS (.xml)';
+  dlBtn.textContent = '↓ QGIS .xml';
   dlBtn.addEventListener('click', e => {
     e.stopPropagation();
     Exports.packXML(pack);
-    toast(`↓ ${pack.name} ${pack.version} pack`);
+    toast(`↓ ${pack.name} ${pack.version} .xml`);
   });
+
+  const dlStylx = document.createElement('a');
+  dlStylx.className = 'pack-dl-btn';
+  dlStylx.title = 'Download pack ArcGIS Pro (.stylx)';
+  dlStylx.textContent = '↓ ArcGIS .stylx';
+  dlStylx.href = `packs/${pack.id}.stylx`;
+  dlStylx.download = `${pack.id}.stylx`;
+  dlStylx.addEventListener('click', e => e.stopPropagation());
 
   const openBtn = document.createElement('button');
   openBtn.className = 'pack-open-btn';
@@ -431,7 +439,7 @@ function mkPackCard(pack, idx) {
     openPack(pack.id);
   });
 
-  btns.appendChild(dlBtn); btns.appendChild(openBtn);
+  btns.appendChild(dlBtn); btns.appendChild(dlStylx); btns.appendChild(openBtn);
   footer.appendChild(count); footer.appendChild(btns);
 
   card.appendChild(swatches); card.appendChild(body); card.appendChild(footer);
@@ -481,15 +489,16 @@ function renderPackDetail() {
 
     const dlXML = document.createElement('button');
     dlXML.className = 'ph-btn';
-    dlXML.textContent = '↓ Pack .xml';
-    dlXML.addEventListener('click', () => { Exports.packXML(pack); toast(`↓ ${pack.name} pack .xml`); });
+    dlXML.textContent = '↓ QGIS .xml';
+    dlXML.addEventListener('click', () => { Exports.packXML(pack); toast(`↓ ${pack.name} .xml`); });
 
-    const dlJSON = document.createElement('button');
-    dlJSON.className = 'ph-btn';
-    dlJSON.textContent = '↓ Pack .json';
-    dlJSON.addEventListener('click', () => { Exports.packJSON(pack); toast(`↓ ${pack.name} pack .json`); });
+    const dlStylxH = document.createElement('a');
+    dlStylxH.className = 'ph-btn';
+    dlStylxH.textContent = '↓ ArcGIS .stylx';
+    dlStylxH.href = `packs/${pack.id}.stylx`;
+    dlStylxH.download = `${pack.id}.stylx`;
 
-    right.appendChild(dlXML); right.appendChild(dlJSON);
+    right.appendChild(dlXML); right.appendChild(dlStylxH);
     header.appendChild(left); header.appendChild(right);
   }
 
@@ -573,10 +582,7 @@ function mkPaletteCard(p, idx) {
   const dlg = document.createElement('div');
   dlg.className = 'dlg';
   [
-    ['.xml',  'xml',  'QGIS Style Manager'],
-    ['.json', 'json', 'ArcGIS Pro Style'],
-    ['.ase',  'ase',  'Adobe'],
-    ['.txt',  'txt',  'HEX + RGB'],
+    ['.xml', 'xml', 'QGIS Style Manager'],
   ].forEach(([label, key, title]) => {
     const b = document.createElement('button');
     b.className = 'dlb';

@@ -42,11 +42,11 @@ const WOC_PACKS = [
     palettes: [
       // Sequential — single hue, original WoC progressions
       {
-        id: 'woc-ocean-seq',
-        name: 'Deep Ocean',
+        id: 'woc-coral-seq',
+        name: 'Coral',
         use: 'sequential',
-        tags: ['sequential','blue','water','density'],
-        colors: ['#F0F7FF','#C8DFFA','#8DBEF5','#4D96E8','#1A6DC8','#0A4A9A','#052E6A','#021840']
+        tags: ['sequential','red','warm','density','heat'],
+        colors: ['#FFF0EC','#FCCDB8','#F8A07A','#F07040','#D84818','#A82808','#781008','#480400']
       },
       {
         id: 'woc-moss-seq',
@@ -69,13 +69,7 @@ const WOC_PACKS = [
         tags: ['sequential','purple','violet','density'],
         colors: ['#F8F4FF','#E0D0F8','#C0A0EE','#9868DC','#6830B8','#481088','#300860','#180038']
       },
-      {
-        id: 'woc-slate-seq',
-        name: 'Slate',
-        use: 'sequential',
-        tags: ['sequential','grey','neutral','print','grayscale'],
-        colors: ['#F6F6F6','#DCDCDC','#C0C0C0','#A0A0A0','#787878','#545454','#343434','#161616']
-      },
+
       // Diverging — original WoC diverging schemes
       {
         id: 'woc-ember-ocean-div',
@@ -220,11 +214,11 @@ const WOC_PACKS = [
         colors: ['#A0D890','#80C870','#58B050','#38980A','#C89850','#A87838','#806030','#604820','#F0ECE8']
       },
       {
-        id: 'elev-coastal',
-        name: 'Coastal Waters',
-        use: 'sequential',
-        tags: ['bathymetric','coastal','shallow','marine','estuary'],
-        colors: ['#F0F8FF','#C8E8F8','#88C8F0','#48A0E0','#1878C0','#0858A0','#063880','#041858']
+        id: 'elev-topo-bathy',
+        name: 'Topo–Bathy',
+        use: 'diverging',
+        tags: ['topographic','bathymetric','bivariate','diverging','elevation','land','ocean'],
+        colors: ['#041858','#0858A0','#48A0E0','#A8D8F0','#FFFFFF','#A8D890','#409040','#1A6018','#0A3808']
       },
     ]
   },
@@ -375,20 +369,7 @@ const WOC_PACKS = [
         tags: ['topographic','historical','18th-century','french','engraving'],
         colors: ['#F8F4E8','#EEE4C8','#DDD0A0','#C8B878','#B09858','#907840','#705828','#504018']
       },
-      {
-        id: 'hist-military-topo',
-        name: 'Military Topographic',
-        use: 'sequential',
-        tags: ['military','topographic','nato','historical','topo-standard'],
-        colors: ['#C0E890','#A0C870','#80A850','#608030','#506820','#7C6040','#A07858','#C0A080','#E0C8A8','#F8F0E0']
-      },
-      {
-        id: 'hist-tactical-air',
-        name: 'Tactical Aeronautical',
-        use: 'qualitative',
-        tags: ['military','aeronautical','aviation','chart','tactical'],
-        colors: ['#C0D8F0','#A8C8E8','#90B8E0','#B8E0C8','#A0C8B0','#F0F0E0','#E0E8D0','#D0D8C0','#B0C090','#889878']
-      },
+
     ]
   },
 
@@ -419,11 +400,11 @@ const WOC_PACKS = [
         colors: ['#080818','#101840','#183880','#2068C0','#3098E0','#50C0F0','#88D8F8','#C8F0FF']
       },
       {
-        id: 'rs-thermal',
-        name: 'Thermal / LST',
+        id: 'rs-swir',
+        name: 'SWIR / Moisture',
         use: 'sequential',
-        tags: ['thermal','temperature','lst','urban-heat','remote-sensing','satellite'],
-        colors: ['#101040','#2040A0','#3090C0','#40C0A0','#88C840','#D8D010','#F89010','#E84808','#880000']
+        tags: ['swir','moisture','drought','remote-sensing','satellite','optical'],
+        colors: ['#F8F4E0','#E0D8A0','#C0B840','#90A000','#507800','#205000','#082800','#041000']
       },
       {
         id: 'rs-night-lights',

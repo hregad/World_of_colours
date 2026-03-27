@@ -200,10 +200,8 @@ function toTXT(p) {
 
 // ── Download dispatch ──────────────────────────────────────────────────────
 const Exports = {
-  xml:  p => dlText(toQGISXML(p),  `${p.id}.xml`,  'application/xml'),
-  json: p => dlText(toCIMJSON(p),  `${p.id}.json`, 'application/json'),
-  ase:  p => dlBin(toASE(p),       `${p.id}.ase`),
-  txt:  p => dlText(toTXT(p),      `${p.id}.txt`,  'text/plain'),
+  // Individual palette exports
+  xml:  p => dlText(toQGISXML(p), `${p.id}.xml`, 'application/xml'),
 
   // Pack-level downloads — all palettes in one file
   packXML(pack) {
@@ -288,26 +286,14 @@ ${allRamps.join('\n')}
 const FORMAT_INFO = [
   {
     ext: '.xml',
-    label: 'QGIS Style Library',
+    label: 'QGIS Style Library (3.x / 4.x)',
     apps: ['QGIS 3.x', 'QGIS 4.x'],
-    how: 'Settings → Style Manager → Import/Export → Import Item(s) → select .xml → check all items → Import. You get 1 gradient colour ramp (for raster pseudocolour and graduated vector) + N fill symbols (for categorized vector), all named and tagged.'
+    how: 'Settings → Style Manager → Import/Export → Import Item(s) → select .xml → check all items → Import. You get 1 gradient colour ramp (for raster pseudocolour and graduated vector) + N fill symbols (for categorized vector), all named and tagged. Available per palette and per pack.'
   },
   {
-    ext: '.json',
-    label: 'ArcGIS Pro Style (CIM)',
-    apps: ['ArcGIS Pro 2.x+'],
-    how: 'Insert tab → Styles → Add Style → point to the folder containing the .json file. Or: Catalog pane → Styles → right-click a style → Manage Style → import.'
-  },
-  {
-    ext: '.ase',
-    label: 'Adobe Swatch Exchange',
-    apps: ['Illustrator', 'Photoshop', 'InDesign'],
-    how: 'Illustrator: Swatches panel → ≡ → Open Swatch Library → Other Library → select .ase. Photoshop: Swatches panel → ≡ → Load Swatches → select .ase.'
-  },
-  {
-    ext: '.txt',
-    label: 'HEX + RGB Reference',
-    apps: ['Any'],
-    how: 'Plain text with hex codes and RGB values. Copy into CSS, code, colour pickers, or any tool that accepts hex or RGB colour input.'
+    ext: '.stylx',
+    label: 'ArcGIS Pro Style (3.x)',
+    apps: ['ArcGIS Pro 3.x'],
+    how: 'Insert tab → Styles → Add Style → select the .stylx file. Or: Catalog pane → Styles → right-click → Add Style. The pack .stylx contains all colour ramps in one file, ready to use in any symbology dialog. Download the pack .stylx from the pack card or pack header.'
   },
 ];
