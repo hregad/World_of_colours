@@ -1,274 +1,575 @@
 /**
- * World of Colours — Palette Data  v1.2
- * ──────────────────────────────────────
- * id      — unique kebab-case slug
- * theme   — top-level collection (drives dropdown)
- * faction — sub-group within theme
- * name    — display name
- * use     — "sequential" | "diverging" | "qualitative"
- * tags    — open-ended thematic keywords (used for search + tag filter)
- * colors  — hex array (6–12 recommended)
+ * World of Colours — Pack Data  v4.0
+ * ────────────────────────────────────────────────────────────────────────
+ * Structure: array of PACKS, each containing PALETTES.
+ *
+ * Pack fields:
+ *   id          — unique kebab slug
+ *   name        — display name
+ *   version     — "I", "II", etc.
+ *   theme       — broad category (used for top-level grouping)
+ *   description — one-line description
+ *   tags        — searchable keywords
+ *   palettes    — array of palette objects
+ *
+ * Palette fields:
+ *   id       — unique kebab slug (scoped within pack)
+ *   name     — display name
+ *   use      — "sequential" | "diverging" | "qualitative"
+ *   tags     — searchable keywords
+ *   colors   — hex array (6–12)
+ *
+ * IMPORTANT: All palettes are original works by H. Regad / World of Colours.
+ * ColorBrewer palettes (© Cynthia Brewer, Apache 2.0) are NOT reproduced here.
+ * If you need ColorBrewer palettes, visit colorbrewer2.org — an excellent
+ * complementary resource for building custom palettes.
+ * ────────────────────────────────────────────────────────────────────────
  */
-const WOC_DATA = [
 
-  // ═══════════════════════════════════════════════════════
-  // CARTOGRAPHY CLASSICS
-  // ═══════════════════════════════════════════════════════
+const WOC_PACKS = [
 
-  // ── Terrain & Hypsometry ───────────────────────────────
-  {id:"c-hypsometric",theme:"Cartography Classics",faction:"Terrain",name:"Hypsometric Tints",use:"sequential",
-   tags:["topographic","terrain","elevation","hypsometric","topo-standard","land"],
-   colors:["#1A5276","#2980B9","#76B7D1","#A8D8A8","#78B060","#4E8A28","#C8A050","#A07838","#785830","#F0EDE8"]},
-  {id:"c-terrain-warm",theme:"Cartography Classics",faction:"Terrain",name:"Warm Terrain",use:"sequential",
-   tags:["topographic","terrain","elevation","topo-standard","land"],
-   colors:["#3D8C60","#6AAF60","#A8C870","#D4D890","#C8A86A","#A87840","#886030","#6A4820","#907878","#F0EDE8"]},
-  {id:"c-terrain-arctic",theme:"Cartography Classics",faction:"Terrain",name:"Arctic Terrain",use:"sequential",
-   tags:["topographic","terrain","arctic","elevation","polar","topo-standard","land"],
-   colors:["#2C4A6E","#4A7A9B","#7AAABF","#A8C8D8","#C8DCE8","#E0EEF0","#D0E0C0","#B0C8A0","#8AA880","#688860"]},
-  {id:"c-terrain-desert",theme:"Cartography Classics",faction:"Terrain",name:"Desert & Arid",use:"sequential",
-   tags:["topographic","terrain","arid","desert","topo-standard","land"],
-   colors:["#1A0E00","#3A2208","#5C3A10","#7A5020","#9A6A30","#B88A50","#D0A870","#E4C898","#F0DEC0","#FBF0E0"]},
-  {id:"c-terrain-tropical",theme:"Cartography Classics",faction:"Terrain",name:"Tropical Relief",use:"sequential",
-   tags:["topographic","terrain","tropical","elevation","topo-standard","land"],
-   colors:["#006080","#0090A0","#40B8B0","#80D8C0","#8AC870","#50A030","#288018","#206010","#C8A060","#E8D0A0"]},
-  // 3 new topographic palettes
-  {id:"c-terrain-alpine",theme:"Cartography Classics",faction:"Terrain",name:"Alpine Relief",use:"sequential",
-   tags:["topographic","terrain","elevation","alpine","mountain","topo-standard","land"],
-   colors:["#2E8B57","#5AAD6A","#8FC878","#C8DC90","#E8E0B0","#D8C8A0","#C0A878","#A08860","#907878","#FFFFFF"]},
-  {id:"c-terrain-ign",theme:"Cartography Classics",faction:"Terrain",name:"IGN-Style Topo",use:"sequential",
-   tags:["topographic","terrain","elevation","ign","topo-standard","land","french"],
-   colors:["#A8D8A8","#90C890","#70B870","#50A850","#309830","#108810","#C8A060","#A87840","#806040","#F8F4F0"]},
-  {id:"c-terrain-srtm",theme:"Cartography Classics",faction:"Terrain",name:"SRTM Classic",use:"sequential",
-   tags:["topographic","terrain","elevation","srtm","dem","remote-sensing","land"],
-   colors:["#003820","#1A6030","#409050","#70C070","#A8D890","#E0F0C8","#F8E8A0","#E8C060","#C08040","#A04820"]},
+  // ══════════════════════════════════════════════════════════════════════
+  // PACK: BASIC I
+  // General-purpose palettes for everyday cartographic work
+  // ══════════════════════════════════════════════════════════════════════
+  {
+    id: 'basic-i',
+    name: 'Basic',
+    version: 'I',
+    theme: 'General',
+    description: 'Essential palettes for everyday cartographic and thematic mapping.',
+    tags: ['general','choropleth','statistic','classification','print'],
+    palettes: [
+      // Sequential — single hue, original WoC progressions
+      {
+        id: 'woc-ocean-seq',
+        name: 'Deep Ocean',
+        use: 'sequential',
+        tags: ['sequential','blue','water','density'],
+        colors: ['#F0F7FF','#C8DFFA','#8DBEF5','#4D96E8','#1A6DC8','#0A4A9A','#052E6A','#021840']
+      },
+      {
+        id: 'woc-moss-seq',
+        name: 'Moss',
+        use: 'sequential',
+        tags: ['sequential','green','vegetation','density'],
+        colors: ['#F4FAF0','#D0EAC0','#A0D080','#6AB840','#3A9010','#1E6808','#0A4402','#042200']
+      },
+      {
+        id: 'woc-ember-seq',
+        name: 'Ember',
+        use: 'sequential',
+        tags: ['sequential','orange','red','risk','heat'],
+        colors: ['#FFF8F0','#FFE0C0','#FFBA80','#F88A30','#E05808','#B83000','#801800','#480800']
+      },
+      {
+        id: 'woc-dusk-seq',
+        name: 'Dusk',
+        use: 'sequential',
+        tags: ['sequential','purple','violet','density'],
+        colors: ['#F8F4FF','#E0D0F8','#C0A0EE','#9868DC','#6830B8','#481088','#300860','#180038']
+      },
+      {
+        id: 'woc-slate-seq',
+        name: 'Slate',
+        use: 'sequential',
+        tags: ['sequential','grey','neutral','print','grayscale'],
+        colors: ['#F6F6F6','#DCDCDC','#C0C0C0','#A0A0A0','#787878','#545454','#343434','#161616']
+      },
+      // Diverging — original WoC diverging schemes
+      {
+        id: 'woc-ember-ocean-div',
+        name: 'Ember–Ocean',
+        use: 'diverging',
+        tags: ['diverging','bivariate','anomaly','temperature'],
+        colors: ['#802000','#C04010','#F07040','#F8C0A0','#FFFFFF','#A0C8F8','#4088D0','#0850A0','#042868']
+      },
+      {
+        id: 'woc-moss-dusk-div',
+        name: 'Moss–Dusk',
+        use: 'diverging',
+        tags: ['diverging','bivariate','environmental'],
+        colors: ['#0A4402','#2E8020','#70B850','#C0E0A0','#FFFFFF','#D0C0F0','#9060D0','#4810A0','#200060']
+      },
+      {
+        id: 'woc-sand-azure-div',
+        name: 'Sand–Azure',
+        use: 'diverging',
+        tags: ['diverging','bivariate','neutral'],
+        colors: ['#604010','#A87030','#D0A860','#F0D8A8','#FFFFFF','#A8D0F0','#5090D0','#1060A8','#003878']
+      },
+      // Qualitative — original WoC multi-hue sets
+      {
+        id: 'woc-atlas-qual',
+        name: 'Atlas',
+        use: 'qualitative',
+        tags: ['qualitative','classification','administrative','political'],
+        colors: ['#2A6FAE','#E8821A','#2EAA6C','#CC3030','#8855CC','#AA7722','#CC4488','#448888']
+      },
+      {
+        id: 'woc-terrain-qual',
+        name: 'Terrain Classes',
+        use: 'qualitative',
+        tags: ['qualitative','landcover','geological','classification'],
+        colors: ['#2E8040','#80A820','#E8D020','#D07830','#A84020','#708080','#3870A8','#8050A0']
+      },
+      {
+        id: 'woc-muted-qual',
+        name: 'Muted',
+        use: 'qualitative',
+        tags: ['qualitative','muted','print','administrative'],
+        colors: ['#6E9EC0','#E0A870','#7EB87E','#D08080','#A890C8','#C0B080','#D090A8','#90B8A8']
+      },
+      {
+        id: 'woc-bold-qual',
+        name: 'Bold',
+        use: 'qualitative',
+        tags: ['qualitative','vivid','classification','dataviz'],
+        colors: ['#0055AA','#E84010','#00A048','#E8A000','#8800CC','#00A8B8','#D04080','#707000']
+      },
+    ]
+  },
 
-  // ── Bathymetric ────────────────────────────────────────
-  {id:"c-bathymetry",theme:"Cartography Classics",faction:"Terrain",name:"Bathymetric Depth",use:"sequential",
-   tags:["bathymetric","ocean","depth","marine","sea","gebco"],
-   colors:["#D0EAF8","#90C8EE","#50A0E0","#1878C8","#0050A0","#003880","#002060","#001040","#000820","#000410"]},
-  {id:"c-ocean-thermal",theme:"Cartography Classics",faction:"Terrain",name:"Ocean Thermal",use:"sequential",
-   tags:["bathymetric","ocean","thermal","marine","temperature","sea"],
-   colors:["#05004E","#0E0671","#1A22A8","#1858C8","#1A9AD0","#40C8C8","#80E0A0","#D0F060","#F8C020","#F03800"]},
-  // 3 new bathymetric palettes
-  {id:"c-bathy-gebco",theme:"Cartography Classics",faction:"Terrain",name:"GEBCO Relief",use:"sequential",
-   tags:["bathymetric","ocean","depth","marine","gebco","sea","etopo"],
-   colors:["#08306B","#0B4D96","#2171B5","#4393C3","#74A9CF","#A8CCE2","#D0E8F8","#E8F0F5","#F0F4F8","#F8FBFF"]},
-  {id:"c-bathy-deep",theme:"Cartography Classics",faction:"Terrain",name:"Abyss",use:"sequential",
-   tags:["bathymetric","ocean","deep-sea","marine","abyssal","sea"],
-   colors:["#000004","#060018","#0A0030","#0C0050","#0A1080","#0830B0","#1060D0","#2898E8","#60C0F0","#B0E8FF"]},
-  {id:"c-bathy-coastal",theme:"Cartography Classics",faction:"Terrain",name:"Coastal Waters",use:"sequential",
-   tags:["bathymetric","ocean","coastal","shallow","marine","sea","estuary"],
-   colors:["#F0F8FF","#D0EAF8","#A0D0F0","#70B8E8","#4090D0","#1870B0","#0A5090","#063870","#032858","#011840"]},
+  // ══════════════════════════════════════════════════════════════════════
+  // PACK: ELEVATION I
+  // Terrain, hypsometry, bathymetry
+  // ══════════════════════════════════════════════════════════════════════
+  {
+    id: 'elevation-i',
+    name: 'Elevation',
+    version: 'I',
+    theme: 'Terrain',
+    description: 'Hypsometric tints, bathymetry, and relief palettes for terrain mapping.',
+    tags: ['terrain','elevation','topographic','bathymetric','relief','dem','srtm'],
+    palettes: [
+      {
+        id: 'elev-hyps-classic',
+        name: 'Hypsometric Classic',
+        use: 'sequential',
+        tags: ['topographic','hypsometric','elevation','land','topo-standard'],
+        colors: ['#2060A0','#3890C0','#80C0D8','#B8E0C0','#6EB050','#389020','#C8903C','#A07050','#886060','#F8F4F0']
+      },
+      {
+        id: 'elev-hyps-warm',
+        name: 'Hypsometric Warm',
+        use: 'sequential',
+        tags: ['topographic','hypsometric','elevation','land','topo-standard'],
+        colors: ['#2870A8','#60A8D0','#A0D0D0','#90C870','#50A030','#208010','#C8A040','#A07838','#806050','#F0E8E0']
+      },
+      {
+        id: 'elev-hyps-polar',
+        name: 'Hypsometric Polar',
+        use: 'sequential',
+        tags: ['topographic','hypsometric','arctic','polar','elevation','land'],
+        colors: ['#104878','#2870A8','#60A8D0','#A0D0E8','#D0EAF0','#E0F0E0','#C8E0A0','#90C060','#60A030','#F8FAF8']
+      },
+      {
+        id: 'elev-bathy-classic',
+        name: 'Bathymetric Classic',
+        use: 'sequential',
+        tags: ['bathymetric','ocean','depth','marine','gebco'],
+        colors: ['#E8F4FC','#A8D8F4','#60A8E0','#2878C8','#0858A8','#083888','#062068','#040848','#020430']
+      },
+      {
+        id: 'elev-bathy-deep',
+        name: 'Abyss',
+        use: 'sequential',
+        tags: ['bathymetric','ocean','deep-sea','abyssal','marine'],
+        colors: ['#B8D8F0','#6098D8','#2868B8','#0840A0','#062880','#041860','#020840','#010420','#000210']
+      },
+      {
+        id: 'elev-bathy-thermal',
+        name: 'Ocean Thermal',
+        use: 'sequential',
+        tags: ['bathymetric','ocean','thermal','temperature','marine'],
+        colors: ['#040830','#0828A0','#0870D0','#20B8C8','#70D890','#C8E840','#F8C020','#E84810','#800810']
+      },
+      {
+        id: 'elev-delta',
+        name: 'Delta',
+        use: 'diverging',
+        tags: ['bathymetric','topographic','diverging','bivariate','elevation'],
+        colors: ['#083868','#2070B0','#60A8D0','#A8D8E8','#FFFFFF','#C8E8B8','#78C040','#308820','#0A5008']
+      },
+      {
+        id: 'elev-relief-grey',
+        name: 'Relief Grey',
+        use: 'sequential',
+        tags: ['topographic','hillshade','relief','grayscale','print'],
+        colors: ['#F8F8F8','#E4E4E4','#CCCCCC','#B0B0B0','#909090','#707070','#505050','#303030','#181818']
+      },
+      {
+        id: 'elev-slope',
+        name: 'Slope Angle',
+        use: 'sequential',
+        tags: ['topographic','slope','geomorphology','topo-analysis'],
+        colors: ['#E0F0D0','#A8D870','#60B010','#288000','#104800','#C87810','#A05010','#782808','#580000']
+      },
+      {
+        id: 'elev-alpine',
+        name: 'Alpine',
+        use: 'sequential',
+        tags: ['topographic','alpine','mountain','elevation','topo-standard'],
+        colors: ['#1A6830','#408840','#78B858','#B0D888','#E0F0C0','#E8E0C0','#C8A878','#A87848','#886050','#F8F8F8']
+      },
+      {
+        id: 'elev-ign',
+        name: 'IGN Inspired',
+        use: 'sequential',
+        tags: ['topographic','ign','elevation','land','french','topo-standard'],
+        colors: ['#A0D890','#80C870','#58B050','#38980A','#C89850','#A87838','#806030','#604820','#F0ECE8']
+      },
+      {
+        id: 'elev-coastal',
+        name: 'Coastal Waters',
+        use: 'sequential',
+        tags: ['bathymetric','coastal','shallow','marine','estuary'],
+        colors: ['#F0F8FF','#C8E8F8','#88C8F0','#48A0E0','#1878C0','#0858A0','#063880','#041858']
+      },
+    ]
+  },
 
-  // ── Other Terrain ──────────────────────────────────────
-  {id:"c-relief-grey",theme:"Cartography Classics",faction:"Terrain",name:"Relief Grey",use:"sequential",
-   tags:["topographic","hillshade","relief","grayscale","print","topo-standard"],
-   colors:["#FFFFFF","#EBEBEB","#D4D4D4","#BABABA","#9E9E9E","#828282","#686868","#4E4E4E","#363636","#1A1A1A"]},
-  {id:"c-slope",theme:"Cartography Classics",faction:"Terrain",name:"Slope Angle",use:"sequential",
-   tags:["topographic","slope","terrain","geomorphology","topo-analysis"],
-   colors:["#E8F5E0","#C0E090","#90C840","#60A000","#308000","#186000","#D08000","#B06000","#903000","#700000"]},
+  // ══════════════════════════════════════════════════════════════════════
+  // PACK: RISK I
+  // Hazards, vulnerability, crisis mapping
+  // ══════════════════════════════════════════════════════════════════════
+  {
+    id: 'risk-i',
+    name: 'Risk',
+    version: 'I',
+    theme: 'Hazard & Crisis',
+    description: 'Palettes for risk, hazard, vulnerability and crisis cartography.',
+    tags: ['risk','hazard','disaster','humanitarian','vulnerability','exposure'],
+    palettes: [
+      {
+        id: 'risk-generic',
+        name: 'Risk Gradient',
+        use: 'sequential',
+        tags: ['risk','hazard','choropleth','general'],
+        colors: ['#FFFFF0','#FEF0A0','#FECC60','#FE9820','#F86000','#D83010','#A00808','#680000','#380000']
+      },
+      {
+        id: 'risk-flood',
+        name: 'Flood',
+        use: 'sequential',
+        tags: ['risk','flood','hydrology','hazard','disaster'],
+        colors: ['#EEF8FF','#B8DCF8','#70B0F0','#2880E0','#0858C8','#0438A0','#021878','#010850']
+      },
+      {
+        id: 'risk-fire',
+        name: 'Wildfire',
+        use: 'sequential',
+        tags: ['risk','fire','wildfire','hazard','disaster'],
+        colors: ['#FFFFF0','#FEEC90','#FEC040','#FE8800','#E85000','#C02008','#880000','#480000']
+      },
+      {
+        id: 'risk-seismic',
+        name: 'Seismic',
+        use: 'sequential',
+        tags: ['risk','seismic','earthquake','geological','hazard'],
+        colors: ['#F4F8E8','#D8EC98','#B0D040','#88A808','#607000','#903810','#702008','#480800']
+      },
+      {
+        id: 'risk-humanitarian',
+        name: 'Humanitarian',
+        use: 'sequential',
+        tags: ['humanitarian','crisis','vulnerability','displacement'],
+        colors: ['#FFF8E8','#FFE898','#FFB840','#FF8000','#E85000','#C02808','#901008','#580000']
+      },
+      {
+        id: 'risk-conflict',
+        name: 'Conflict Intensity',
+        use: 'sequential',
+        tags: ['conflict','military','humanitarian','political','security'],
+        colors: ['#FFF8D0','#FFE080','#FFB030','#FF7008','#E84010','#C01808','#901008','#580808','#300000']
+      },
+      {
+        id: 'risk-multi-hazard',
+        name: 'Multi-Hazard',
+        use: 'sequential',
+        tags: ['risk','hazard','multi-hazard','composite','disaster'],
+        colors: ['#FFFFF0','#F0F8A0','#D8E840','#C0A808','#B87800','#C04808','#A02008','#701008','#401008','#200008']
+      },
+      {
+        id: 'risk-exposure',
+        name: 'Exposure Index',
+        use: 'diverging',
+        tags: ['risk','exposure','diverging','vulnerability'],
+        colors: ['#106828','#40A840','#88D060','#C8F090','#FFFFFF','#F8E098','#F09020','#D04808','#900808']
+      },
+      {
+        id: 'risk-tsunami',
+        name: 'Tsunami Inundation',
+        use: 'sequential',
+        tags: ['risk','tsunami','coastal','marine','flood','hazard'],
+        colors: ['#F0F8FF','#B8DCF8','#70B0F0','#2880E0','#0858C8','#042898','#020870','#010440']
+      },
+      {
+        id: 'risk-air-quality',
+        name: 'Air Quality Index',
+        use: 'sequential',
+        tags: ['environmental','air-quality','health','pollution','aqi'],
+        colors: ['#00D400','#E8E800','#E88000','#D80000','#900090','#680010']
+      },
+    ]
+  },
 
-  // ── Military ───────────────────────────────────────────
-  {id:"c-military-topo",theme:"Cartography Classics",faction:"Military",name:"Military Topography",use:"sequential",
-   tags:["military","topographic","terrain","nato","topo-standard","land"],
-   colors:["#C8E6A0","#A8CC78","#88B050","#688830","#8C7050","#A08060","#B89878","#D0B898","#E8D8C0","#F5EEE0"]},
-  {id:"c-tactical-air",theme:"Cartography Classics",faction:"Military",name:"Tactical Air Chart",use:"qualitative",
-   tags:["military","aeronautical","chart","aviation","tactical"],
-   colors:["#1A3A5C","#2C5F8A","#4A8CBF","#7AB8D4","#B8D8E8","#F0F0F0","#D4E8D0","#A0C898","#609858","#306830"]},
+  // ══════════════════════════════════════════════════════════════════════
+  // PACK: HISTORICAL I
+  // Antique, vintage and period-inspired cartographic palettes
+  // ══════════════════════════════════════════════════════════════════════
+  {
+    id: 'historical-i',
+    name: 'Historical',
+    version: 'I',
+    theme: 'Historical & Antique',
+    description: 'Vintage and period-inspired palettes for historical and antique cartography.',
+    tags: ['historical','antique','vintage','period','engraving','print'],
+    palettes: [
+      {
+        id: 'hist-parchment',
+        name: 'Parchment',
+        use: 'sequential',
+        tags: ['antique','parchment','historical','print','warm'],
+        colors: ['#FBF5E0','#F0E4C0','#E0CC98','#C8B070','#A88848','#886030','#684018','#482808']
+      },
+      {
+        id: 'hist-sepia',
+        name: 'Sepia Ink',
+        use: 'sequential',
+        tags: ['antique','sepia','historical','print','engraving'],
+        colors: ['#FBF0E0','#F0D8B8','#D8B880','#C09050','#A07030','#805018','#603008','#401800']
+      },
+      {
+        id: 'hist-antique-pol',
+        name: 'Antique Political',
+        use: 'qualitative',
+        tags: ['antique','political','historical','administrative','vintage'],
+        colors: ['#C8A87C','#90B88C','#A8B8D0','#D09880','#B0A8C8','#C8C090','#A09878','#8898A8']
+      },
+      {
+        id: 'hist-manuscript',
+        name: 'Illuminated Manuscript',
+        use: 'qualitative',
+        tags: ['historical','medieval','qualitative','illustration'],
+        colors: ['#8C3020','#1A5C30','#1A3870','#8C7010','#5C2870','#2C6878','#8C5820','#506840']
+      },
+      {
+        id: 'hist-imperiale',
+        name: 'Impériale',
+        use: 'qualitative',
+        tags: ['historical','political','empire','period','19th-century'],
+        colors: ['#9CB8D8','#E8D898','#B8D4B0','#E8B8A0','#C8B8D8','#D8C8A0','#A0C0B8','#D8A8B8']
+      },
+      {
+        id: 'hist-ordnance',
+        name: 'Ordnance Survey',
+        use: 'qualitative',
+        tags: ['topographic','ordnance','british','historical','land'],
+        colors: ['#E0F0D0','#D0D8B8','#C8D0A0','#C0C888','#B0C070','#A0B858','#8CAA48','#789840']
+      },
+      {
+        id: 'hist-cassini',
+        name: 'Cassini Relief',
+        use: 'sequential',
+        tags: ['topographic','historical','18th-century','french','engraving'],
+        colors: ['#F8F4E8','#EEE4C8','#DDD0A0','#C8B878','#B09858','#907840','#705828','#504018']
+      },
+      {
+        id: 'hist-military-topo',
+        name: 'Military Topographic',
+        use: 'sequential',
+        tags: ['military','topographic','nato','historical','topo-standard'],
+        colors: ['#C0E890','#A0C870','#80A850','#608030','#506820','#7C6040','#A07858','#C0A080','#E0C8A8','#F8F0E0']
+      },
+      {
+        id: 'hist-tactical-air',
+        name: 'Tactical Aeronautical',
+        use: 'qualitative',
+        tags: ['military','aeronautical','aviation','chart','tactical'],
+        colors: ['#C0D8F0','#A8C8E8','#90B8E0','#B8E0C8','#A0C8B0','#F0F0E0','#E0E8D0','#D0D8C0','#B0C090','#889878']
+      },
+    ]
+  },
 
-  // ── Sequential ─────────────────────────────────────────
-  {id:"c-blues",theme:"Cartography Classics",faction:"Sequential",name:"Blues",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","single-hue"],
-   colors:["#F7FBFF","#DEEBF7","#C6DBEF","#9ECAE1","#6BAED6","#4292C6","#2171B5","#08519C","#08306B","#041B3D"]},
-  {id:"c-greens",theme:"Cartography Classics",faction:"Sequential",name:"Greens",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","single-hue","vegetation"],
-   colors:["#F7FCF5","#E5F5E0","#C7E9C0","#A1D99B","#74C476","#41AB5D","#238B45","#006D2C","#00441B","#002710"]},
-  {id:"c-reds",theme:"Cartography Classics",faction:"Sequential",name:"Reds",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","single-hue","risk","hazard"],
-   colors:["#FFF5F0","#FEE0D2","#FCBBA1","#FC9272","#FB6A4A","#EF3B2C","#CB181D","#A50F15","#67000D","#3D0007"]},
-  {id:"c-purples",theme:"Cartography Classics",faction:"Sequential",name:"Purples",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","single-hue"],
-   colors:["#FCFBFD","#EFEDF5","#DADAEB","#BCBDDC","#9E9AC8","#807DBA","#6A51A3","#54278F","#3F007D","#250049"]},
-  {id:"c-oranges",theme:"Cartography Classics",faction:"Sequential",name:"Oranges",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","single-hue"],
-   colors:["#FFF5EB","#FEE6CE","#FDD0A2","#FDAE6B","#FD8D3C","#F16913","#D94801","#A63603","#7F2704","#4A1600"]},
-  {id:"c-ylgnbu",theme:"Cartography Classics",faction:"Sequential",name:"Yellow-Green-Blue",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","multi-hue"],
-   colors:["#FFFFD9","#EDF8B1","#C7E9B4","#7FCDBB","#41B6C4","#1D91C0","#225EA8","#253494","#081D58","#030C2A"]},
-  {id:"c-ylorbr",theme:"Cartography Classics",faction:"Sequential",name:"Yellow-Orange-Brown",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","multi-hue"],
-   colors:["#FFFFE5","#FFF7BC","#FEE391","#FEC44F","#FE9929","#EC7014","#CC4C02","#993404","#662506","#3D1400"]},
-  {id:"c-bupu",theme:"Cartography Classics",faction:"Sequential",name:"Blue-Purple",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","multi-hue"],
-   colors:["#F7FCFD","#E0ECF4","#BFD3E6","#9EBCDA","#8C96C6","#8C6BB1","#88419D","#810F7C","#4D004B","#260028"]},
-  {id:"c-gnbu",theme:"Cartography Classics",faction:"Sequential",name:"Green-Blue",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","multi-hue","hydrology"],
-   colors:["#F7FCF0","#E0F3DB","#CCEBC5","#A8DDB5","#7BCCC4","#4EB3D3","#2B8CBE","#0868AC","#084081","#042040"]},
-  {id:"c-rdpu",theme:"Cartography Classics",faction:"Sequential",name:"Red-Purple",use:"sequential",
-   tags:["statistic","choropleth","colorbrewer","multi-hue"],
-   colors:["#FFF7F3","#FDE0DD","#FCC5C0","#FA9FB5","#F768A1","#DD3497","#AE017E","#7A0177","#49006A","#25003A"]},
-  {id:"c-viridis",theme:"Cartography Classics",faction:"Sequential",name:"Viridis",use:"sequential",
-   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
-   colors:["#440154","#482878","#3E4A89","#31688E","#26838F","#1F9D8A","#35B779","#6DCD59","#B4DE2C","#FDE725"]},
-  {id:"c-plasma",theme:"Cartography Classics",faction:"Sequential",name:"Plasma",use:"sequential",
-   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
-   colors:["#0D0887","#41049D","#6A00A8","#8F0DA4","#B12A90","#CC4778","#E16462","#F2844B","#FCA636","#FCCE25"]},
-  {id:"c-inferno",theme:"Cartography Classics",faction:"Sequential",name:"Inferno",use:"sequential",
-   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
-   colors:["#000004","#1B0C41","#4B0C6B","#781C6D","#A52C60","#CF4446","#ED6925","#FB9B06","#F7D13D","#FCFFA4"]},
-  {id:"c-magma",theme:"Cartography Classics",faction:"Sequential",name:"Magma",use:"sequential",
-   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
-   colors:["#000004","#180F3E","#450F75","#721F81","#9E2F7F","#CD4071","#F1605D","#FD9567","#FEC98D","#FCFDBF"]},
-  {id:"c-cividis",theme:"Cartography Classics",faction:"Sequential",name:"Cividis",use:"sequential",
-   tags:["statistic","perceptually-uniform","colorblind-safe","matplotlib"],
-   colors:["#00204C","#09306B","#1B4981","#2E608E","#43788C","#588F88","#70A884","#8EC07B","#ACD870","#E4F263"]},
+  // ══════════════════════════════════════════════════════════════════════
+  // PACK: REMOTE SENSING I
+  // SAR, optical indices, satellite-derived products
+  // ══════════════════════════════════════════════════════════════════════
+  {
+    id: 'remote-sensing-i',
+    name: 'Remote Sensing',
+    version: 'I',
+    theme: 'Satellite & Remote Sensing',
+    description: 'Palettes for SAR, optical indices, and satellite-derived raster products.',
+    tags: ['remote-sensing','satellite','radar','sar','optical','index'],
+    palettes: [
+      {
+        id: 'rs-ndvi',
+        name: 'NDVI',
+        use: 'diverging',
+        tags: ['ndvi','vegetation','remote-sensing','satellite','optical','index'],
+        colors: ['#7A3A08','#C88018','#E8C040','#F8F090','#D0E870','#98C820','#489800','#186800','#003800']
+      },
+      {
+        id: 'rs-sar-coherence',
+        name: 'SAR Coherence',
+        use: 'sequential',
+        tags: ['sar','radar','coherence','interferometry','insar','satellite'],
+        colors: ['#080818','#101840','#183880','#2068C0','#3098E0','#50C0F0','#88D8F8','#C8F0FF']
+      },
+      {
+        id: 'rs-thermal',
+        name: 'Thermal / LST',
+        use: 'sequential',
+        tags: ['thermal','temperature','lst','urban-heat','remote-sensing','satellite'],
+        colors: ['#101040','#2040A0','#3090C0','#40C0A0','#88C840','#D8D010','#F89010','#E84808','#880000']
+      },
+      {
+        id: 'rs-night-lights',
+        name: 'Night Lights (NTL)',
+        use: 'sequential',
+        tags: ['night-lights','ntl','viirs','dmsp','urban','energy','satellite'],
+        colors: ['#000000','#080604','#181008','#301808','#503010','#785020','#A87828','#D0A840','#F0D060','#FFEE88']
+      },
+      {
+        id: 'rs-landcover',
+        name: 'Land Cover',
+        use: 'qualitative',
+        tags: ['landcover','classification','corine','remote-sensing','environmental'],
+        colors: ['#2C7820','#90C840','#F8E030','#D09030','#B03020','#888888','#3890D0','#B0D8F0','#F8F8F8','#604020']
+      },
+      {
+        id: 'rs-soil',
+        name: 'Soil Classification',
+        use: 'qualitative',
+        tags: ['soil','geological','classification','environmental','land'],
+        colors: ['#886040','#C09060','#D0B890','#A0A060','#706840','#487030','#A08870','#C0A888','#888070','#505040']
+      },
+      {
+        id: 'rs-geology',
+        name: 'Geological Units',
+        use: 'qualitative',
+        tags: ['geology','lithology','classification','geological'],
+        colors: ['#F0A860','#8EB890','#4880B8','#9080D0','#C08858','#B89080','#708898','#6C9020','#B89020','#587048']
+      },
+      {
+        id: 'rs-burn-severity',
+        name: 'Burn Severity (dNBR)',
+        use: 'diverging',
+        tags: ['fire','burn','remote-sensing','satellite','change-detection'],
+        colors: ['#207800','#58B020','#B8D870','#F0F0D0','#FFFFFF','#F0D8A0','#E09030','#C04808','#800000']
+      },
+    ]
+  },
 
-  // ── Diverging ──────────────────────────────────────────
-  {id:"c-rdbu",theme:"Cartography Classics",faction:"Diverging",name:"Red-Blue",use:"diverging",
-   tags:["statistic","bivariate","diverging","anomaly","colorbrewer","climate"],
-   colors:["#67001F","#B2182B","#D6604D","#F4A582","#FDDBC7","#F7F7F7","#D1E5F0","#92C5DE","#4393C3","#2166AC","#053061"]},
-  {id:"c-rdylgn",theme:"Cartography Classics",faction:"Diverging",name:"Red-Yellow-Green",use:"diverging",
-   tags:["statistic","bivariate","diverging","risk","colorbrewer","environmental"],
-   colors:["#A50026","#D73027","#F46D43","#FDAE61","#FEE08B","#FFFFBF","#D9EF8B","#A6D96A","#66BD63","#1A9850","#006837"]},
-  {id:"c-brbg",theme:"Cartography Classics",faction:"Diverging",name:"Brown-Green",use:"diverging",
-   tags:["statistic","bivariate","diverging","vegetation","colorbrewer","drought"],
-   colors:["#543005","#8C510A","#BF812D","#DFC27D","#F6E8C3","#F5F5F5","#C7EAE5","#80CDC1","#35978F","#01665E","#003C30"]},
-  {id:"c-spectral",theme:"Cartography Classics",faction:"Diverging",name:"Spectral",use:"diverging",
-   tags:["statistic","diverging","classification","colorbrewer","multi-class"],
-   colors:["#9E0142","#D53E4F","#F46D43","#FDAE61","#FEE08B","#FFFFBF","#E6F598","#ABDDA4","#66C2A5","#3288BD","#5E4FA2"]},
-  {id:"c-piyg",theme:"Cartography Classics",faction:"Diverging",name:"Pink-Green",use:"diverging",
-   tags:["statistic","bivariate","diverging","colorbrewer"],
-   colors:["#8E0152","#C51B7D","#DE77AE","#F1B6DA","#FDE0EF","#F7F7F7","#E6F5D0","#B8E186","#7FBC41","#4D9221","#276419"]},
-  {id:"c-puor",theme:"Cartography Classics",faction:"Diverging",name:"Purple-Orange",use:"diverging",
-   tags:["statistic","bivariate","diverging","colorbrewer"],
-   colors:["#2D004B","#542788","#8073AC","#B2ABD2","#D8DAEB","#F7F7F7","#FEE0B6","#FDB863","#E08214","#B35806","#7F3B08"]},
-  {id:"c-coolwarm",theme:"Cartography Classics",faction:"Diverging",name:"Cool-Warm",use:"diverging",
-   tags:["statistic","bivariate","diverging","temperature","climate","anomaly"],
-   colors:["#3B4CC0","#6282EA","#8DB0FE","#C0D4F5","#EAD4C8","#F7AC90","#E7755B","#C94B3B","#B40426"]},
-  {id:"c-delta",theme:"Cartography Classics",faction:"Diverging",name:"Delta (Ocean–Land)",use:"diverging",
-   tags:["bathymetric","topographic","bivariate","diverging","elevation","dem","land"],
-   colors:["#093061","#1A5A8A","#3D8EB0","#80C4CC","#C5E5D5","#FFFFFF","#D5E8C5","#A8D090","#60A850","#307820","#0A4808"]},
-  {id:"c-temp-anomaly",theme:"Cartography Classics",faction:"Diverging",name:"Temperature Anomaly",use:"diverging",
-   tags:["statistic","bivariate","diverging","temperature","climate","anomaly","colorbrewer"],
-   colors:["#053061","#2166AC","#4393C3","#92C5DE","#D1E5F0","#FFFFFF","#FDDBC7","#F4A582","#D6604D","#B2182B","#67001F"]},
-  {id:"c-drought",theme:"Cartography Classics",faction:"Diverging",name:"Drought Index",use:"diverging",
-   tags:["statistic","bivariate","diverging","climate","vegetation","drought","environmental"],
-   colors:["#7B3A10","#A85A20","#C88040","#DDB070","#EDD8A8","#F5F5F5","#C0D8A0","#80B860","#408830","#186000","#003800"]},
-  {id:"c-rdgy",theme:"Cartography Classics",faction:"Diverging",name:"Red-Grey",use:"diverging",
-   tags:["statistic","bivariate","diverging","colorbrewer"],
-   colors:["#67001F","#B2182B","#D6604D","#F4A582","#FDDBC7","#FFFFFF","#E0E0E0","#BABABA","#878787","#4D4D4D","#1A1A1A"]},
-
-  // ── Qualitative ────────────────────────────────────────
-  {id:"c-set1",theme:"Cartography Classics",faction:"Qualitative",name:"Set I — Vivid",use:"qualitative",
-   tags:["statistic","classification","colorbrewer"],
-   colors:["#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#A65628","#F781BF","#999999","#FFFF33","#A6CEE3"]},
-  {id:"c-pastel",theme:"Cartography Classics",faction:"Qualitative",name:"Pastel Regions",use:"qualitative",
-   tags:["statistic","classification","administrative","choropleth","colorbrewer","print"],
-   colors:["#FBB4AE","#B3CDE3","#CCEBC5","#DECBE4","#FED9A6","#FFFFCC","#E5D8BD","#FDDAEC","#F2F2F2","#B3E2CD"]},
-  {id:"c-dark2",theme:"Cartography Classics",faction:"Qualitative",name:"Dark Classes",use:"qualitative",
-   tags:["statistic","classification","colorbrewer"],
-   colors:["#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","#666666","#2C7BB6","#B2182B"]},
-  {id:"c-paired",theme:"Cartography Classics",faction:"Qualitative",name:"Paired",use:"qualitative",
-   tags:["statistic","classification","colorbrewer","bivariate"],
-   colors:["#A6CEE3","#1F78B4","#B2DF8A","#33A02C","#FB9A99","#E31A1C","#FDBF6F","#FF7F00","#CAB2D6","#6A3D9A"]},
-  {id:"c-tableau10",theme:"Cartography Classics",faction:"Qualitative",name:"Tableau 10",use:"qualitative",
-   tags:["statistic","classification","chart","dataviz"],
-   colors:["#4E79A7","#F28E2B","#E15759","#76B7B2","#59A14F","#EDC948","#B07AA1","#FF9DA7","#9C755F","#BAB0AC"]},
-  {id:"c-safe",theme:"Cartography Classics",faction:"Qualitative",name:"Colourblind-Safe 7",use:"qualitative",
-   tags:["colorblind-safe","classification","accessibility"],
-   colors:["#0077BB","#33BBEE","#009988","#EE7733","#CC3311","#EE3377","#BBBBBB"]},
-  {id:"c-earth-tones",theme:"Cartography Classics",faction:"Qualitative",name:"Earth Tones",use:"qualitative",
-   tags:["topographic","terrain","classification","geological","land"],
-   colors:["#6B4C3B","#9B7653","#C4A882","#D4C5A9","#8B9E5C","#4E6B3E","#3A5E7E","#6B8FA8","#A05050","#D07070"]},
-  {id:"c-antique",theme:"Cartography Classics",faction:"Qualitative",name:"Antique Map",use:"qualitative",
-   tags:["topographic","historical","classification","administrative","print"],
-   colors:["#855C75","#D9AF6B","#AF6458","#736F4C","#526A83","#625377","#68855C","#9C9C5E","#A06177","#8C785A"]},
-
-  // ── Thematic ───────────────────────────────────────────
-  {id:"c-population",theme:"Cartography Classics",faction:"Thematic",name:"Population Density",use:"sequential",
-   tags:["statistic","choropleth","demography","urban"],
-   colors:["#FFFFF0","#FEFEC0","#FEE090","#FDBB50","#FC8D30","#E85C10","#C02808","#901000","#600000","#300000"]},
-  {id:"c-nightlights",theme:"Cartography Classics",faction:"Thematic",name:"Night Lights (NTL)",use:"sequential",
-   tags:["statistic","remote-sensing","urban","energy","viirs","dmsp","satellite"],
-   colors:["#000000","#0A0808","#180C04","#301806","#502808","#784010","#A86820","#D0A030","#F0C840","#FFEE80"]},
-  {id:"c-landcover",theme:"Cartography Classics",faction:"Thematic",name:"Land Cover",use:"qualitative",
-   tags:["remote-sensing","classification","environmental","land","corine"],
-   colors:["#1A6B1A","#8CC850","#F0E060","#D09030","#C03020","#808080","#4090D0","#B0D0F0","#F0F0F0","#604020"]},
-  {id:"c-ndvi",theme:"Cartography Classics",faction:"Thematic",name:"NDVI Vegetation",use:"diverging",
-   tags:["remote-sensing","vegetation","bivariate","environmental","satellite","index"],
-   colors:["#8B4513","#C8860A","#E8C44A","#F5E080","#D4E880","#A8D050","#68B020","#308010","#146000","#004820"]},
-  {id:"c-precip",theme:"Cartography Classics",faction:"Thematic",name:"Precipitation",use:"sequential",
-   tags:["statistic","climate","hydrology","choropleth","rainfall"],
-   colors:["#FFFFF0","#EFF8C0","#C8E880","#88C840","#50A810","#208000","#0060D0","#0028A0","#001060","#000020"]},
-  {id:"c-flood-risk",theme:"Cartography Classics",faction:"Thematic",name:"Flood Risk",use:"sequential",
-   tags:["statistic","hydrology","risk","hazard","flood","disaster"],
-   colors:["#F7FBFF","#D0E8F8","#A0C8F0","#60A0E0","#2070C8","#0040A0","#002880","#001060","#000840","#000420"]},
-  {id:"c-wildfire",theme:"Cartography Classics",faction:"Thematic",name:"Wildfire Risk",use:"sequential",
-   tags:["statistic","environmental","risk","hazard","fire","disaster"],
-   colors:["#FFFFD4","#FEE391","#FEC44F","#FE9929","#EC7014","#CC4C02","#8C2D04","#630000","#3D0000","#1A0000"]},
-  {id:"c-urban-heat",theme:"Cartography Classics",faction:"Thematic",name:"Urban Heat Island",use:"sequential",
-   tags:["statistic","urban","temperature","remote-sensing","climate","satellite"],
-   colors:["#2B2D42","#424A6E","#4A7A9B","#52B0C0","#80C880","#C8D840","#F0C000","#E87000","#D03000","#900000"]},
-  {id:"c-air-quality",theme:"Cartography Classics",faction:"Thematic",name:"Air Quality Index",use:"sequential",
-   tags:["statistic","environmental","risk","health","pollution","aqi"],
-   colors:["#00E400","#FFFF00","#FF7E00","#FF0000","#8F3F97","#7E0023"]},
-  {id:"c-sar-coherence",theme:"Cartography Classics",faction:"Thematic",name:"SAR Coherence",use:"sequential",
-   tags:["remote-sensing","radar","sar","satellite","interferometry","insar"],
-   colors:["#000000","#1A1A2E","#16213E","#0F3460","#164B8A","#1A6BC0","#2090E0","#40B8F0","#80D8F8","#E0F8FF"]},
-  {id:"c-soil-type",theme:"Cartography Classics",faction:"Thematic",name:"Soil Classification",use:"qualitative",
-   tags:["geological","soil","classification","environmental","land"],
-   colors:["#8B5E3C","#C89050","#D4B080","#A0A060","#606840","#486828","#A08060","#C0A880","#888060","#504028"]},
-  {id:"c-geology",theme:"Cartography Classics",faction:"Thematic",name:"Geological Units",use:"qualitative",
-   tags:["geological","classification","lithology"],
-   colors:["#F4A460","#8FBC8F","#4682B4","#9370DB","#CD853F","#BC8F5F","#708090","#6B8E23","#B8860B","#556B2F"]},
-
-  // ── Risk (new faction) ─────────────────────────────────
-  {id:"r-multi-hazard",theme:"Cartography Classics",faction:"Risk",name:"Multi-Hazard",use:"sequential",
-   tags:["risk","hazard","disaster","statistic","choropleth","humanitarian"],
-   colors:["#FFFDE7","#FFF9C4","#FFF176","#FFD600","#FFC107","#FF9800","#F44336","#C62828","#880E4F","#4A148C"]},
-  {id:"r-seismic",theme:"Cartography Classics",faction:"Risk",name:"Seismic Risk",use:"sequential",
-   tags:["risk","hazard","seismic","earthquake","geological","disaster"],
-   colors:["#F9FBE7","#F0F4C3","#DCE775","#C6CC28","#AFB42B","#EF6C00","#E53935","#B71C1C","#880E0E","#4A0606"]},
-  {id:"r-tsunami",theme:"Cartography Classics",faction:"Risk",name:"Tsunami Inundation",use:"sequential",
-   tags:["risk","hazard","tsunami","flood","coastal","marine","disaster","bathymetric"],
-   colors:["#F0F8FF","#B8D8F8","#70B0F0","#3080E0","#0850B8","#0030A0","#002080","#001060","#000840","#000420"]},
-  // 1 more risk for total of 3 new risk palettes + existing ones in Thematic
-  {id:"r-exposure",theme:"Cartography Classics",faction:"Risk",name:"Exposure Index",use:"diverging",
-   tags:["risk","hazard","disaster","statistic","bivariate","humanitarian","exposure"],
-   colors:["#1A9850","#91CF60","#D9EF8B","#FFFFBF","#FEE08B","#FC8D59","#D73027","#A50026"]},
-
-  // ── Political ──────────────────────────────────────────
-  {id:"c-political",theme:"Cartography Classics",faction:"Political",name:"Political Regions",use:"qualitative",
-   tags:["administrative","political","classification"],
-   colors:["#E8D44D","#4DB8E8","#E8784D","#4DE88C","#E84D8C","#8C4DE8","#4D8CE8","#E8AC4D","#4DE8D4","#E84D4D"]},
-  {id:"c-admin-muted",theme:"Cartography Classics",faction:"Political",name:"Admin Muted",use:"qualitative",
-   tags:["administrative","political","choropleth","muted","print"],
-   colors:["#CADEA7","#A8CBB5","#B8C9D5","#D5BEC9","#D5CEB5","#C2C8B5","#B5C2C8","#C8B5C2","#C8C2B5","#B5C8C2"]},
-  {id:"c-election",theme:"Cartography Classics",faction:"Political",name:"Election — Bipartite",use:"diverging",
-   tags:["statistic","bivariate","political","election","diverging"],
-   colors:["#B22222","#CC3333","#DD5555","#EE8888","#FFBBBB","#FFFFFF","#BBBBFF","#8888EE","#5555DD","#3333CC","#2222B2"]},
-  {id:"c-conflict",theme:"Cartography Classics",faction:"Political",name:"Conflict Intensity",use:"sequential",
-   tags:["statistic","military","risk","humanitarian","choropleth","hazard"],
-   colors:["#FFF9C4","#FFE082","#FFB74D","#FF8A65","#E57373","#EF5350","#E53935","#C62828","#B71C1C","#7F0000"]},
-  {id:"c-humanitarian",theme:"Cartography Classics",faction:"Political",name:"Humanitarian Crisis",use:"sequential",
-   tags:["statistic","humanitarian","risk","choropleth","disaster","exposure"],
-   colors:["#FFF8DC","#FFE4B5","#FFC04C","#FF9F2E","#FF7800","#E85000","#C83000","#A01000","#780000","#400000"]},
-
-  // ── Accessibility ──────────────────────────────────────
-  {id:"c-print-grey",theme:"Cartography Classics",faction:"Accessibility",name:"Print-Safe Grey",use:"sequential",
-   tags:["accessibility","print","grayscale","statistic","colorblind-safe"],
-   colors:["#F5F5F5","#E0E0E0","#C8C8C8","#ADADAD","#919191","#737373","#575757","#3D3D3D","#242424","#0D0D0D"]},
-  {id:"c-cb-sequential",theme:"Cartography Classics",faction:"Accessibility",name:"Colourblind Sequential",use:"sequential",
-   tags:["accessibility","colorblind-safe","statistic","choropleth"],
-   colors:["#FDE8CD","#FCC98A","#F9A94A","#E88020","#C05800","#903800","#602000","#401008","#200800"]},
-  {id:"c-cb-diverging",theme:"Cartography Classics",faction:"Accessibility",name:"Colourblind Diverging",use:"diverging",
-   tags:["accessibility","colorblind-safe","bivariate","diverging"],
-   colors:["#2166AC","#4393C3","#92C5DE","#D1E5F0","#FFFFFF","#FDDBC7","#F4A582","#D6604D","#B2182B"]},
-  {id:"c-high-contrast",theme:"Cartography Classics",faction:"Accessibility",name:"High Contrast",use:"qualitative",
-   tags:["accessibility","print","classification","high-contrast","colorblind-safe"],
-   colors:["#000000","#FFFFFF","#FF0000","#0000FF","#F0E442","#FF00FF","#00CCCC","#FF8000"]},
+  // ══════════════════════════════════════════════════════════════════════
+  // PACK: PERCEPTUAL I
+  // Perceptually uniform palettes for scientific visualisation
+  // (matplotlib/scipy independent implementations)
+  // ══════════════════════════════════════════════════════════════════════
+  {
+    id: 'perceptual-i',
+    name: 'Perceptual',
+    version: 'I',
+    theme: 'Scientific Visualisation',
+    description: 'Perceptually uniform and colourblind-safe palettes for scientific mapping.',
+    tags: ['perceptually-uniform','colorblind-safe','scientific','matplotlib'],
+    palettes: [
+      {
+        id: 'perc-viridis',
+        name: 'Viridis',
+        use: 'sequential',
+        tags: ['perceptually-uniform','colorblind-safe','matplotlib','scientific'],
+        colors: ['#440154','#482878','#3E4A89','#31688E','#26838F','#1F9D8A','#35B779','#6DCD59','#B4DE2C','#FDE725']
+      },
+      {
+        id: 'perc-plasma',
+        name: 'Plasma',
+        use: 'sequential',
+        tags: ['perceptually-uniform','colorblind-safe','matplotlib','scientific'],
+        colors: ['#0D0887','#41049D','#6A00A8','#8F0DA4','#B12A90','#CC4778','#E16462','#F2844B','#FCA636','#FCCE25']
+      },
+      {
+        id: 'perc-inferno',
+        name: 'Inferno',
+        use: 'sequential',
+        tags: ['perceptually-uniform','colorblind-safe','matplotlib','scientific'],
+        colors: ['#000004','#1B0C41','#4B0C6B','#781C6D','#A52C60','#CF4446','#ED6925','#FB9B06','#F7D13D','#FCFFA4']
+      },
+      {
+        id: 'perc-magma',
+        name: 'Magma',
+        use: 'sequential',
+        tags: ['perceptually-uniform','colorblind-safe','matplotlib','scientific'],
+        colors: ['#000004','#180F3E','#450F75','#721F81','#9E2F7F','#CD4071','#F1605D','#FD9567','#FEC98D','#FCFDBF']
+      },
+      {
+        id: 'perc-cividis',
+        name: 'Cividis',
+        use: 'sequential',
+        tags: ['perceptually-uniform','colorblind-safe','matplotlib','scientific'],
+        colors: ['#00204C','#09306B','#1B4981','#2E608E','#43788C','#588F88','#70A884','#8EC07B','#ACD870','#E4F263']
+      },
+      {
+        id: 'perc-tol-muted',
+        name: 'Tol Muted',
+        use: 'qualitative',
+        tags: ['colorblind-safe','qualitative','paul-tol','scientific','accessibility'],
+        // Paul Tol's muted qualitative palette — independent from ColorBrewer
+        colors: ['#0077BB','#33BBEE','#009988','#EE7733','#CC3311','#EE3377','#BBBBBB']
+      },
+      {
+        id: 'perc-wong',
+        name: 'Wong',
+        use: 'qualitative',
+        tags: ['colorblind-safe','qualitative','wong','scientific','accessibility'],
+        // Wong (2011) Nature Methods — independent scientific palette
+        colors: ['#000000','#E69F00','#56B4E9','#009E73','#F0E442','#0072B2','#D55E00','#CC79A7']
+      },
+      {
+        id: 'perc-coolwarm',
+        name: 'Cool–Warm',
+        use: 'diverging',
+        tags: ['perceptually-uniform','diverging','temperature','scientific'],
+        colors: ['#3B4CC0','#6282EA','#8DB0FE','#C0D4F5','#EAD4C8','#F7AC90','#E7755B','#C94B3B','#B40426']
+      },
+      {
+        id: 'perc-cb-safe',
+        name: 'Colourblind-Safe Sequential',
+        use: 'sequential',
+        tags: ['colorblind-safe','accessibility','sequential'],
+        colors: ['#FDE8C8','#F8C880','#F0A040','#D07010','#A04808','#702800','#481000','#280800']
+      },
+      {
+        id: 'perc-cb-div',
+        name: 'Colourblind-Safe Diverging',
+        use: 'diverging',
+        tags: ['colorblind-safe','accessibility','diverging'],
+        colors: ['#1050A8','#3878C8','#80B0E8','#C8DDF8','#FFFFFF','#F8D8C8','#E89870','#C05820','#882000']
+      },
+    ]
+  },
 
 ];
 
-// Derived list of all unique tags (used for autocomplete)
-const ALL_TAGS = [...new Set(WOC_DATA.flatMap(p => p.tags))].sort();
+// ── Derived helpers ─────────────────────────────────────────────────────
+// Flat list of all palettes with pack reference (for search and export)
+const WOC_ALL_PALETTES = WOC_PACKS.flatMap(pack =>
+  pack.palettes.map(p => ({
+    ...p,
+    packId:      pack.id,
+    packName:    pack.name,
+    packVersion: pack.version,
+    packTheme:   pack.theme,
+    fullId:      `${pack.id}--${p.id}`,
+    // Merge pack tags + palette tags for search
+    allTags:     [...new Set([...pack.tags, ...p.tags])]
+  }))
+);
+
+// All unique tags across all palettes
+const ALL_TAGS = [...new Set(WOC_ALL_PALETTES.flatMap(p => p.allTags))].sort();
+
+// All unique pack themes
+const ALL_THEMES = [...new Set(WOC_PACKS.map(p => p.theme))];

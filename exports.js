@@ -204,6 +204,84 @@ const Exports = {
   json: p => dlText(toCIMJSON(p),  `${p.id}.json`, 'application/json'),
   ase:  p => dlBin(toASE(p),       `${p.id}.ase`),
   txt:  p => dlText(toTXT(p),      `${p.id}.txt`,  'text/plain'),
+
+  // Pack-level downloads — all palettes in one file
+  packXML(pack) {
+    // Combine all palettes into a single qgis_style XML
+    // with all symbols + all colorramps
+    const allSymbols = [];
+    const allRamps = [];
+    pack.palettes.forEach(p => {
+      const n = p.colors.length;
+      const c1 = h2r(p.colors[0]), cN = h2r(p.colors[n-1]);
+      const midStops = p.colors.slice(1,-1).map((hex,i) => {
+        const {r,g,b} = h2r(hex);
+        return `${((i+1)/(n-1)).toFixed(6)};${r},${g},${b},255`;
+      }).join(':');
+      p.colors.forEach((hex,i) => {
+        const {r,g,b} = h2r(hex);
+        const sname = xmlEsc(`${p.name} ${i+1}`);
+        allSymbols.push(`    <symbol type="fill" name="${sname}" alpha="1" clip_to_extent="1" force_rhr="0">
+      <data_defined_properties><Option type="Map"><Option name="name" value="" type="QString"/>
+        <Option name="properties"/><Option name="type" value="collection" type="QString"/></Option></data_defined_properties>
+      <layer class="SimpleFill" pass="0" enabled="1" locked="0">
+        <Option type="Map">
+          <Option name="color" value="${r},${g},${b},255" type="QString"/>
+          <Option name="style" value="solid" type="QString"/>
+          <Option name="outline_style" value="no" type="QString"/>
+        </Option>
+      </layer>
+    </symbol>`);
+      });
+      allRamps.push(`    <colorramp type="gradient" name="${xmlEsc(p.name)}" tags="${xmlEsc(p.tags.join(','))}">
+      <prop k="color1" v="${c1.r},${c1.g},${c1.b},255"/>
+      <prop k="color2" v="${cN.r},${cN.g},${cN.b},255"/>
+      <prop k="discrete" v="0"/>
+      <prop k="rampType" v="gradient"/>
+      ${midStops ? '<prop k="stops" v="' + midStops + '"/>' : ''}
+    </colorramp>`);
+    });
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE qgis_style>
+<qgis_style version="1">
+  <!--
+    World of Colours — ${xmlEsc(pack.name)} ${pack.version}
+    ${xmlEsc(pack.description)}
+    Source: ${SITE_URL} — Exported: ${exportDate()}
+    Import: QGIS Settings > Style Manager > Import/Export > Import Item(s)
+    Contains: ${pack.palettes.length} colour ramps + ${pack.palettes.reduce((n,p)=>n+p.colors.length,0)} fill symbols
+  -->
+  <symbols>
+${allSymbols.join('\n')}
+  </symbols>
+  <colorramps>
+${allRamps.join('\n')}
+  </colorramps>
+  <textformats/>
+  <labelsettings/>
+  <legendpatchshapes/>
+  <scales/>
+</qgis_style>`;
+    dlText(xml, `${pack.id}.xml`, 'application/xml');
+  },
+
+  packJSON(pack) {
+    const data = {
+      type: 'CIMStyleGallery',
+      name: `${pack.name} ${pack.version}`,
+      description: `${pack.description} — ${SITE_URL} — ${exportDate()}`,
+      palettes: pack.palettes.map(p => ({
+        type: 'CIMColorPalette',
+        name: p.name,
+        tags: p.tags,
+        colors: p.colors.map((h,i) => {
+          const {r,g,b} = h2r(h);
+          return {type:'CIMRGBColor',values:[r,g,b,100],name:`${p.name} ${i+1}`};
+        })
+      }))
+    };
+    dlText(JSON.stringify(data, null, 2), `${pack.id}.json`, 'application/json');
+  },
 };
 
 // ── Format info for help modal ─────────────────────────────────────────────
